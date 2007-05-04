@@ -37,11 +37,20 @@ void combo_item_selected( object_t *obj, event_t *event )
 	textbox_set_text( tbox, str );
 }
 */
+
+static int pageno = 0;
+
 void new_window( object_t *o, event_t *e )
 {
 	widget_t *wsc, *fr, *tbox, *combo;
 	layout_t *lt, *lt2;
 	bounds_t *b;
+	char buf[64];
+	
+	pageno++;
+	
+	memset(buf, 0, 64);
+	sprintf(buf, "Combo %d", pageno);
 	
 	b = new_bounds( -1, -1, 200, 200 );
 	wsc = workspace_window_widget_create( ws, b, 0 );
@@ -64,6 +73,7 @@ void new_window( object_t *o, event_t *e )
 	
 	//object_addhandler( combo, "selected", combo_item_selected );
 	
+	workspace_window_set_title(wsc, buf);
 	workspace_window_show( wsc );
 }
 

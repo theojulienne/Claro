@@ -24,7 +24,7 @@ void cgraphics_workspace_widget_create( widget_t *widget )
 {
 	widget->native = gtk_notebook_new( );
 
-	gtk_notebook_set_show_tabs( widget->native, FALSE );	
+	gtk_notebook_set_show_tabs( widget->native, TRUE );	
 	//g_object_set(G_OBJECT(widget->native), "enable-popup", TRUE, NULL);
 	
 	cgraphics_widget_create( widget );
@@ -53,7 +53,7 @@ object_t *cgraphics_workspace_get_active( widget_t *widget )
 	gwidget = gtk_notebook_get_nth_page( widget->native, active );
 	cw = cgraphics_gtk_to_claro_widget( gwidget );
 	
-	return cw;
+	return (object_t*)cw;
 }
 
 void cgraphics_workspace_cascade( widget_t *widget )
@@ -70,15 +70,23 @@ void cgraphics_workspace_tile( widget_t *widget, int dir )
 void cgraphics_workspace_window_widget_create( widget_t *widget )
 {
 	widget_t *parent = WIDGET(OBJECT(widget)->parent);
-	
+		
 	widget->native = gtk_layout_new( NULL, NULL );
-	
+		
 	cgraphics_widget_create( widget );
+    
+    gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(parent->native), GTK_WIDGET(widget->native), TRUE);
+	gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(parent->native), GTK_WIDGET(widget->native), TRUE);
 }
 
 void cgraphics_workspace_window_update_title( widget_t *widget )
 {
-	
+	workspace_window_widget_t * window = (workspace_window_widget_t *)widget;
+	//should create a custom widget here that contains a label + image
+	if(window->title)
+	     gtk_notebook_set_tab_label_text(
+	        GTK_NOTEBOOK(WIDGET(OBJECT(window)->parent)->native), 
+	        GTK_WIDGET(widget->native), window->title);    
 }
 
 void cgraphics_workspace_window_show( widget_t *widget )

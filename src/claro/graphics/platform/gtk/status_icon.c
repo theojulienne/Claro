@@ -57,12 +57,12 @@ void cgraphics_status_icon_set_menu(status_icon_t * status, object_t * menu)
 
 void cgraphics_status_icon_set_visible(status_icon_t * status, int visible)
 {
-    gtk_status_icon_set_visible(GTK_STATUS_ICON(status), visible? TRUE : FALSE);
+    gtk_status_icon_set_visible(GTK_STATUS_ICON(status->native), visible? TRUE : FALSE);
 }
 
 void cgraphics_status_icon_set_tooltip(status_icon_t * status, const char * tooltip)
 {
-    gtk_status_icon_set_tooltip(GTK_STATUS_ICON(status), tooltip);
+    gtk_status_icon_set_tooltip(GTK_STATUS_ICON(status->native), tooltip);
 }
 
 #else
