@@ -7,7 +7,7 @@ targets
 	none
 
 contains
-    recurse statusicon statusicon
+	recurse statusicon statusicon
 	recurse canvas canvas
 	recurse cursor cursor
 	recurse combo combo

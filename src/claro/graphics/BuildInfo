@@ -108,6 +108,7 @@ targets
 				platform/cocoa/RBSplitView/RBSplitview.m
 				platform/cocoa/RBSplitView/RBSplitSubview.m
 				platform/cocoa/font_dialog.m
+				platform/cocoa/status_icon.m
 			platform win32
 				platform/win32.c
 				platform/win32/window.c
@@ -138,6 +139,7 @@ targets
 				platform/win32/images.c
 				platform/win32/system.c
 				platform/win32/font_dialog.c
+				platform/win32/status_icon.c
 		includes
 			../graphics.h
 			graphics.h
