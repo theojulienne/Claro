@@ -1,0 +1,9 @@
+info
+	name "claro designer"
+	description "Claro Designer (Example)"
+	version "0.1"
+
+targets
+	application designer
+		sources
+			designer.c

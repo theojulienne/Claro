@@ -1,0 +1,57 @@
+info
+	name "claro.base"
+	description "Claro.Base Framework"
+	version "0.1"
+
+targets
+	library claro-base
+		sources
+			block.c
+			hashtable.c
+			claro.c
+			list.c
+			log.c
+			memory.c
+			object.c
+			oscompat.c
+			store.c
+			object_map.c
+			string.c
+		includes
+			../base.h
+			block.h
+			hashtable.h
+			store.h
+			claro.h
+			object_map.h
+			object.h
+			string.h
+			memory.h
+			list.h
+			log.h
+			rbtree.h
+			stdinc.h
+
+contains
+	none
+
+options
+	none
+
+depends
+	platform win32
+		none
+	platform darwin
+		none
+	platform posix
+		none
+	platform all
+		none
+
+flags
+	platform darwin
+		none
+	platform posix
+		none
+	platform all
+		none

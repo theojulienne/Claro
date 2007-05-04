@@ -1,0 +1,3 @@
+python:
+	cp hello.py Hello.app/Contents/MacOS/Hello
+	./Hello.app/Contents/MacOS/Hello

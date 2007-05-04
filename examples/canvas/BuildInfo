@@ -1,0 +1,12 @@
+info
+	name "claro canvas examples"
+	description "Claro Canvas Examples"
+	version "0.1"
+
+targets
+	application canvas-speed
+		sources
+			canvas-speed.c
+	application canvas-test
+		sources
+			canvas-test.c

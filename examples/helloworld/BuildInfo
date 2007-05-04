@@ -1,0 +1,9 @@
+info
+	name "claro hello world"
+	description "Claro Hello World"
+	version "0.1"
+
+targets
+	application hello
+		sources
+			hello.c

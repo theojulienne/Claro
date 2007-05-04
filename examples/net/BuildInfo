@@ -1,0 +1,14 @@
+info
+	name "claro networking examples"
+	description "Claro Networking Examples"
+	version "0.1"
+
+targets
+	none
+
+contains
+	recurse echo echo
+
+flags
+	libdir "^src/claro/net"
+	library "claro-net"

@@ -1,0 +1,12 @@
+info
+	name "claro networking echo example"
+	description "Claro Networking Echo Example"
+	version "0.1"
+
+targets
+	application client
+		sources
+			client.c
+	application server
+		sources
+			server.c

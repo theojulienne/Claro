@@ -1,0 +1,9 @@
+info
+	name "claro cursor"
+	description "Claro Cursor test"
+	version "0.1"
+
+targets
+	application cursor
+		sources
+			cursor.c

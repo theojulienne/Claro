@@ -1,0 +1,9 @@
+info
+	name "claro workspace example"
+	description "Claro Workspace Example"
+	version "0.1"
+
+targets
+	application workspace
+		sources
+			workspace.c

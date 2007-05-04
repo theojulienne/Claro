@@ -1,0 +1,12 @@
+info
+	name "claro image example"
+	description "Claro Image Example"
+	version "0.1"
+
+targets
+	application image
+		sources
+			image.c
+	application image-inline
+		sources
+			inline.c

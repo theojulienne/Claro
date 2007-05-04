@@ -1,0 +1,24 @@
+info
+	name "claro.net"
+	description "Claro.Networking Framework"
+	version "0.1"
+
+targetsz
+	library claro-net
+		sources
+			sockets.c
+		includes
+			sockets.h
+
+contains
+	none
+
+options
+	none
+
+depends
+	none
+
+flags
+	platform darwin
+		ldflags "-L../base -lclaro-base"

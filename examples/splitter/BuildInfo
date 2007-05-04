@@ -1,0 +1,9 @@
+info
+	name "claro splitter example"
+	description "Claro Splitter Example"
+	version "0.1"
+
+targets
+	application splitter
+		sources
+			splitter-test.c

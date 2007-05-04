@@ -1,0 +1,9 @@
+info
+	name "claro combo example"
+	description "Claro ComboBox Example"
+	version "0.1"
+
+targets
+	application combo
+		sources
+			combo.c

@@ -1,0 +1,43 @@
+info
+	name "claro"
+	description "Claro Framework"
+	version "0.1"
+
+targets
+	none
+
+contains
+	recurse base src/claro/base
+	recurse graphics src/claro/graphics
+	recurse net src/claro/net
+	recurse examples examples
+
+	(posix) recurse contextual src/claro/contextual
+
+
+depends
+	platform win32
+		none
+	platform darwin
+		none
+	platform posix
+		none
+	platform all
+		none
+
+flags
+	define CLARO_SOURCE
+	(opengl) define CLARO_OPENGL
+	platform darwin
+		define _MAC
+		define HAVE_MMAP
+		cflags "-g -fPIC -DPIC -Wall"
+		ldflags "-framework Cocoa"
+	platform posix
+		define _NIX
+		cflags "-g -fPIC -DPIC -Wall"
+		define HAVE_MMAP
+	platform win32
+		cflags "-g -DPIC -Wall"
+	platform all
+		include "#src"

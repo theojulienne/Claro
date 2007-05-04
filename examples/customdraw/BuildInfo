@@ -1,0 +1,9 @@
+info
+	name "claro custom draw"
+	description "Claro custom draw"
+	version "0.1"
+
+targets
+	application custom
+		sources
+			custom.c

@@ -1,0 +1,9 @@
+info
+	name "claro statusicon"
+	description "Claro StatusIcon test"
+	version "0.1"
+
+targets
+	application statusicon
+		sources
+			statusicon.c

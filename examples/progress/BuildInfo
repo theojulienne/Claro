@@ -1,0 +1,9 @@
+info
+	name "claro progress example"
+	description "Claro Progress Bar Example"
+	version "0.1"
+
+targets
+	application progress
+		sources
+			progress-test.c

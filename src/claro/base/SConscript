@@ -1,0 +1,23 @@
+Import('env')
+
+BaseSources = [ "block.c","hashtable.c","claro.c","list.c","log.c","memory.c","object.c","oscompat.c", "store.c", "object_map.c", "string.c"]
+
+if env['PLATFORM'] == 'win32':
+	prefixa = "#build/lib"
+	prefixs = "#build/"
+else:
+	prefixa = "#build/" + env['SHLIBPREFIX']
+	prefixs = prefixa
+StaticLibrary(prefixa + "claro-base", BaseSources)
+SharedLibrary(prefixs + "claro-base", BaseSources)
+
+Install('/usr/local/lib', [prefixa + "claro-base.a", prefixs + "claro-base" + env["SHLIBSUFFIX"]])
+Install('/usr/local/include/claro/base', ["hashtable.h","block.h","claro.h","list.h","log.h","memory.h",
+    "object.h","stdinc.h", "object_map.h", "rbtree.h", "store.h", "string.h"
+    ])
+Install('/usr/local/include/claro', ["../base.h"])
+
+Alias("libraries", [
+    prefixa + "claro-base.a",
+    prefixs + "claro-base" + env['SHLIBSUFFIX'],
+    ])

@@ -1,0 +1,12 @@
+info
+	name "claro layout example"
+	description "Claro Layout Example"
+	version "0.1"
+
+targets
+	application layout-test
+		sources
+			layout_test.c
+	application layout-any
+		sources
+			layout_any.c

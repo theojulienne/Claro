@@ -1,0 +1,239 @@
+info
+	name "claro.graphics"
+	description "Claro.Graphics Framework"
+	version "0.1"
+
+targets
+	library claro-graphics
+		sources
+			layout/layout_parser.c
+			layout/layout.c
+			layout/layout_heap.c
+			widget.c
+			graphics.c
+			image.c
+			font.c
+			system.c
+			status_icon.c
+			widgets/stock.c
+			widgets/window.c
+			widgets/toolbar.c
+			widgets/textbox.c
+			widgets/button.c
+			widgets/canvas.c
+			widgets/splitter.c
+			widgets/container.c
+			widgets/checkbox.c
+			widgets/dialog.c
+			widgets/label.c
+			widgets/progress.c
+			widgets/radio.c
+			widgets/statusbar.c
+			widgets/textarea.c
+			widgets/frame.c
+			widgets/image.c
+			widgets/list.c
+			widgets/listbox.c
+			widgets/listview.c
+			widgets/combo.c
+			widgets/menubar.c
+			widgets/menu.c
+			widgets/scrollbar.c
+			widgets/workspace.c
+			widgets/opengl.c
+			widgets/treeview.c
+			widgets/font_dialog.c
+			platform posix
+				platform/gtk.c
+				platform/gdkcairo.c
+				platform/gtkcairo.c
+				platform/gtk/window.c
+				platform/gtk/toolbar.c
+				platform/gtk/textbox.c
+				platform/gtk/button.c
+				platform/gtk/canvas.c
+				platform/gtk/splitter.c
+				platform/gtk/container.c
+				platform/gtk/label.c
+				platform/gtk/statusbar.c
+				platform/gtk/progressbar.c
+				platform/gtk/checkbox.c
+				platform/gtk/radio.c
+				platform/gtk/textarea.c
+				platform/gtk/frame.c
+				platform/gtk/image.c
+				platform/gtk/listview.c
+				platform/gtk/listbox.c
+				platform/gtk/combo.c
+				platform/gtk/menubar.c
+				platform/gtk/menu.c
+				platform/gtk/scrollbar.c
+				platform/gtk/workspace.c
+				platform/gtk/opengl.c
+				platform/gtk/treeview.c
+				platform/gtk/font.c
+				platform/gtk/images.c
+				platform/gtk/system.c
+				platform/gtk/font_dialog.c
+				platform/gtk/status_icon.c
+			platform darwin
+				platform/macosx_cocoa.m
+				platform/cocoa/window.m
+				platform/cocoa/toolbar.m
+				platform/cocoa/textbox.m
+				platform/cocoa/button.m
+				platform/cocoa/canvas.m
+				platform/cocoa/splitter.m
+				platform/cocoa/container.m
+				platform/cocoa/label.m
+				platform/cocoa/statusbar.m
+				platform/cocoa/progressbar.m
+				platform/cocoa/checkbox.m
+				platform/cocoa/radio.m
+				platform/cocoa/textarea.m
+				platform/cocoa/frame.m
+				platform/cocoa/image.m
+				platform/cocoa/listview.m
+				platform/cocoa/listbox.m
+				platform/cocoa/combo.m
+				platform/cocoa/menubar.m
+				platform/cocoa/menu.m
+				platform/cocoa/scrollbar.m
+				platform/cocoa/workspace.m
+				platform/cocoa/opengl.m
+				platform/cocoa/treeview.m
+				platform/cocoa/font.m
+				platform/cocoa/images.m
+				platform/cocoa/system.m
+				platform/cocoa/RBSplitView/RBSplitview.m
+				platform/cocoa/RBSplitView/RBSplitSubview.m
+				platform/cocoa/font_dialog.m
+			platform win32
+				platform/win32.c
+				platform/win32/window.c
+				platform/win32/toolbar.c
+				platform/win32/textbox.c
+				platform/win32/button.c
+				platform/win32/canvas.c
+				platform/win32/splitter.c
+				platform/win32/container.c
+				platform/win32/label.c
+				platform/win32/statusbar.c
+				platform/win32/progressbar.c
+				platform/win32/checkbox.c
+				platform/win32/radio.c
+				platform/win32/textarea.c
+				platform/win32/frame.c
+				platform/win32/image.c
+				platform/win32/listview.c
+				platform/win32/listbox.c
+				platform/win32/combo.c
+				platform/win32/menubar.c
+				platform/win32/menu.c
+				platform/win32/scrollbar.c
+				platform/win32/workspace.c
+				platform/win32/opengl.c
+				platform/win32/treeview.c
+				platform/win32/font.c
+				platform/win32/images.c
+				platform/win32/system.c
+				platform/win32/font_dialog.c
+		includes
+			../graphics.h
+			graphics.h
+			font.h
+			notify.h
+			image.h
+			widget.h
+			system.h
+			platform.h
+			widgets/window.h
+			widgets/toolbar.h
+			widgets/textbox.h
+			widgets/button.h
+			widgets/canvas.h
+			widgets/splitter.h
+			widgets/container.h
+			widgets/checkbox.h
+			widgets/dialog.h
+			widgets/label.h
+			widgets/progress.h
+			widgets/radio.h
+			widgets/statusbar.h
+			widgets/textarea.h
+			widgets/frame.h
+			widgets/image.h
+			widgets/list.h
+			widgets/listbox.h
+			widgets/listview.h
+			widgets/combo.h
+			widgets/menubar.h
+			widgets/menu.h
+			widgets/scrollbar.h
+			widgets/workspace.h
+			widgets/opengl.h
+			widgets/treeview.h
+			widgets/font_dialog.c
+			layout/layout_heap.h
+			layout/layout.h
+			platform posix
+				platform/gtk/notify.h
+				platform/gdkcairo.h
+				platform/gtkcairo.h
+				platform/gtk.h
+			platform win32
+				platform/win32/notify.h
+				platform/win32/pngdib/libpng/pngconf.h
+				platform/win32/pngdib/libpng/zconf.h
+				platform/win32/pngdib/libpng/zlib.h
+				platform/win32/pngdib/libpng/png.h
+				platform/win32/pngdib/pngdib.h
+				platform/win32/IImgCtx.h
+				platform/win32.h
+			platform darwin
+				platform/cocoa/RBSplitView/RBSplitView.h
+				platform/cocoa/RBSplitView/RBSplitSubview.h
+				platform/cocoa/RBSplitView/RBSplitViewPrivateDefines.h
+				platform/cocoa/window.h
+				platform/cocoa/notify.h
+				platform/macosx_cocoa.h
+
+contains
+	none
+
+options
+	cairo
+		description "Cairo Graphics support"
+		default try
+		(posix) test pkg-config "cairo"
+		(darwin) test exists "/usr/local/include/cairo"
+	opengl
+		description "OpenGL support"
+		default yes
+
+depends
+	platform win32
+		none
+	platform darwin
+		none
+	platform posix
+		test pkg-config "gtk+-2.0 gdk-2.0"
+	platform all
+		none
+
+flags
+	platform darwin
+		(cairo) cflags "-I/usr/local/include/cairo"
+		(cairo) ldflags "-L/usr/local/lib -lcairo"
+		ldflags "-L../base -lclaro-base"
+	platform posix
+		pkg-config "gtk+-2.0 gdk-2.0"
+		(cairo) pkg-config "cairo"
+		ldflags "-L ../base -lclaro-base"
+	platform win32
+		(cairo) cflags "-I/MinGW/include/cairo"
+		(cairo) ldflags "-L/MinGW/lib -lcairo"
+		(opengl) ldflags "-lopengl32 -lglu32"
+		ldflags "-L../base -lclaro-base -lgdi32 -lole32  -lcomctl32 -lmsvcp60"
+	platform all
+		(!cairo) define NO_CAIRO

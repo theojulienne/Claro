@@ -1,0 +1,16 @@
+info
+	name "claro contextual examples"
+	description "Claro Contextual Examples"
+	version "0.1"
+
+targets
+	application contextual-demo
+		sources
+			contextual-demo.c
+	application contextual-canvas-demo
+		sources
+			contextual-canvas-demo.c
+
+flags
+	library "claro-contextual"
+	libdir "^src/claro/contextual"
