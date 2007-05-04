@@ -16,6 +16,8 @@ targets
 			system.c
 			status_icon.c
 			widgets/stock.c
+			widgets/stock-16.c
+			widgets/stock-22.c
 			widgets/window.c
 			widgets/toolbar.c
 			widgets/textbox.c

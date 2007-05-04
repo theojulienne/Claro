@@ -18,69 +18,36 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
-struct stock_img_
-{
-	const char * id;
-	const unsigned char * img;
-	int len;
-};
+void _claro_menu_stock_init();
+image_t * _stock_menu_get_image(const char * stock_id);
+void _stock_menu_add_image(const char * stock_id, image_t * img);
 
-#include "stock-items.c"
-
-static int 
-str_equal (void * v1, void * v2)
-{
-        return strcmp (v1, v2) == 0;
-}
-
-static unsigned int
-str_hash (void * v1)
-{
-        unsigned int hash = 0;
-        char *p = (char *) v1;
-
-        while (*p++)
-                hash = (hash << 5) - (hash + *p);
-
-        return hash;
-}
-
-static void val_free(void * v)
-{
-	object_t * object = (object_t*)v;
-	if(!object->destroy_pending)
-		event_send( object, "destroy", "" );
-	printf("%s: %p\n", __FUNCTION__, v);
-}
-
-static hashtable_t * stock_imgs = NULL;
-
-static void stock_free(object_t * obj, event_t * event)
-{
-	hashtable_destroy(stock_imgs);
-}
+void _claro_tb_stock_init();
+image_t * _stock_tb_get_image(const char * stock_id);
+void _stock_tb_add_image(const char * stock_id, image_t * img);
 
 void claro_stock_init()
 {
-	stock_imgs = hashtable_create(NUM_STOCK_ITEMS,
-		str_hash, str_equal, NULL, val_free);
-	object_addhandler(claro, "destroy", stock_free);
-	
-	int i;
-	for(i = 0;i < NUM_STOCK_ITEMS;i++)
-	{	
-		image_t * img = image_load_inline_png( claro, stock_raw_[i].img, stock_raw_[i].len);
-		hashtable_insert(stock_imgs, stock_raw_[i].id, img, FALSE);
-	}
+    _claro_menu_stock_init();
+    _claro_tb_stock_init();
 }
 
-image_t * stock_get_image(const char * stock_id)
+image_t * stock_get_image(const char * stock_id, int size)
 {
-	return (image_t*) hashtable_search(stock_imgs, (void*) stock_id);
+    if(size == cStockMenu)
+        return _stock_menu_get_image(stock_id);
+    else if(size == cStockTb)
+        return _stock_tb_get_image(stock_id);
+    else
+        return NULL;    
 }
 
-void stock_add_image(const char * stock_id, image_t * img)
+void stock_add_image(const char * stock_id, int size, image_t * img)
 {
-	hashtable_insert(stock_imgs, stock_id, img, FALSE);
+	if(size == cStockMenu)
+        return _stock_menu_add_image(stock_id, img);
+    else if(size == cStockTb)
+        return _stock_tb_add_image(stock_id, img);
+    //add a warning here    
 }
 

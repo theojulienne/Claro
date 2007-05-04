@@ -23,6 +23,15 @@
  * @{
  */
 
+/**
+ * \brief stock size enum
+ *  *  cStockMenu  menu size
+ *  cStockTb    toolbar size
+ */
+
+#define cStockMenu  1
+#define cStockTb    2
+
 /* functions */
 
 /**
@@ -31,7 +40,7 @@
  * \param stock_id The string ID of the stock image, NOT NULL.
  * \return The Image object.
  */
-CLFEXP image_t * stock_get_image(const char * stock_id);
+CLFEXP image_t * stock_get_image(const char * stock_id, int size);
 
 
 /**
@@ -41,7 +50,7 @@ CLFEXP image_t * stock_get_image(const char * stock_id);
  * \param img The Image object to add.
  * \return The Image object.
  */
-CLFEXP void stock_add_image(const char * stock_id, image_t * img);
+CLFEXP void stock_add_image(const char * stock_id, int size, image_t * img);
 
 
 /**
@@ -49,22 +58,6 @@ CLFEXP void stock_add_image(const char * stock_id, image_t * img);
  */
 
 void claro_stock_init();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*\@}*/

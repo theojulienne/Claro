@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	window_set_title(w, "Status Icon");
 	
 	menu = menu_widget_create(w, 0);
-    quit_item = menu_append_item(menu, NULL, stock_get_image("system-log-out"), "Quit");
+    quit_item = menu_append_item(menu, NULL, stock_get_image("system-log-out", cStockMenu), "&Quit");
     object_addhandler(OBJECT(quit_item), "pushed", window_closed);
 
 	img = image_load(w, "icon.png");

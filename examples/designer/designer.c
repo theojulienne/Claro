@@ -221,7 +221,7 @@ int main( int argc, char *argv[] )
 	
 	menubar_append_separator( wgt, item );
 		
-	item = menubar_append_item( wgt, item, stock_get_image("system-log-out"), "&Quit" );
+	item = menubar_append_item( wgt, item, stock_get_image("system-log-out", cStockMenu), "&Quit" );
 	menubar_add_key_binding( wgt, item, "Q", cModifierCommand );
 	object_addhandler( item, "pushed", window_closed );
 
