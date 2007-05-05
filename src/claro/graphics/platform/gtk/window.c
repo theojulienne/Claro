@@ -109,9 +109,10 @@ void cgraphics_window_hide( widget_t *w )
 
 void cgraphics_window_focus( widget_t *w )
 {
-	/*gtk_window_native *nd = (gtk_window_native *)w->ndata;
-	gtk_widget_grab_focus( GTK_WIDGET(nd->window) );*/
-	gtk_widget_grab_focus( GTK_WIDGET(w->native) );
+	gtk_window_native *nd = (gtk_window_native *)w->ndata;
+	//gtk_widget_grab_focus( GTK_WIDGET(nd->window) );
+	//gtk_widget_grab_focus( GTK_WIDGET(w->native) );
+    gtk_window_present(GTK_WINDOW(nd->window));
 }
 
 void cgraphics_window_update_title( widget_t *w )
