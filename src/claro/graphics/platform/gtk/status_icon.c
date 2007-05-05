@@ -32,7 +32,9 @@ static void _on_status_icon_activate(GtkStatusIcon * icon, gpointer arg)
 static void _on_status_icon_popup_menu(GtkStatusIcon *icon, guint button, guint32 activate_time, gpointer arg)
 {
     status_icon_t * status = (status_icon_t*)arg;
-    gtk_menu_popup (GTK_MENU (WIDGET(status->native2)->native), NULL, NULL, NULL, NULL, button, activate_time);
+    GtkMenu * menu = GTK_MENU (WIDGET(status->native2)->native);
+    if(menu)
+        gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button, activate_time);
 }
 
 void cgraphics_status_icon_create(status_icon_t * status, int flags)

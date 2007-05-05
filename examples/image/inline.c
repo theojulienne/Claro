@@ -28,9 +28,9 @@ void window_closed( object_t *btn, event_t *event )
 
 void add_stock()
 {
-	image_t * img = stock_get_image("edit-copy");
+	image_t * img = stock_get_image("edit-copy", cStockTb);
 	image_widget_create_with_image( w, new_bounds(0,0,22,22), 0, img );
-	img = stock_get_image("edit-paste");
+	img = stock_get_image("edit-paste", cStockTb);
 	image_widget_create_with_image( w, new_bounds(22,0,22,22), 0, img );
 }
 
