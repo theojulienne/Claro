@@ -73,15 +73,17 @@ void cgraphics_window_widget_create( widget_t *widget )
 	
 	if ( widget->flags & cWindowModalDialog )
 	{
-		widget_t *wp = OBJECT(widget)->parent;
+		widget_t *wp = WIDGET(OBJECT(widget)->parent);
 		
 		if ( wp )
-			gtk_window_set_transient_for( GTK_WIDGET(widget->native), GTK_WIDGET(wp->native) );
+			gtk_window_set_transient_for( GTK_WINDOW(widget->native), GTK_WINDOW(wp->native) );
 		gtk_window_set_modal( widget->native, TRUE );
+		gtk_window_set_destroy_with_parent(widget->native, TRUE);
+		gtk_window_set_type_hint(widget->native, GDK_WINDOW_TYPE_HINT_DIALOG);
 	}
 	
 	if ( widget->flags & cWindowCenterParent )
-		gtk_window_set_position( widget->native, GTK_WIN_POS_CENTER_ON_PARENT );
+		gtk_window_set_position( widget->native, GTK_WIN_POS_CENTER );
 	
 	if ( widget->flags & cWidgetCustomDraw )
 		_cgraphics_screen_changed_handler( widget->native, NULL, widget );
@@ -121,7 +123,7 @@ void cgraphics_window_update_title( widget_t *w )
 	/*gtk_window_native *nd = (gtk_window_native *)w->ndata;
 	
 	gtk_window_set_title( GTK_WINDOW(nd->window), ww->title );*/
-	gtk_window_set_title( GTK_WIDGET(w->native), ww->title );
+	gtk_window_set_title( GTK_WINDOW(w->native), ww->title );
 }
 
 void cgraphics_window_update_icon( widget_t *w )
