@@ -34,7 +34,7 @@ static void _on_status_icon_popup_menu(GtkStatusIcon *icon, guint button, guint3
     status_icon_t * status = (status_icon_t*)arg;
     widget_t * menu = WIDGET(status->native2);
     if(menu != NULL)
-        gtk_menu_popup (GTK_MENU(menu->native)), NULL, NULL, NULL, NULL, button, activate_time);
+        gtk_menu_popup (GTK_MENU(menu->native), NULL, NULL, NULL, NULL, button, activate_time);
 }
 
 void cgraphics_status_icon_create(status_icon_t * status, int flags)
