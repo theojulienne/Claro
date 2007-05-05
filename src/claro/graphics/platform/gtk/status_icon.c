@@ -33,7 +33,7 @@ static void _on_status_icon_popup_menu(GtkStatusIcon *icon, guint button, guint3
 {
     status_icon_t * status = (status_icon_t*)arg;
     GtkMenu * menu = GTK_MENU (WIDGET(status->native2)->native);
-    if(menu)
+    if(menu != NULL)
         gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button, activate_time);
 }
 
@@ -44,7 +44,8 @@ void cgraphics_status_icon_create(status_icon_t * status, int flags)
     g_signal_connect(G_OBJECT(icon), "activate", G_CALLBACK(_on_status_icon_activate), (gpointer)status); 
     g_signal_connect(G_OBJECT(icon), "popup-menu", G_CALLBACK (_on_status_icon_popup_menu), (gpointer)status);
  
-    status->native = (void*)icon;        
+    status->native = (void*)icon;      
+    status->native2 = NULL;  
 }
 
 void cgraphics_status_icon_set_icon(status_icon_t * status, image_t * icon)
