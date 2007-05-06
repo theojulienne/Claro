@@ -132,7 +132,7 @@ void cgraphics_widget_create( widget_t *widget )
 	
 	/* FIXME: height should be determined from font height in pixels */
 	if ( widget->size_req->h == -1 )
-		widget->size_req->h = 30;
+		widget->size_req->h = 25;
 	
 	gtk_widget_set_size_request( GTK_WIDGET(widget->native), widget->size_req->w, widget->size_req->h );
 	

@@ -32,13 +32,16 @@ class widget( clarowrap.base.cobject ):
 		pass
 
 class stock:
+	cStockMenu = claro.cStockMenu
+	cStockTb = claro.cStockTb
+
 	@staticmethod
-	def get_image( stock_id ):
-		return claro.stock_get_image( stock_id )
+	def get_image( stock_id, size ):
+		return claro.stock_get_image( stock_id, size )
 		
 	@staticmethod
-	def add_image( stock_id, img ):
-		claro.stock_add_image( stock_id, img )	
+	def add_image( stock_id, size, img ):
+		claro.stock_add_image( stock_id, size, img )	
 
 
 class window( widget ):
@@ -94,6 +97,9 @@ class canvas( widget ):
 
 	def fill_rect( self, x, y, w, h, r, g, b, a ):
 		claro.canvas_fill_rect( self.obj, x, y, w, h, r, g, b, a )
+
+ 	def draw_rgb_buffer(self, x, y, w, h, buf):
+		claro.canvas_draw_rgb_buffer(self.obj, x, y, w, h, buf)
 
 
 class menubar( widget ):

@@ -317,3 +317,75 @@ void cgraphics_canvas_draw_image( widget_t *widget, image_t *image, int x, int y
 	cairo_paint( cw->cr );
 }
 
+void cgraphics_canvas_draw_rgb_buffer(widget_t * widget, int x, int y, int w, int h, unsigned char * buffer)
+{
+    canvas_widget_t *cw = (canvas_widget_t *)widget;
+    GdkDrawable * drawable = GTK_WIDGET(widget->native)->window;
+    int rowstride = w * 3;
+
+    g_debug("%s\n", __FUNCTION__);
+            
+//slow and cross-platform way
+#if 1
+
+    unsigned char *cairo_pixels;
+    cairo_format_t format = CAIRO_FORMAT_RGB24;
+    cairo_surface_t *surface;
+    static const cairo_user_data_key_t key;
+    int j, len;
+
+    if (len < rowstride * (h - 1) + w * 3)
+    {
+        g_error("buffer is not large enough");
+        //fail here
+    }
+    
+    //format = CAIRO_FORMAT_ARGB32;
+
+    cairo_pixels = (unsigned char *) malloc (4 * w * h);
+    assert(cairo_pixels != NULL);
+    surface = cairo_image_surface_create_for_data (cairo_pixels,
+						 format,
+						 w, h, 4 * w);
+						 
+    cairo_surface_set_user_data (surface, &key, cairo_pixels, (cairo_destroy_func_t)free);
+
+    for (j = h; j; j--)
+    {
+        unsigned char *p = buffer;
+        unsigned char *q = cairo_pixels;
+	    unsigned char *end = p + 3 * w;
+	    
+	    while (p < end)
+	    {
+	    
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+	      q[0] = p[2];
+	      q[1] = p[1];
+	      q[2] = p[0];
+#else	  
+	      q[1] = p[0];
+	      q[2] = p[1];
+	      q[3] = p[2];
+#endif
+	      p += 3;
+	      q += 4;
+	    }
+        
+        buffer += rowstride;
+        cairo_pixels += 4 * w;
+    }
+
+    cairo_set_source_surface (cw->cr, surface, x, y);
+    cairo_surface_destroy (surface);    
+
+//actual blitting..
+#else
+    
+    gdk_draw_rgb_image(drawable, &GTK_WIDGET(widget->native)->style->fg[0], x, y, w, h, 
+        GDK_RGB_DITHER_NONE, (guchar*)buffer, rowstride);
+    
+#endif                
+}
+
+

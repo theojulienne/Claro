@@ -16,24 +16,27 @@ class test_window(cg.window):
 			print child.get_type()
 		
 		self.canvas = cg.canvas(self, cg.bounds(0,0,300,300))
-		self.add_handler("redraw", self.draw_cb)
+		self.canvas.add_handler("redraw", self.draw_cb)
 		self.canvas.redraw()
 		
 	def draw_cb(self,o,e):
 		print "draw()"
-		self.canvas.fill_rect(0,0,200,200,0,0,0,1)	
+		buf = "\00" * 200 * 200 * 3
+		self.canvas.draw_rgb_buffer(0,0,200,200, buf)
+		#self.canvas.fill_rect(0,0,200,200,0,0,0,1)	
 		
 	def make_menu(self):
 		self.mb = cg.menubar(self)
 		file_menu = self.mb.append_item(None, None, "File")
-		file_quit = self.mb.append_item(file_menu, cg.stock.get_image("system-log-out"), "Quit")
+		file_quit = self.mb.append_item(file_menu, cg.stock.get_image("system-log-out", cg.stock.cStockMenu), "Quit")
 		self.mb.add_key_binding(file_quit, "Q", cg.menubar.ModifierCommand)
 		file_quit.add_handler("pushed", self.close_cb)
 	
 	def make_toolbar(self):
-		self.tb = cg.toolbar(self)
-		prev = self.tb.append_icon(cg.stock.get_image("go-previous"),"None","Previous")
-		next = self.tb.append_icon(cg.stock.get_image("go-next"),None,"Next")
+		pass
+		#self.tb = cg.toolbar(self)
+		#prev = self.tb.append_icon(cg.stock.get_image("go-previous"),"None","Previous")
+		#next = self.tb.append_icon(cg.stock.get_image("go-next"),None,"Next")
 		
 	def close_cb(self,o,e):
 		claro.base.shutdown()

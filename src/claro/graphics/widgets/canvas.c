@@ -240,6 +240,14 @@ void canvas_draw_image( object_t *widget, image_t *image, int x, int y )
 	cgraphics_canvas_draw_image( widget, image, x, y );
 }
 
+//24-bit, RGB, no dithering
+//probably should draw_rgba_buffer too
+void canvas_draw_rgb_buffer(object_t * widget, int x, int y, int w, int h, unsigned char * buffer)
+{
+    assert_valid_canvas_widget( widget, "widget" );
+    cgraphics_canvas_draw_rgb_buffer(widget, x, y, w, h, buffer);        
+}
+
 #ifndef NO_CAIRO
 cairo_t *canvas_get_cairo_context( object_t *widget )
 {

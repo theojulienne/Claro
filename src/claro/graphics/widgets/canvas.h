@@ -205,6 +205,10 @@ CLFEXP int canvas_cairo_buffered_text_width( canvas_widget_t *widget, const char
  */
 CLFEXP int canvas_cairo_buffered_text_display_count( canvas_widget_t *widget, const char *text, int width );
 
+//NEW
+
+CLFEXP void canvas_draw_rgb_buffer(object_t * widget, int x, int y, int w, int h, unsigned char * buffer);
+
 
 #ifndef NO_CAIRO
 CLFEXP cairo_t *canvas_get_cairo_context( object_t *widget );

@@ -35,7 +35,7 @@ extern void claro_shutdown( );
 %include "../../src/claro/graphics/widgets/toolbar.h"
 %include "../../src/claro/graphics/widgets/textbox.h"
 %include "../../src/claro/graphics/widgets/button.h"
-//%include "../../src/claro/graphics/widgets/canvas.h"
+%include "../../src/claro/graphics/widgets/canvas.h"
 %include "../../src/claro/graphics/widgets/splitter.h"
 %include "../../src/claro/graphics/widgets/container.h"
 %include "../../src/claro/graphics/widgets/textarea.h"

@@ -1,5 +1,5 @@
-CFLAGS=-I../../src -I/usr/include/python2.4 `pkg-config --cflags cairo gtk+-2.0`
-#LDFLAGS=-lclaro-base -L../../src/claro/base/ -lpython2.4 -Wl,--export-dynamic -lclaro-graphics -L../../src/claro/graphics/ `pkg-config --libs cairo gtk+-2.0`
+CFLAGS=-I../../src -I/usr/include/python2.4 `pkg-config --cflags gtk+-2.0`
+LDFLAGS=-lclaro-base -L../../src/claro/base/ -lpython2.4 -Wl,--export-dynamic -lclaro-graphics -L../../src/claro/graphics/ `pkg-config --libs gtk+-2.0`
 
 all: _claro.so
 

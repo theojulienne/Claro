@@ -100,6 +100,8 @@ void cgraphics_canvas_show_text( widget_t *widget, int x, int y, const char *tex
 
 void cgraphics_canvas_fill_rect( widget_t *widget, int x, int y, int w, int h, double r, double g, double b, double a );
 void cgraphics_canvas_draw_image( widget_t *widget, image_t *image, int x, int y );
+//cody, 5/6/07
+void cgraphics_canvas_draw_rgb_buffer(widget_t * widget, int x, int y, int w, int h, unsigned char * buffer);
 
 /* Splitter */
 void cgraphics_splitter_widget_create( widget_t *widget);
