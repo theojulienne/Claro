@@ -117,7 +117,7 @@ void cgraphics_widget_create( widget_t *widget )
 {
 	widget_t *parent;
 	PangoFontDescription * font_desc;
-	
+
 	parent = (widget_t *)object_parent(widget);
 	
 	/* check for parent */
@@ -129,10 +129,10 @@ void cgraphics_widget_create( widget_t *widget )
 	
 	font_desc = ((GtkWidget*)widget->native)->style->font_desc;
 	//printf("%s: FONT_SIZE %d\n", __FUNCTION__, pango_font_description_get_size(font_desc));
-	
+		
 	/* FIXME: height should be determined from font height in pixels */
-	if ( widget->size_req->h == -1 )
-		widget->size_req->h = 25;
+	//if ( widget->size_req->h == -1 )
+	//	widget->size_req->h = 25;
 	
 	gtk_widget_set_size_request( GTK_WIDGET(widget->native), widget->size_req->w, widget->size_req->h );
 	
