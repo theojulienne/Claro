@@ -22,6 +22,69 @@
 
 //gint cgraphics_button_clicked_handler( GtkWidget *widget, widget_t *w );
 
+static void _on_tab_closed(GtkButton * button, widget_t * tab)
+{
+    widget_close(OBJECT(tab));
+}
+
+static GtkWidget * _create_tab_label(GtkNotebook * notebook, widget_t * tab)
+{
+    GtkWidget *hbox, *label_hbox, *label_ebox;
+	GtkWidget *label;
+	GtkWidget *close_button;
+	GtkSettings *settings;
+	gint w, h;
+	GtkWidget *image;
+	GtkWidget *icon;
+
+	hbox = gtk_hbox_new (FALSE, 0);
+
+	label_ebox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
+	gtk_box_pack_start (GTK_BOX (hbox), label_ebox, TRUE, TRUE, 0);
+
+	label_hbox = gtk_hbox_new (FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (label_ebox), label_hbox);
+
+	close_button = gtk_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+	gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
+
+	settings = gtk_widget_get_settings (GTK_WIDGET (notebook));
+	gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &w, &h);
+	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+	//gtk_widget_set_size_request (close_button, w + 2, h + 2);
+	gtk_container_add (GTK_CONTAINER (close_button), image);
+	gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
+
+	g_signal_connect (G_OBJECT (close_button), "clicked",
+                          G_CALLBACK (_on_tab_closed),
+                          tab);
+
+
+	icon = gtk_image_new ();
+	gtk_box_pack_start (GTK_BOX (label_hbox), icon, FALSE, FALSE, 2);
+
+    label = gtk_label_new ("");
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_misc_set_padding (GTK_MISC (label), 2, 0);
+	gtk_box_pack_start (GTK_BOX (label_hbox), label, FALSE, FALSE, 0);
+	
+	gtk_widget_show (hbox);
+	gtk_widget_show (label_ebox);
+	gtk_widget_show (label_hbox);
+	gtk_widget_show (label);
+	gtk_widget_show (image);
+	gtk_widget_show (close_button);
+	gtk_widget_show (icon);
+	
+	g_object_set_data (G_OBJECT (hbox), "label", label);
+	g_object_set_data (G_OBJECT (hbox), "icon", icon);
+	g_object_set_data (G_OBJECT (hbox), "close-button", close_button);
+    
+	return hbox; 
+}
+
 
 /* called at initialisation */
 void cgraphics_init( )
@@ -36,7 +99,7 @@ void cgraphics_check_events( )
 }
 
 /* resize handler */
-static gint cgraphics_resized_handler( GtkWidget *widget, GdkEventConfigure *event, widget_t *w )
+static gint cgraphics_resized_handler( GtkWidget *widget, GdkEventConfigure *event, object_t *w )
 {
 	widget_set_size( w, event->width, event->height, 1 );
 	widget_set_content_size( w, event->width, event->height, 1 );
@@ -54,14 +117,14 @@ void _cgraphics_screen_changed_handler( GtkWidget *widget, GdkScreen *arg1, widg
 	
 	sc = gtk_widget_get_screen( widget );
 	
-	cm = gdk_screen_get_rgba_colormap( widget );
+	cm = gdk_screen_get_rgba_colormap( sc );
 	
 	w->supports_alpha = 0;
 	
 	if ( cm == NULL )
 	{
 		printf( "Warning: Alpha not supported\n" );
-		cm = gdk_screen_get_rgb_colormap( widget );
+		cm = gdk_screen_get_rgb_colormap( sc );
 	}
 	else
 		w->supports_alpha = 1;
@@ -93,9 +156,9 @@ gint cgraphics_resized2_handler( GtkWidget *widget, GtkAllocation *event, widget
 			 event->width == w->size.w && event->height == w->size.h )
 			return 0;
 		
-		widget_set_size( w, event->width, event->height, 1 );
-		widget_set_content_size( w, event->width, event->height, 1 );
-		widget_set_position( w, event->x, event->y, 1 );
+		widget_set_size( OBJECT(w), event->width, event->height, 1 );
+		widget_set_content_size( OBJECT(w), event->width, event->height, 1 );
+		widget_set_position( OBJECT(w), event->x, event->y, 1 );
 		
 		widget_resized_handle( OBJECT(w), 0 );
 	}
@@ -106,7 +169,7 @@ gint cgraphics_resized2_handler( GtkWidget *widget, GtkAllocation *event, widget
 /* destroy handler */
 gint cgraphics_destroy_handler( widget_t *w )
 {
-	widget_destroy( w );
+	widget_destroy( OBJECT(w) );
  
 	return 1;
 }
@@ -166,11 +229,14 @@ void cgraphics_widget_create( widget_t *widget )
 	}
 	else if ( !strcmp( parent->object.type, "claro.graphics.widgets.workspace" ) )
 	{
-		gtk_notebook_append_page( widget_get_container(parent), widget->native, NULL );
+	    printf("%s: creating tab widget..\n", __FUNCTION__);
+	    GtkNotebook * nb = GTK_NOTEBOOK(widget_get_container(OBJECT(parent)));
+	    GtkWidget * label = _create_tab_label(nb, widget);
+		gtk_notebook_append_page(nb, GTK_WIDGET(widget->native), label);
 	}
 	else
 	{
-		gtk_layout_put( GTK_LAYOUT(widget_get_container(parent)), widget->native, widget->size_req->x, widget->size_req->y );
+		gtk_layout_put( GTK_LAYOUT(widget_get_container(OBJECT(parent))), widget->native, widget->size_req->x, widget->size_req->y );
 	}
 	
 	g_object_set_data( widget->native, "claro_widget", widget );
@@ -184,7 +250,7 @@ void cgraphics_widget_create( widget_t *widget )
 widget_t *cgraphics_gtk_to_claro_widget( GtkWidget *w )
 {
 	widget_t *objval;
-	objval = g_object_get_data( w, "claro_widget" );
+	objval = g_object_get_data( G_OBJECT(w), "claro_widget" );
 	return objval;
 }
 

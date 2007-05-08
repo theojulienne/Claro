@@ -24,7 +24,7 @@ void cgraphics_workspace_widget_create( widget_t *widget )
 {
 	widget->native = gtk_notebook_new( );
 
-	gtk_notebook_set_show_tabs( widget->native, TRUE );	
+	//gtk_notebook_set_show_tabs( widget->native, TRUE );	
 	//g_object_set(G_OBJECT(widget->native), "enable-popup", TRUE, NULL);
 	
 	cgraphics_widget_create( widget );
@@ -82,11 +82,16 @@ void cgraphics_workspace_window_widget_create( widget_t *widget )
 void cgraphics_workspace_window_update_title( widget_t *widget )
 {
 	workspace_window_widget_t * window = (workspace_window_widget_t *)widget;
+	GtkNotebook * notebook = GTK_NOTEBOOK(WIDGET(OBJECT(window)->parent)->native);
+	GtkWidget * tab_label = gtk_notebook_get_tab_label(notebook, GTK_WIDGET(widget->native));
+	
 	//should create a custom widget here that contains a label + image
-	if(window->title)
-	     gtk_notebook_set_tab_label_text(
+	/*     gtk_notebook_set_tab_label_text(
 	        GTK_NOTEBOOK(WIDGET(OBJECT(window)->parent)->native), 
 	        GTK_WIDGET(widget->native), window->title);    
+	*/
+	if(window->title) 
+	    gtk_label_set_text(GTK_LABEL(g_object_get_data(G_OBJECT(tab_label), "label")), window->title);    
 }
 
 void cgraphics_workspace_window_show( widget_t *widget )
@@ -114,7 +119,12 @@ void cgraphics_workspace_window_maximise( widget_t *widget )
 	gtk_widget_show( widget->native );
 }
 
-void cgraphics_workspace_window_update_icon( widget_t *w )
+void cgraphics_workspace_window_update_icon( widget_t *widget )
 {
-	
+    workspace_window_widget_t * window = (workspace_window_widget_t *)widget;
+    GtkNotebook * notebook = GTK_NOTEBOOK(WIDGET(OBJECT(window)->parent)->native);
+	GtkWidget * tab_label = gtk_notebook_get_tab_label(notebook, GTK_WIDGET(widget->native));	
+	GtkImage * icon = GTK_IMAGE(g_object_get_data(G_OBJECT(tab_label), "icon"));
+	if(window->icon)
+	    gtk_image_set_from_pixbuf(icon, GDK_PIXBUF(window->icon->native));
 }
