@@ -334,11 +334,12 @@ void cgraphics_canvas_draw_rgb_buffer(widget_t * widget, int x, int y, int w, in
     static const cairo_user_data_key_t key;
     int j, len;
 
-    if (len < rowstride * (h - 1) + w * 3)
+   /* if (len < rowstride * (h - 1) + w * 3)
     {
         g_error("buffer is not large enough");
         //fail here
     }
+   */
     
     //format = CAIRO_FORMAT_ARGB32;
 

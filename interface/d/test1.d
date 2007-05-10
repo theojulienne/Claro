@@ -30,7 +30,7 @@ class ClockWindow : WindowWidget {
 	void make_menu( ) {
 		this.mb = new MenuBarWidget( this );
 		auto file_menu = this.mb.appendItem( "File" );
-		auto file_quit = this.mb.appendItem( file_menu, Stock.getImage("system-log-out"), "Quit" );
+		auto file_quit = this.mb.appendItem( file_menu, Stock.getImage("system-log-out", StockSize.Menu), "Quit" );
 		this.mb.addKeyBinding( file_quit, "Q", MenuBarWidget.ModifierCommand );
 		file_quit.add_handler( "pushed", &this.closed );
 	}

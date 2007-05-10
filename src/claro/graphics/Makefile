@@ -6,29 +6,29 @@ ifndef CONFIG
 endif
 
 ifeq ($(CONFIG),Debug)
-  BINDIR := ../../..
-  LIBDIR := ../../..
+  BINDIR := ../../../bin
+  LIBDIR := ../../../lib
   OBJDIR := obj/Debug
-  OUTDIR := ../../..
+  OUTDIR := ../../../bin
   CPPFLAGS := -MD -D "NO_CAIRO" -I "../../"
   CFLAGS += $(CPPFLAGS) -fPIC -g
   CXXFLAGS := $(CFLAGS)
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared
-  LDDEPS :=
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared ../../../bin/libclaro-base.so ../../../lib/libclaro-graphics-widgets.a ../../../lib/libclaro-graphics-platform.a
+  LDDEPS := ../../../bin/libclaro-base.so ../../../lib/libclaro-graphics-widgets.a ../../../lib/libclaro-graphics-platform.a
   TARGET := libclaro-graphics.so
   BLDCMD = $(CC) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES)
 endif
 
 ifeq ($(CONFIG),Release)
-  BINDIR := ../../..
-  LIBDIR := ../../..
+  BINDIR := ../../../bin
+  LIBDIR := ../../../lib
   OBJDIR := obj/Release
-  OUTDIR := ../../..
+  OUTDIR := ../../../bin
   CPPFLAGS := -MD -D "NO_CAIRO" -I "../../"
   CFLAGS += $(CPPFLAGS) -fPIC -O2
   CXXFLAGS := $(CFLAGS)
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -s
-  LDDEPS :=
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -s ../../../bin/libclaro-base.so ../../../lib/libclaro-graphics-widgets.a ../../../lib/libclaro-graphics-platform.a
+  LDDEPS := ../../../bin/libclaro-base.so ../../../lib/libclaro-graphics-widgets.a ../../../lib/libclaro-graphics-platform.a
   TARGET := libclaro-graphics.so
   BLDCMD = $(CC) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES)
 endif
@@ -43,36 +43,6 @@ OBJECTS := \
 	$(OBJDIR)/font.o \
 	$(OBJDIR)/system.o \
 	$(OBJDIR)/status_icon.o \
-	$(OBJDIR)/stock.o \
-	$(OBJDIR)/stock-16.o \
-	$(OBJDIR)/stock-22.o \
-	$(OBJDIR)/window.o \
-	$(OBJDIR)/toolbar.o \
-	$(OBJDIR)/textbox.o \
-	$(OBJDIR)/button.o \
-	$(OBJDIR)/canvas.o \
-	$(OBJDIR)/splitter.o \
-	$(OBJDIR)/container.o \
-	$(OBJDIR)/checkbox.o \
-	$(OBJDIR)/dialog.o \
-	$(OBJDIR)/label.o \
-	$(OBJDIR)/progress.o \
-	$(OBJDIR)/radio.o \
-	$(OBJDIR)/statusbar.o \
-	$(OBJDIR)/textarea.o \
-	$(OBJDIR)/frame.o \
-	$(OBJDIR)/image.o \
-	$(OBJDIR)/list.o \
-	$(OBJDIR)/listbox.o \
-	$(OBJDIR)/listview.o \
-	$(OBJDIR)/combo.o \
-	$(OBJDIR)/menubar.o \
-	$(OBJDIR)/menu.o \
-	$(OBJDIR)/scrollbar.o \
-	$(OBJDIR)/workspace.o \
-	$(OBJDIR)/opengl.o \
-	$(OBJDIR)/treeview.o \
-	$(OBJDIR)/font_dialog.o \
 
 CMD := $(subst \,\\,$(ComSpec)$(COMSPEC))
 ifeq (,$(CMD))
@@ -141,156 +111,6 @@ $(OBJDIR)/system.o: system.c
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJDIR)/status_icon.o: status_icon.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/stock.o: widgets/stock.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/stock-16.o: widgets/stock-16.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/stock-22.o: widgets/stock-22.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/window.o: widgets/window.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/toolbar.o: widgets/toolbar.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/textbox.o: widgets/textbox.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/button.o: widgets/button.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/canvas.o: widgets/canvas.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/splitter.o: widgets/splitter.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/container.o: widgets/container.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/checkbox.o: widgets/checkbox.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/dialog.o: widgets/dialog.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/label.o: widgets/label.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/progress.o: widgets/progress.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/radio.o: widgets/radio.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/statusbar.o: widgets/statusbar.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/textarea.o: widgets/textarea.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/frame.o: widgets/frame.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/image.o: widgets/image.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/list.o: widgets/list.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/listbox.o: widgets/listbox.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/listview.o: widgets/listview.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/combo.o: widgets/combo.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/menubar.o: widgets/menubar.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/menu.o: widgets/menu.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/scrollbar.o: widgets/scrollbar.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/workspace.o: widgets/workspace.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/opengl.o: widgets/opengl.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/treeview.o: widgets/treeview.c
-	-@$(CMD_MKOBJDIR)
-	@echo $(notdir $<)
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR)/font_dialog.o: widgets/font_dialog.c
 	-@$(CMD_MKOBJDIR)
 	@echo $(notdir $<)
 	@$(CC) $(CFLAGS) -o $@ -c $<
