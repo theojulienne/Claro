@@ -13,7 +13,7 @@ ifeq ($(CONFIG),Debug)
   CPPFLAGS := -MD -D "HAVE_MMAP" -I "../../"
   CFLAGS += $(CPPFLAGS) -fPIC -g
   CXXFLAGS := $(CFLAGS)
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -dynamiclib
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared
   LDDEPS :=
   TARGET := libclaro-base.so
   BLDCMD = $(CC) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES)
@@ -27,7 +27,7 @@ ifeq ($(CONFIG),Release)
   CPPFLAGS := -MD -D "HAVE_MMAP" -I "../../"
   CFLAGS += $(CPPFLAGS) -fPIC -O2
   CXXFLAGS := $(CFLAGS)
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -s -dynamiclib
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -s
   LDDEPS :=
   TARGET := libclaro-base.so
   BLDCMD = $(CC) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES)

@@ -9,22 +9,32 @@ endif
 
 export CONFIG
 
-.PHONY: all clean claro-base claro-graphics
+.PHONY: all clean claro-base claro-graphics claro-graphics-widgets claro-graphics-platform
 
-all: claro-base claro-graphics
+all: claro-base claro-graphics claro-graphics-widgets claro-graphics-platform
 
-Makefile: premake.lua src/claro/base/premake.lua src/claro/graphics/premake.lua
+Makefile: premake.lua src/claro/base/premake.lua src/claro/graphics/premake.lua src/claro/graphics/widgets/premake.lua src/claro/graphics/platform/premake.lua
 	@echo ==== Regenerating Makefiles ====
-	@premake --file $^ src/claro/base/premake.lua src/claro/graphics/premake.lua src/claro/base/premake.lua src/claro/graphics/premake.lua src/claro/base/premake.lua src/claro/graphics/premake.lua --target gnu --os macosx
+	@premake --file $^ --target gnu --os linux
 
 claro-base:
 	@echo ==== Building claro-base ====
 	@$(MAKE) --no-print-directory -C src/claro/base
 
-claro-graphics:
+claro-graphics: claro-base claro-graphics-widgets claro-graphics-platform
 	@echo ==== Building claro-graphics ====
 	@$(MAKE) --no-print-directory -C src/claro/graphics
+
+claro-graphics-widgets:
+	@echo ==== Building claro-graphics-widgets ====
+	@$(MAKE) --no-print-directory -C src/claro/graphics/widgets
+
+claro-graphics-platform:
+	@echo ==== Building claro-graphics-platform ====
+	@$(MAKE) --no-print-directory -C src/claro/graphics/platform
 
 clean:
 	@$(MAKE) --no-print-directory -C src/claro/base clean
 	@$(MAKE) --no-print-directory -C src/claro/graphics clean
+	@$(MAKE) --no-print-directory -C src/claro/graphics/widgets clean
+	@$(MAKE) --no-print-directory -C src/claro/graphics/platform clean
