@@ -33,7 +33,7 @@ typedef struct hashtable_ hashtable_t;
  * @return                  newly created hashtable or NULL on failure
  */
  
-hashtable_t *
+CLFEXP hashtable_t *
 hashtable_str_create(unsigned int minsize, int copy_strings, void    (*val_free_fn) (void*));
 
 /*****************************************************************************
@@ -46,7 +46,7 @@ hashtable_str_create(unsigned int minsize, int copy_strings, void    (*val_free_
  * @return                  newly created hashtable or NULL on failure
  */
 
-hashtable_t *
+CLFEXP hashtable_t *
 hashtable_create(unsigned int minsize,
                  unsigned int (*hashfunction) (void*),
                  int (*key_eq_fn) (void*,void*),
@@ -73,7 +73,7 @@ hashtable_create(unsigned int minsize,
  * If in doubt, remove before insert.
  */
 
-int 
+CLFEXP int 
 hashtable_insert(hashtable_t *h, void *k, void *v, int replace);
 
 
@@ -86,7 +86,7 @@ hashtable_insert(hashtable_t *h, void *k, void *v, int replace);
  * @return      the value associated with the key, or NULL if none found
  */
 
-void *
+CLFEXP void *
 hashtable_search(hashtable_t *h, void *k);
 
 /*****************************************************************************
@@ -98,7 +98,7 @@ hashtable_search(hashtable_t *h, void *k);
  * @return      the value associated with the key, or NULL if none found
  */
 
-void * /* returns value */
+CLFEXP void * /* returns value */
 hashtable_remove(hashtable_t *h, void *k);
 
 /*****************************************************************************
@@ -108,7 +108,7 @@ hashtable_remove(hashtable_t *h, void *k);
  * @param   h   the hashtable
  * @return      the number of items stored in the hashtable
  */
-unsigned int
+CLFEXP unsigned int
 hashtable_count(hashtable_t *h);
 
 
@@ -120,7 +120,7 @@ hashtable_count(hashtable_t *h);
  * @param       free_values     whether to call 'free' on the remaining values
  */
 
-void
+CLFEXP void
 hashtable_destroy(hashtable_t *h);
 
 #endif
