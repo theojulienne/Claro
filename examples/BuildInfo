@@ -8,7 +8,7 @@ targets
 
 contains
 	recurse statusicon statusicon
-	recurse canvas canvas
+	(cairo) recurse canvas canvas
 	recurse cursor cursor
 	recurse combo combo
 	recurse designer designer
@@ -21,6 +21,8 @@ contains
 	recurse splitter splitter
 	recurse workspace workspace
 	recurse customdraw customdraw
+
+fail
 	recurse contextual contextual
 	
 null
