@@ -68,8 +68,10 @@
 	NSRect frame = [self frame];
 	widget_set_size( cw, frame.size.width, frame.size.height, 1 );
 
+#ifndef NO_CAIRO
 	cairo_surface_destroy( cvsw->surface );
 	cvsw->surface = NULL;
+#endif
 /*	
 #ifndef NO_CAIRO
 	cairo_surface_destroy( cvsw->surface );
@@ -200,7 +202,13 @@ event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
 	/*cairo_rectangle( cvsw->cr, aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height );
 	cairo_clip( cvsw->cr );*/
 #endif
+
+#ifndef NO_CAIRO
 	event_send( OBJECT(cw), "redraw", "p", cvsw->cr );
+#else
+	event_send( OBJECT(cw), "redraw", "p", NULL );
+#endif
+
 #ifndef NO_CAIRO
 	
 	cairo_destroy( cvsw->cr );
