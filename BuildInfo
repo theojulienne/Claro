@@ -9,8 +9,10 @@ targets
 contains
 	recurse base src/claro/base
 	recurse graphics src/claro/graphics
-	recurse net src/claro/net
 	recurse examples examples
+	
+skip
+	recurse net src/claro/net
 
 broken
 	(posix) recurse contextual src/claro/contextual
