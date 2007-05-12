@@ -92,7 +92,7 @@ CLFEXP void object_set_parent( object_t *obj, object_t *parent );
 /* event functions */
 
 CLFEXP void object_addhandler( object_t *object, const char *event, event_func_t *func );
-CLFEXP void object_addhandler_interface( object_t *object, const char *event, event_func_t *func, void *data );
+CLFEXP void object_addhandler_interface( object_t *object, const char *event, event_iface_func_t *func, void *data );
 CLFEXP int event_send( object_t *object, const char *event, const char *fmt, ... );
 
 CLFEXP char *event_get_name( event_t *event );
