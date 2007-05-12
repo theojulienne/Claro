@@ -10,4 +10,6 @@ public
 	import claro.graphics.widgets.window;
 	import claro.graphics.widgets.menubar;
 	import claro.graphics.widgets.canvas;
+	import claro.graphics.widgets.button;
+	import claro.graphics.widgets.textbox;
 }
