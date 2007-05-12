@@ -381,3 +381,7 @@ void cgraphics_canvas_draw_image( widget_t *widget, image_t *image, int x, int y
 }
 
 
+void cgraphics_canvas_draw_rgb_buffer(widget_t * widget, int x, int y, int w, int h, unsigned char * buffer)
+{
+	
+}

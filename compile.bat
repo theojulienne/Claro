@@ -1,1 +1,1 @@
-bscripts/compile
+@bscripts/compile %*
