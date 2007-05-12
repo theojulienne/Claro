@@ -155,7 +155,7 @@ list_item_t *list_widget_row_insert_ptr( object_t *list, list_item_t *parent, in
 	
 	/* create the item and fill it */
 	//item = (list_item_t *)object_create( (parent==NULL?list:OBJECT(parent)), sizeof(list_item_t), "claro.graphics.list_item" );
-	item = (list_item_t *)object_create_from_class( &list_item_class_info, (parent==NULL?list:OBJECT(parent)) );
+	item = (list_item_t *)object_create_from_class( list_item_type, (parent==NULL?list:OBJECT(parent)) );
 	object_realize( OBJECT(item) );
 	
 	item->data = (void **)malloc( sizeof(void *) * lw->columns );
