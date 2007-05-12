@@ -95,6 +95,6 @@ CLFEXP void object_addhandler( object_t *object, const char *event, event_func_t
 CLFEXP void object_addhandler_interface( object_t *object, const char *event, event_iface_func_t *func, void *data );
 CLFEXP int event_send( object_t *object, const char *event, const char *fmt, ... );
 
-CLFEXP char *event_get_name( event_t *event );
+CLFEXP const char * event_get_name( event_t *event );
 
 #endif
