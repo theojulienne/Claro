@@ -23,6 +23,11 @@
  * widgets like ListView should be used to actually do something
  */
 
+claro_define_type_partial( list_item, object, NULL, NULL, NULL, NULL );
+claro_define_widget_partial( list, NULL, NULL, NULL, NULL );
+
+
+
 void list_widget_init_ptr( object_t *obj, unsigned int col_num, int *cols )
 {
 	list_widget_t *lw = (list_widget_t *)obj;
@@ -149,7 +154,9 @@ list_item_t *list_widget_row_insert_ptr( object_t *list, list_item_t *parent, in
 	va_copy(argp, argpi);
 	
 	/* create the item and fill it */
-	item = (list_item_t *)object_create( (parent==NULL?list:OBJECT(parent)), sizeof(list_item_t), "claro.graphics.list_item" );
+	//item = (list_item_t *)object_create( (parent==NULL?list:OBJECT(parent)), sizeof(list_item_t), "claro.graphics.list_item" );
+	item = (list_item_t *)object_create_from_class( &list_item_class_info, (parent==NULL?list:OBJECT(parent)) );
+	object_realize( OBJECT(item) );
 	
 	item->data = (void **)malloc( sizeof(void *) * lw->columns );
 	

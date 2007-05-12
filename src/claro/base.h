@@ -48,6 +48,8 @@ extern "C" {
 #include "base/list.h"
 #include "base/block.h"
 #include "base/object.h"
+#include "base/classes.h"
+#include "base/events.h"
 #include "base/claro.h"
 #include "base/log.h"
 #include "base/memory.h"

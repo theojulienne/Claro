@@ -23,13 +23,16 @@
  * @{
  */
 
-#define assert_only_scrollbar_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.scrollbar" )
+#define assert_only_scrollbar_widget(o,n)	assert_type_check( o, n, "scrollbar_widget" )
 #define assert_valid_scrollbar_widget(o,n)	assert_not_null( o, n, "ScrollBar" ); \
 						assert_only_scrollbar_widget( o, n )
 
 typedef struct scrollbar_widget_ scrollbar_widget_t;
 
 #define CLARO_SCROLLBAR_MAXIMUM 256
+
+declare_class( scrollbar_widget );
+#define scrollbar_widget_type scrollbar_widget_get_type()
 
 struct scrollbar_widget_
 {

@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_window_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.window" )
+#define assert_only_window_widget(o,n)	assert_type_check( o, n, "window_widget" )
 #define assert_valid_window_widget(o,n)	assert_not_null( o, n, "Window" ); \
 					assert_only_window_widget( o, n )
 
@@ -33,6 +33,9 @@ struct layout_;
 #define cWindowModalDialog 1
 #define cWindowCenterParent 2
 #define cWindowNoResizing 4
+
+declare_class( window_widget );
+#define window_widget_type window_widget_get_type()
 
 struct window_widget_
 {

@@ -29,6 +29,9 @@
 
 typedef struct status_icon_ status_icon_t;
 
+declare_class( status_icon );
+#define status_icon_type status_icon_get_type( )
+
 struct status_icon_
 {
     object_t object;

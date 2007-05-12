@@ -19,21 +19,41 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
-object_t *splitter_widget_create( object_t *parent, bounds_t *bounds, int flags )
+void splitter_widget_inst_realize( object_t *object );
+void splitter_widget_inst_create( object_t *object );
+
+claro_define_widget_partial( splitter, splitter_widget_inst_create, splitter_widget_inst_realize, NULL, NULL );
+
+void splitter_widget_inst_create( object_t *object )
 {
-	assert_valid_widget( parent, "parent" );
-	object_t *o = default_widget_create(parent, sizeof(splitter_widget_t), 
-						"claro.graphics.widgets.splitter", bounds, 
-						flags, cgraphics_splitter_widget_create);
-	splitter_widget_t *sw = (splitter_widget_t *)o;
+	splitter_widget_t *sw = (splitter_widget_t *)object;
 	
 	sw->children[0].flex = 1;
 	sw->children[0].size = 0;
 	
 	sw->children[1].flex = 1;
 	sw->children[1].size = 0;
-	
-	return o;
+}
+
+void splitter_widget_inst_realize( object_t *object )
+{
+	cgraphics_splitter_widget_create( WIDGET(object) );
+}
+
+object_t *splitter_widget_create( object_t *parent, bounds_t *bounds, int flags )
+{
+	object_t *object;
+
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( splitter_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }
 
 void splitter_set_info( object_t *splitter, int child, int flex, int size )

@@ -23,9 +23,12 @@
  * @{
  */
 
-#define assert_only_progress_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.progress" )
+#define assert_only_progress_widget(o,n)	assert_type_check( o, n, "progress_widget" )
 #define assert_valid_progress_widget(o,n)	assert_not_null( o, n, "Progress" ); \
 						assert_only_progress_widget( o, n )
+
+declare_class( progress_widget );
+#define progress_widget_type progress_widget_get_type()
 
 typedef struct progress_widget_ {
     widget_t widget;

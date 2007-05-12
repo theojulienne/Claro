@@ -24,13 +24,16 @@
  * @{
  */
 
-#define assert_only_textbox_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.textbox" )
+#define assert_only_textbox_widget(o,n)	assert_type_check( o, n, "textbox_widget" )
 #define assert_valid_textbox_widget(o,n)	assert_not_null( o, n, "TextBox" ); \
 						assert_only_textbox_widget( o, n )
 
 typedef struct textbox_widget_ textbox_widget_t;
 
 #define CLARO_TEXTBOX_MAXIMUM 8192
+
+declare_class( textbox_widget );
+#define textbox_widget_type textbox_widget_get_type()
 
 struct textbox_widget_
 {

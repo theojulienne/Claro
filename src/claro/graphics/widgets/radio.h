@@ -23,15 +23,18 @@
  * @{
  */
 
-#define assert_only_radiobutton_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.radiobutton" )
+#define assert_only_radiobutton_widget(o,n)	assert_type_check( o, n, "radiobutton_widget" )
 #define assert_valid_radiobutton_widget(o,n)	assert_not_null( o, n, "Radio Button" ); \
 						assert_only_radiobutton_widget( o, n )
 
-#define assert_only_radiogroup_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.radiogroup" )
+#define assert_only_radiogroup_widget(o,n)	assert_type_check( o, n, "radiogroup" )
 #define assert_valid_radiogroup_widget(o,n)	assert_not_null( o, n, "Radio Group" ); \
 						assert_only_radiogroup_widget( o, n )
 
 #define RADIOBUTTON_TEXT_MAX 256
+
+declare_class( radiogroup );
+#define radiogroup_type radiogroup_get_type()
 
 typedef struct radiogroup_
 {
@@ -42,6 +45,9 @@ typedef struct radiogroup_
 	
 	void *ndata;
 } radiogroup_t;
+
+declare_class( radiobutton_widget );
+#define radiobutton_widget_type radiobutton_widget_get_type()
 
 typedef struct radiobutton_widget_
 {

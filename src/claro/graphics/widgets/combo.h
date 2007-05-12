@@ -23,11 +23,14 @@
  * @{
  */
 
-#define assert_only_combo_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.combo" )
+#define assert_only_combo_widget(o,n)	assert_type_check( o, n, "combo_widget" )
 #define assert_valid_combo_widget(o,n)	assert_not_null( o, n, "Combo Widget" ); \
 					assert_only_combo_widget( o, n )
 
 typedef struct combo_widget_ combo_widget_t;
+
+declare_class( combo_widget );
+#define combo_widget_type combo_widget_get_type()
 
 struct combo_widget_
 {

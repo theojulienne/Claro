@@ -19,13 +19,28 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void statusbar_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( statusbar, NULL, statusbar_widget_inst_realize, NULL, NULL );
+
+void statusbar_widget_inst_realize( object_t *object )
+{
+	cgraphics_statusbar_widget_create( WIDGET(object) );
+}
+
 object_t *statusbar_widget_create( object_t *parent, int flags )
 {
-	assert_valid_window_widget( parent, "parent" );
-	
-	return default_widget_create(parent, sizeof(statusbar_widget_t), 
-					"claro.graphics.widgets.statusbar", NULL, 
-					flags, cgraphics_statusbar_widget_create);
+	object_t *object;
+
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( statusbar_widget_type, parent );
+
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }
 
 void statusbar_set_text( object_t *obj, const char *text )

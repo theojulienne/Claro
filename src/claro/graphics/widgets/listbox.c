@@ -22,26 +22,39 @@
 void listbox_new_row_handle( object_t *obj, event_t *event );
 void listbox_remove_row_handle( object_t *obj, event_t *event );
 
-object_t *listbox_widget_create( object_t *parent, bounds_t *bounds, int flags )
+void listbox_widget_inst_create( object_t *object );
+void listbox_widget_inst_realize( object_t *object );
+
+claro_define_type_partial( listbox_widget, list_widget, listbox_widget_inst_create, listbox_widget_inst_realize, NULL, NULL );
+
+void listbox_widget_inst_create( object_t *object )
 {
-	listbox_widget_t *lw;
-	object_t *obj;
-	
-	assert_valid_widget( parent, "parent" );
-	
-	obj = default_widget_create(parent, sizeof(listbox_widget_t), 
-										   "claro.graphics.widgets.listbox", bounds, 
-										   flags, cgraphics_listbox_widget_create);
-	
-	lw = (listbox_widget_t *)obj;
-	
-	list_widget_init( obj, 1, CLIST_TYPE_STRING );
+	list_widget_init( object, 1, CLIST_TYPE_STRING );
 	
 	/* handle list operations */
-	object_addhandler( obj, "new_row", listbox_new_row_handle );
-	object_addhandler( obj, "remove_row", listbox_remove_row_handle );
+	object_addhandler( object, "new_row", listbox_new_row_handle );
+	object_addhandler( object, "remove_row", listbox_remove_row_handle );
+}
+
+void listbox_widget_inst_realize( object_t *object )
+{
+	cgraphics_listbox_widget_create( WIDGET(object) );
+}
+
+object_t *listbox_widget_create( object_t *parent, bounds_t *bounds, int flags )
+{
+	object_t *object;
 	
-	return obj;
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( listbox_widget_type, parent );
+	
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+	
+	object_realize( object );
+
+	return object;
 }
 
 list_item_t *listbox_append_row( object_t *listbox, char *text )

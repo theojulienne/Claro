@@ -23,12 +23,15 @@
  * @{
  */
 
-#define assert_only_checkbox_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.checkbox" )
+#define assert_only_checkbox_widget(o,n)	assert_type_check( o, n, "checkbox_widget" )
 #define assert_valid_checkbox_widget(o,n)	assert_not_null( o, n, "Checkbox Widget" ); \
 						assert_only_checkbox_widget( o, n )
 
 
 #define CHECKBOX_TEXT_MAX 256
+
+declare_class( checkbox_widget );
+#define checkbox_widget_type checkbox_widget_get_type()
 
 typedef struct checkbox_widget_ {
     widget_t widget;

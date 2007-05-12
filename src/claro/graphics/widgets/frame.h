@@ -23,11 +23,14 @@
  * @{
  */
 
-#define assert_only_frame_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.frame" )
+#define assert_only_frame_widget(o,n)	assert_type_check( o, n, "frame_widget" )
 #define assert_valid_frame_widget(o,n)	assert_not_null( o, n, "Frame Widget" ); \
 					assert_only_frame_widget( o, n )
 
 #define CLARO_FRAME_MAXIMUM 256
+
+declare_class( frame_widget );
+#define frame_widget_type frame_widget_get_type()
 
 typedef struct frame_widget_ {
     widget_t widget;

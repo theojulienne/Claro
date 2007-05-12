@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_list_item(o,n)	assert_type_check( o, n, "claro.graphics.list_item" )
+#define assert_only_list_item(o,n)	assert_type_check( o, n, "list_item" )
 #define assert_valid_list_item(o,n)	assert_not_null( o, n, "List Item" ); \
 					assert_only_list_item( o, n )
 enum
@@ -38,6 +38,9 @@ enum
 /**
  * List items define items in a list_widget
  */
+declare_class( list_item );
+#define list_item_type list_item_get_type()
+
 typedef struct list_item_
 {
 	object_t object;
@@ -66,6 +69,9 @@ typedef struct list_item_
 /**
  * List widget, a base for widgets containing items
  */
+declare_class( list_widget );
+#define list_widget_type list_widget_get_type()
+
 typedef struct list_widget_
 {
 	widget_t widget;

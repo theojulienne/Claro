@@ -23,13 +23,16 @@
  * @{
  */
 
-#define assert_only_menu_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.menu" )
+#define assert_only_menu_widget(o,n)	assert_type_check( o, n, "menu_widget" )
 #define assert_valid_menu_widget(o,n)	assert_not_null( o, n, "Menu" ); \
 					assert_only_menu_widget( o, n )
 
 typedef struct menu_widget_ menu_widget_t;
 
 #define cMenuPopupAtCursor 1
+
+declare_class( menu_widget );
+#define menu_widget_type menu_widget_get_type()
 
 struct menu_widget_
 {

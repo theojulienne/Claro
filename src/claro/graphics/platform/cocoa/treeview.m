@@ -121,44 +121,6 @@
 - (NSMenu *)menuForEvent:(NSEvent *)theEvent;
 @end
 
-@implementation ClaroOutlineView
-
-/* http://www.cocoadev.com/index.pl?RightClickSelectInTableView */
-- (NSMenu *)menuForEvent:(NSEvent *)theEvent
-{
-	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-	int row = [self rowAtPoint:mousePoint];
-	list_item_t *sel = NULL;
-	
-	if (row >= 0)
-	{
-		[self selectRow:row byExtendingSelection:NO];
-		
-		ClaroTreeItem *crow = [self itemAtRow: row];
-		sel = [crow me];
-		
-		[[self delegate] selected: self];
-	}
-	else
-	{
-		// you can disable this if you don't want clicking on an empty space to deselect all rows
-		[self deselectAll:self];
-	}
-	
-	/* right clicked is a bad name for this */
-	event_send( OBJECT(obj), "right_clicked", "" );
-	
-	// make sure you return something!
-	return [super menuForEvent:theEvent];
-}
-
-- (void)setClaroWidget:(widget_t *)widget
-{
-	obj = OBJECT(widget);
-}
-
-@end
-
 
 /* ClaroListView (subclassed from NSScrollView) */
 @interface ClaroTreeView : NSScrollView
@@ -190,6 +152,44 @@
 - (void)insertRow:(list_item_t *)item;
 - (void)deleteRow:(list_item_t *)item;
 - (void)selectRow:(list_item_t *)item;
+
+@end
+
+@implementation ClaroOutlineView
+
+/* http://www.cocoadev.com/index.pl?RightClickSelectInTableView */
+- (NSMenu *)menuForEvent:(NSEvent *)theEvent
+{
+	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+	int row = [self rowAtPoint:mousePoint];
+	list_item_t *sel = NULL;
+	
+	if (row >= 0)
+	{
+		[self selectRow:row byExtendingSelection:NO];
+		
+		ClaroTreeItem *crow = [self itemAtRow: row];
+		sel = [crow me];
+		
+		[(ClaroTreeView *)[self delegate] selected: self];
+	}
+	else
+	{
+		// you can disable this if you don't want clicking on an empty space to deselect all rows
+		[self deselectAll:self];
+	}
+	
+	/* right clicked is a bad name for this */
+	event_send( OBJECT(obj), "right_clicked", "" );
+	
+	// make sure you return something!
+	return [super menuForEvent:theEvent];
+}
+
+- (void)setClaroWidget:(widget_t *)widget
+{
+	obj = OBJECT(widget);
+}
 
 @end
 

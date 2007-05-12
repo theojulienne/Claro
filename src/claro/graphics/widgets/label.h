@@ -23,13 +23,16 @@
  * @{
  */
 
-#define assert_only_label_widget(o,n)		assert_type_check( o, n, "claro.graphics.widgets.label" )
+#define assert_only_label_widget(o,n)		assert_type_check( o, n, "label_widget" )
 #define assert_valid_label_widget(o,n)		assert_not_null( o, n, "Label" ); \
 						assert_only_label_widget( o, n )
 
 #define CLARO_LABEL_MAXIMUM 256
 
 typedef struct label_widget_ label_widget_t;
+
+declare_class( label_widget );
+#define label_widget_type label_widget_get_type()
 
 struct label_widget_
 {

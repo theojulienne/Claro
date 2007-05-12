@@ -25,9 +25,12 @@
 
 typedef struct treeview_widget_ treeview_widget_t;
 
-#define assert_only_treeview_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.treeview" )
+#define assert_only_treeview_widget(o,n)	assert_type_check( o, n, "treeview_widget" )
 #define assert_valid_treeview_widget(o,n)	assert_not_null( o, n, "TreeView Widget" ); \
 						assert_only_treeview_widget( o, n )
+
+declare_class( treeview_widget );
+#define treeview_widget_type treeview_widget_get_type()
 
 /**
  * \brief TreeView widget

@@ -47,7 +47,7 @@
 - (void)setClaroWidget:(widget_t *)widget
 {
 	SaneView *sv;
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	/* thanks, but no thanks: a normal coordinate system would be nice. */
 	sv = [[SaneView alloc] initWithFrame: [[self contentView] frame]];
@@ -97,7 +97,7 @@ void cgraphics_window_widget_create( widget_t *widget )
 	
 	[window setClaroWidget:widget];
 	
-	widget_set_content_size( widget, widget->size_req->w, widget->size_req->h, 1 );
+	widget_set_content_size( OBJECT(widget), widget->size_req->w, widget->size_req->h, 1 );
 	
 	[window makeKeyWindow];
 	
@@ -109,7 +109,7 @@ void cgraphics_window_show( window_widget_t *w )
 	ClaroWindow *window = (ClaroWindow *)w->widget.native;
 	
 	if ( WIDGET(w)->flags & cWindowModalDialog && OBJECT(w)->parent != NULL &&
-		!strcmp( OBJECT(w)->parent->type, "claro.graphics.widgets.window" ) )
+		object_is_of_class( OBJECT(w)->parent, "window_widget" ) )
 	{
 		[NSApp beginSheet: window
 			modalForWindow: WIDGET(OBJECT(w)->parent)->native
@@ -129,7 +129,7 @@ void cgraphics_window_close( widget_t *w )
 	ClaroWindow *window = (ClaroWindow *)w->native;
 	
 	if ( WIDGET(w)->flags & cWindowModalDialog && OBJECT(w)->parent != NULL &&
-		!strcmp( OBJECT(w)->parent->type, "claro.graphics.widgets.window" ) )
+		object_is_of_class( OBJECT(w)->parent, "window_widget" ) )
 	{
 		[NSApp endSheet: window];
 		[window orderOut: window];

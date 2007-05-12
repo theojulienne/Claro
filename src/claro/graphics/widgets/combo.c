@@ -22,26 +22,35 @@
 void combo_new_row_handle( object_t *obj, event_t *event );
 void combo_remove_row_handle( object_t *obj, event_t *event );
 
+void combo_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( combo, NULL, combo_widget_inst_realize, NULL, NULL );
+
+void combo_widget_inst_realize( object_t *object )
+{
+	cgraphics_combo_widget_create( WIDGET(object) );
+}
+
 object_t *combo_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
-	combo_widget_t *lw;
-	object_t *obj;
+	object_t *object;
 	
 	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( combo_widget_type, parent );
 	
-	obj = default_widget_create(parent, sizeof(combo_widget_t), 
-										   "claro.graphics.widgets.combo", bounds, 
-										   flags, cgraphics_combo_widget_create);
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
 	
-	lw = (combo_widget_t *)obj;
-	
-	list_widget_init( obj, 1, CLIST_TYPE_STRING );
+	list_widget_init( object, 1, CLIST_TYPE_STRING );
 	
 	/* handle list operations */
-	object_addhandler( obj, "new_row", combo_new_row_handle );
-	object_addhandler( obj, "remove_row", combo_remove_row_handle );
+	object_addhandler( object, "new_row", combo_new_row_handle );
+	object_addhandler( object, "remove_row", combo_remove_row_handle );
 	
-	return obj;
+	object_realize( object );
+
+	return object;
 }
 
 list_item_t *combo_append_row( object_t *combo, char *text )

@@ -16,19 +16,19 @@
  */
 
 
-/* ClaroWindow (subclassed from NSWindow) */
-@interface ClaroWindow : NSWindow
+#ifndef _CLARO_CLASS_EXAMPLE_FOO_H
+#define _CLARO_CLASS_EXAMPLE_FOO_H
+
+/* definition of the foo class, inherits from object */
+typedef struct foo_ foo_t;
+
+declare_class( foo );
+struct foo_
 {
-    object_t *cw;
-}
+	object_t object;
+};
 
-/* internal init function */
-- (void)setClaroWidget:(widget_t *)widget;
+/* foo class function(s) */
+object_t *foo_create( object_t *parent );
 
-/* notification responders */
-- (void)claroResize:(NSNotification *)aNotification;
-- (void)claroMove:(NSNotification *)aNotification;
-- (void)claroClose:(NSNotification *)aNotification;
-@end
-
-void cgraphics_window_close( widget_t *widget );
+#endif

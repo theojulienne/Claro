@@ -23,24 +23,41 @@ void treeview_new_row_handle( object_t *obj, event_t *event );
 void treeview_remove_row_handle( object_t *obj, event_t *event );
 event_handler( treeview_edit_row_handle );
 
-object_t *treeview_widget_create( object_t *parent, bounds_t *bounds, int flags )
+void treeview_widget_inst_create( object_t *object );
+void treeview_widget_inst_realize( object_t *object );
+
+claro_define_type_partial( treeview_widget, list_widget, treeview_widget_inst_create, treeview_widget_inst_realize, NULL, NULL );
+
+void treeview_widget_inst_create( object_t *object )
 {
-	object_t *obj;
-	
-	assert_valid_widget( parent, "parent" );
-	
-	obj = default_widget_create(parent, sizeof(treeview_widget_t), 
-										   "claro.graphics.widgets.treeview", bounds, 
-										   flags, cgraphics_treeview_widget_create);
-	
-	list_widget_init( obj, 2, CLIST_TYPE_PTR, CLIST_TYPE_STRING );
+	list_widget_init( object, 2, CLIST_TYPE_PTR, CLIST_TYPE_STRING );
 	
 	/* handle list operations */
-	object_addhandler( obj, "new_row", treeview_new_row_handle );
-	object_addhandler( obj, "remove_row", treeview_remove_row_handle );
-	object_addhandler( obj, "edit_row", treeview_edit_row_handle );
+	object_addhandler( object, "new_row", treeview_new_row_handle );
+	object_addhandler( object, "remove_row", treeview_remove_row_handle );
+	object_addhandler( object, "edit_row", treeview_edit_row_handle );
+}
+
+
+void treeview_widget_inst_realize( object_t *object )
+{
+	cgraphics_treeview_widget_create( WIDGET(object) );
+}
+
+object_t *treeview_widget_create( object_t *parent, bounds_t *bounds, int flags )
+{
+	object_t *object;
 	
-	return obj;
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( treeview_widget_type, parent );
+	
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+	
+	object_realize( object );
+
+	return object;
 }
 
 list_item_t *treeview_append_row( object_t *treeview, list_item_t *parent, image_t *image, char *title )

@@ -22,25 +22,37 @@
 void menubar_new_item_handle( object_t *obj, event_t *event );
 void menubar_remove_item_handle( object_t *obj, event_t *event );
 
-object_t *menubar_widget_create( object_t *parent, int flags ) 
+void menubar_widget_inst_realize( object_t *object );
+
+claro_define_type_partial( menubar_widget, list_widget, NULL, menubar_widget_inst_realize, NULL, NULL );
+
+void menubar_widget_inst_realize( object_t *object )
+{
+	cgraphics_menubar_widget_create( WIDGET(object) );
+}
+
+object_t *menubar_widget_create( object_t *parent, int flags )
 {
 	window_widget_t *pwin = (window_widget_t *)parent;
+	object_t *object;
 	
 	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( menubar_widget_type, parent );
 	
-	object_t *obj = default_widget_create(parent, sizeof(menubar_widget_t), 
-										   "claro.graphics.widgets.menubar", NULL, 
-										   flags, cgraphics_menubar_widget_create);
+	widget_set_flags( object, flags );
 	
-	list_widget_init( obj, 2, CLIST_TYPE_PTR, CLIST_TYPE_STRING );
+	list_widget_init( object, 2, CLIST_TYPE_PTR, CLIST_TYPE_STRING );
 	
 	/* handle list operations */
-	object_addhandler( obj, "new_row", menubar_new_item_handle );
-	object_addhandler( obj, "remove_row", menubar_remove_item_handle );
+	object_addhandler( object, "new_row", menubar_new_item_handle );
+	object_addhandler( object, "remove_row", menubar_remove_item_handle );
 	
-	pwin->menubar = obj;
+	pwin->menubar = (widget_t *)object;
 	
-	return obj;
+	object_realize( object );
+
+	return object;
 }
 
 void menubar_add_key_binding( object_t * menubar, list_item_t * item, const char * utf8_key, int modifier)
@@ -87,7 +99,7 @@ list_item_t *menubar_insert_separator( object_t *menubar, list_item_t *parent, i
 
 void menubar_new_item_handle( object_t *obj, event_t *event )
 {
-	list_widget_t *lw = (list_widget_t *)obj;
+	//list_widget_t *lw = (list_widget_t *)obj;
 	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
 	
 	cgraphics_menubar_new_item( WIDGET(obj), item );
@@ -111,7 +123,7 @@ void menubar_remove_item( object_t *menubar, list_item_t *item )
 
 void menubar_remove_item_handle( object_t *obj, event_t *event )
 {
-	list_widget_t *lw = (list_widget_t *)obj;
+	//list_widget_t *lw = (list_widget_t *)obj;
 	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
 	
 	cgraphics_menubar_remove_item( WIDGET(obj), item );

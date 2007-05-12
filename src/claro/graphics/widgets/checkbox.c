@@ -19,28 +19,36 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
-object_t *checkbox_widget_create( object_t *parent, bounds_t *bounds, int flags )
+void checkbox_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( checkbox, NULL, checkbox_widget_inst_realize, NULL, NULL );
+
+void checkbox_widget_inst_realize( object_t *object )
 {
-	object_t *obj;
-	
-	assert_valid_widget( parent, "parent" );
-	
-	obj = default_widget_create(parent, sizeof(checkbox_widget_t), 
-					 "claro.graphics.widgets.checkbox", bounds, 
-					 flags, cgraphics_checkbox_widget_create);
-	
-	checkbox_set_text( obj, "" );
-	
-	return obj;
+	cgraphics_checkbox_widget_create( WIDGET(object) );
 }
 
 object_t *checkbox_widget_create_with_label( object_t *parent, bounds_t *bounds, int flags, const char *label )
 {
-	object_t *obj = checkbox_widget_create( parent, bounds, flags );
+	object_t *object;
 	
-	checkbox_set_text( obj, label );
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( checkbox_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
 	
-	return obj;
+	checkbox_set_label( object, label );
+
+	object_realize( object );
+
+	return object;
+}
+
+object_t *checkbox_widget_create( object_t *parent, bounds_t *bounds, int flags )
+{
+	return checkbox_widget_create_with_label( parent, bounds, flags, "" );
 }
 
 void checkbox_set_label( object_t *obj, const char *label )
@@ -50,6 +58,11 @@ void checkbox_set_label( object_t *obj, const char *label )
 	assert_valid_checkbox_widget( obj, "obj" );
 	
 	strscpy( chk->text, label, CHECKBOX_TEXT_MAX );
+	
+	/* skip if object not yet realized */
+	if ( !object_is_realized( obj ) )
+		return;
+	
 	cgraphics_checkbox_set_text(WIDGET(obj));
 }
 
@@ -69,5 +82,10 @@ void checkbox_set_checked( object_t *obj, int checked )
 	assert_valid_checkbox_widget( obj, "obj" );
 	
 	chk->checked = checked;
+	
+	/* skip if object not yet realized */
+	if ( !object_is_realized( obj ) )
+		return;
+	
 	cgraphics_checkbox_update_checked( WIDGET(obj) );
 }

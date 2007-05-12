@@ -136,7 +136,7 @@ void dialog_stack_pop( widget_t *w )
 
 int dialog_stack_check( widget_t *r )
 {
-	if ( !strcmp( r->object.type, "claro.graphics.widgets.window" ) && 
+	if ( object_is_of_class( OBJECT(r), "window_widget" ) && 
 		  claro_current_dialog != 0 && claro_current_dialog != r )
 	{
 		SetFocus( claro_current_dialog->native );
@@ -290,7 +290,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					case NM_RCLICK:
 						w = cg_find_by_native( hdr->hwndFrom );
 						
-						if ( !strcmp( OBJECT(w)->type, "claro.graphics.widgets.treeview" ) )
+						if ( object_is_of_class( OBJECT(w), "treeview_widget" ) )
 						{
 							TVHITTESTINFO hti;
 							TVITEM titem;
@@ -328,7 +328,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					case NM_CLICK:
 						w = cg_find_by_native( hdr->hwndFrom );
 						
-						if ( !strcmp( OBJECT(w)->type, "claro.graphics.widgets.listview" ) )
+						if ( object_is_of_class( OBJECT(w), "listview_widget" ) )
 						{
 							int a = SendMessage( w->native, LVM_GETHOTITEM, 0, 0 );
 							list_item_t *li = list_widget_get_row( w, 0, a );
@@ -435,7 +435,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 						if ( w == NULL )
 							break;
 						
-						if ( !strcmp( OBJECT(w)->type, "claro.graphics.widgets.treeview" ) )
+						if ( object_is_of_class( OBJECT(w), "treeview_widget" ) )
 						{
 							tcd = (LPNMTVCUSTOMDRAW)hdr;
 							cd = (LPNMCUSTOMDRAW)hdr;
@@ -505,7 +505,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							return CDRF_DODEFAULT;
 						}
-						else if ( !strcmp( OBJECT(w)->type, "claro.graphics.widgets.listview" ) )
+						else if ( object_is_of_class( OBJECT(w), "listview_widget" ) )
 						{
 							cd = (LPNMCUSTOMDRAW)hdr;
 							
@@ -586,9 +586,9 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				switch ( HIWORD( wParam ) )
 				{
 					case BN_CLICKED:
-						if ( !strcmp( w->object.type, "claro.graphics.widgets.button" )  )
+						if ( object_is_of_class( OBJECT(w), "button_widget" )  )
 							event_send( OBJECT(w), "pushed", "" );
-						else if ( !strcmp( w->object.type, "claro.graphics.widgets.radiobutton" )  )
+						else if ( object_is_of_class( OBJECT(w), "radiobutton_widget" )  )
 						{
 							/* Yes. That's right. I didn't like the way Windows wanted
 							 *  to do everything it's own way, so we'll do radio buttons
@@ -615,7 +615,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							event_send( OBJECT(w), "selected", "" );
 							event_send( OBJECT(rg), "changed", "p", w );
 						}
-						else if ( !strcmp( w->object.type, "claro.graphics.widgets.checkbox" )  )
+						else if ( object_is_of_class( OBJECT(w), "checkbox_widget" )  )
 						{
 							checkbox_widget_t *cb = (checkbox_widget_t *)w;
 							
@@ -625,13 +625,13 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 						}
 						break;
 					case EN_CHANGE:
-						if ( !strcmp( w->object.type, "claro.graphics.widgets.textbox" ) )
+						if ( object_is_of_class( OBJECT(w), "textbox_widget" ) )
 						{
 							textbox_widget_t *tbw = (textbox_widget_t *)w;
 							SendMessage( w->native, WM_GETTEXT, CLARO_TEXTBOX_MAXIMUM-1, (LPARAM)tbw->text );
 							event_send( OBJECT(w), "changed", "" );
 						}
-						else if ( !strcmp( w->object.type, "claro.graphics.widgets.textarea" ) )
+						else if ( object_is_of_class( OBJECT(w), "textarea_widget" ) )
 						{
 							textarea_widget_t *tbw = (textarea_widget_t *)w;
 							SendMessage( w->native, WM_GETTEXT, CLARO_TEXTAREA_MAXIMUM-1, (LPARAM)tbw->text );
@@ -639,7 +639,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 						}
 						break;
 					case LBN_SELCHANGE: /* also CBN_SELCHANGE, they are aparently the same */
-						if ( !strcmp( w->object.type, "claro.graphics.widgets.listbox" ) )
+						if ( object_is_of_class( OBJECT(w), "listbox_widget" ) )
 						{
 							listbox_widget_t *lw = (listbox_widget_t *)w;
 							list_item_t *i;
@@ -652,7 +652,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							event_send( OBJECT(w), "selected", "p", i );
 						}
-						else if ( !strcmp( w->object.type, "claro.graphics.widgets.combo" ) )
+						else if ( object_is_of_class( OBJECT(w), "combo_widget" ) )
 						{
 							combo_widget_t *lw = (combo_widget_t *)w;
 							list_item_t *i;
@@ -668,7 +668,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 						
 						break;
 					case LBN_DBLCLK:
-						if ( !strcmp( w->object.type, "claro.graphics.widgets.listbox" ) )
+						if ( object_is_of_class( OBJECT(w), "listbox_widget" ) )
 						{
 							event_send( OBJECT(w), "double_clicked", "" );
 						}
@@ -691,7 +691,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			
 			dialog_stack_pop( w );
 			
-			if ( !strcmp( w->object.type, "claro.graphics.widgets.workspace.window" ) )
+			if ( object_is_of_class( OBJECT(w), "workspace_window_widget" ) )
 			{
 				SendMessage( WIDGET(w->object.parent)->native, WM_MDIDESTROY, (WPARAM)hWnd, 0 );
 			}
@@ -776,7 +776,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					if ( w == NULL )
 						break;
 					
-					if ( !strcmp( OBJECT(w)->type, "claro.graphics.widgets.toolbar" ) )
+					if ( object_is_of_class( OBJECT(w), "toolbar_widget" ) )
 					{
 						tbcd = (LPNMTBCUSTOMDRAW)hdr;
 						cd = (LPNMCUSTOMDRAW)hdr;
@@ -883,7 +883,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			contr.bottom = clientr.bottom - clientr.top;
 			int tool_size = 0;
 			
-			if ( !strcmp( rw->object.type, "claro.graphics.widgets.workspace.window" ) )
+			if ( object_is_of_class( OBJECT(rw), "workspace_window_widget" ) )
 			{
 				MoveWindow( w->container, contr.left, contr.top, contr.right, contr.bottom, 1 );
 				break;
@@ -915,7 +915,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			{
 				o = (object_t *)n->data;
 				
-				if ( !strcmp( o->type, "claro.graphics.widgets.statusbar" ) )
+				if ( object_is_of_class( OBJECT(o), "statusbar_widget" ) )
 				{
 					SendMessage( WIDGET(o)->native, WM_SIZE, 0, 0 );
 					
@@ -930,7 +930,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			
 			//MoveWindow( w->container, contr.left, contr.top, contr.right, contr.bottom, 1 );
 			
-			if ( !strcmp( w->object.type, "claro.graphics.widgets.window" ) )
+			if ( object_is_of_class( OBJECT(w), "window_widget" ) )
 			{
 				window_widget_t *win = (window_widget_t *)w;
 				if ( status_size != win->exsp_status || tool_size != win->exsp_tools )
@@ -951,7 +951,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				MoveWindow( w->container, contr.left, contr.top, contr.right, contr.bottom, 1 );
 			}
 			
-			if ( !strcmp( rw->object.type, "claro.graphics.widgets.window" ) && windoww->workspace != 0 )
+			if ( object_is_of_class( OBJECT(rw), "window_widget" ) && windoww->workspace != 0 )
 				SetWindowPos( windoww->workspace->native, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 			
 			return 0;
@@ -970,7 +970,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			switch ( HIWORD( wParam ) )
 			{
 				case BN_CLICKED:
-					if ( w != NULL && !strcmp( w->object.type, "claro.graphics.widgets.toolbar" )  )
+					if ( w != NULL && object_is_of_class( OBJECT(w), "toolbar_widget" )  )
 					{
 						list_item_t *li = NULL;
 						list_item_t *tli;
@@ -991,8 +991,8 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							event_send( OBJECT(li), "pushed", "" );
 					}
 					else if ( w == NULL ||
-						      !strcmp( w->object.type, "claro.graphics.widgets.menubar" ) ||
-						      !strcmp( w->object.type, "claro.graphics.widgets.menu" ) )
+						      object_is_of_class( OBJECT(w), "menubar_widget" ) ||
+						      object_is_of_class( OBJECT(w), "menu_widget" ) )
 					{
 						list_item_t *li = NULL;
 						list_item_t *tli;
@@ -1016,16 +1016,16 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					}
 					break;
 				default:
-					if ( !strcmp( rw->object.type, "claro.graphics.widgets.window" ) && windoww->workspace != 0 )
+					if ( object_is_of_class( OBJECT(rw), "window_widget" ) && windoww->workspace != 0 )
 						return DefFrameProc( hWnd, windoww->workspace->native, uMsg, wParam, lParam );
 			}
 			
 			break;
 	}
 	
-	if ( !strcmp( rw->object.type, "claro.graphics.widgets.workspace.window" ) )
+	if ( object_is_of_class( OBJECT(rw), "workspace_window_widget" ) )
 		return DefMDIChildProc( hWnd, uMsg, wParam, lParam );
-	else if ( !strcmp( rw->object.type, "claro.graphics.widgets.window" ) && windoww->workspace != 0 )
+	else if ( object_is_of_class( OBJECT(rw), "window_widget" ) && windoww->workspace != 0 )
 		return DefFrameProc( hWnd, (HWND)windoww->workspace->native, uMsg, wParam, lParam );
 	else
 		return DefWindowProc( hWnd, uMsg, wParam, lParam );
@@ -1099,7 +1099,7 @@ void cgraphics_window_widget_create( widget_t *widget )
 	if ( widget->flags & cWindowNoResizing )
 		wflags &= ~WS_THICKFRAME;
 	
-	if ( widget->flags & cWindowModalDialog && widget->object.parent != 0 && !strcmp( widget->object.parent->type, "claro.graphics.widgets.window" ) )
+	if ( widget->flags & cWindowModalDialog && widget->object.parent != 0 && object_is_of_class( OBJECT(widget->object.parent), "window_widget" ) )
 	{
 		wflags = WS_POPUPWINDOW | WS_DLGFRAME | WS_OVERLAPPED | WS_CLIPSIBLINGS | DS_MODALFRAME;
 		wexflags = WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
@@ -1124,7 +1124,7 @@ void cgraphics_window_widget_create( widget_t *widget )
 		object_t *parent = widget->object.parent;
 		widget_t *wp = (widget_t *)parent;
 		
-		if ( parent != 0 && !strcmp( parent->type, "claro.graphics.widgets.window" ) )
+		if ( parent != 0 && object_is_of_class( OBJECT(parent->type), "window_widget" ) )
 		{
 			px = wp->size.x;
 			py = wp->size.y;

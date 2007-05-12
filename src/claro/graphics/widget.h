@@ -23,7 +23,10 @@
  * @{
  */
 
-#define assert_only_widget(o,n)		assert_type_check_relaxed( o, n, "claro.graphics.widgets." )
+#define claro_define_widget(type) claro_define_type( type##_widget, widget )
+#define claro_define_widget_partial(type,a,b,c,d) claro_define_type_partial( type##_widget, widget, a, b, c, d )
+
+#define assert_only_widget(o,n)		object_is_of_class(o,n)
 #define assert_valid_widget(o,n)	assert_not_null( o, n, "Widget" ); \
 					assert_only_widget( o, n )
 
@@ -42,6 +45,7 @@ typedef struct bounds_
 
 #define cSizeRequestChanged 1
 
+declare_class( widget );
 struct widget_
 {
     object_t object;
@@ -314,6 +318,10 @@ CLFEXP void widget_set_position( object_t *widget, int x, int y, int event );
  * \param widget A widget
  */
 CLFEXP void widget_destroy( object_t *widget );
+
+
+CLFEXP void widget_set_flags( object_t *widget, int flags );
+CLFEXP void widget_set_bounds( object_t *widget, bounds_t *bounds );
 
 /*\@}*/
 

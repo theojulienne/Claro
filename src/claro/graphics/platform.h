@@ -65,6 +65,8 @@ void cgraphics_menubar_remove_item( widget_t *widget, list_item_t *item );
 void cgraphics_menubar_disable_item( widget_t *menubar, list_item_t *item );
 void cgraphics_menubar_enable_item( widget_t *menubar, list_item_t *item );
 
+void cgraphics_menubar_add_key_binding(widget_t * widget, list_item_t *item, const char * utf8_key,int modifier);
+
 /* Menu */
 void cgraphics_menu_widget_create( widget_t *widget );
 void cgraphics_menu_new_item( widget_t *widget, list_item_t *item );
@@ -168,6 +170,7 @@ void cgraphics_image_set_image( widget_t *widget );
 
 /* Image Functions */
 void cgraphics_image_load( image_t *img, const char *file );
+void cgraphics_image_load_inline_png( image_t *img, const unsigned char * data, int len );
 
 /* ListView */
 void cgraphics_listview_widget_create( widget_t *widget );

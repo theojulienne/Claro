@@ -7,6 +7,7 @@ targets
 	none
 
 contains
+	recurse classes classes
 	recurse statusicon statusicon
 	(cairo) recurse canvas canvas
 	recurse cursor cursor

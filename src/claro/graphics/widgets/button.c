@@ -19,13 +19,30 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+
+void button_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( button, NULL, button_widget_inst_realize, NULL, NULL );
+
+void button_widget_inst_realize( object_t *object )
+{
+	cgraphics_button_widget_create( WIDGET(object) );
+}
+
 object_t *button_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
-	assert_valid_widget( parent, "parent" );
-	return default_widget_create(parent, sizeof(button_widget_t), 
-										   "claro.graphics.widgets.button", bounds, 
-										   flags, cgraphics_button_widget_create);
+	object_t *object;
 	
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( button_widget_type, parent );
+	
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+	
+	object_realize( object );
+
+	return object;
 }
 
 object_t *button_widget_create_with_label( object_t *parent, bounds_t *bounds, int flags, const char *label )
@@ -47,6 +64,10 @@ void button_set_label( object_t *obj, const char *label )
 	assert_valid_button_widget( obj, "obj" );
 	
 	strscpy( bw->text, label, CLARO_BUTTON_MAXIMUM );
+	
+	/* skip if object not yet realized */
+	if ( !object_is_realized( obj ) )
+		return;
 	
 	cgraphics_button_update_text( bw );
 }

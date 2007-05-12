@@ -26,7 +26,7 @@
 /* ClaroProgressBar (subclassed from NSProgressIndicator) */
 @interface ClaroProgressBar : NSProgressIndicator
 {
-    widget_t *cw;
+    object_t *cw;
 }
 
 /* internal init function */
@@ -53,7 +53,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[self setIndeterminate:NO];
 	[self setMinValue:0.0];

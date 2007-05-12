@@ -62,7 +62,7 @@ int splitterDividerLen = 288;
 /* ClaroSplitter (subclassed from NSSplitView) */
 @interface ClaroSplitter : RBSplitView
 {
-	widget_t *cw;
+	object_t *cw;
 	splitter_widget_t *sw;
 }
 
@@ -102,13 +102,13 @@ int splitterDividerLen = 288;
 - (void)setClaroWidget:(widget_t *)widget
 {
 	static NSImage *nsi = nil;
-	cw = widget;
+	cw = OBJECT(widget);
 	sw = (splitter_widget_t *)cw;
 	
 	if ( nsi == nil )
 		nsi = [[NSImage alloc] initWithData:[NSData dataWithBytes:splitterDividerBuffer length:splitterDividerLen]];
 	
-	[self setVertical: (cw->flags & cSplitterVertical) ? NO : YES];
+	[self setVertical: (WIDGET(cw)->flags & cSplitterVertical) ? NO : YES];
 	[self setDivider: nsi];
 		
 	[[NSNotificationCenter defaultCenter] addObserver:self

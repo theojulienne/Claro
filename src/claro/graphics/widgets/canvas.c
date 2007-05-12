@@ -19,12 +19,29 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void canvas_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( canvas, NULL, canvas_widget_inst_realize, NULL, NULL );
+
+void canvas_widget_inst_realize( object_t *object )
+{
+	cgraphics_canvas_widget_create( WIDGET(object) );
+}
+
 object_t *canvas_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
+	object_t *object;
+	
 	assert_valid_widget( parent, "parent" );
-	return default_widget_create(parent, sizeof(canvas_widget_t), 
-                                           "claro.graphics.widgets.canvas", bounds, 
-                                           flags, cgraphics_canvas_widget_create);    
+
+	object = object_create_from_class( canvas_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }
 
 void canvas_redraw( object_t *widget )

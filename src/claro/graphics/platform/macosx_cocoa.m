@@ -21,6 +21,8 @@
 // //#include <cairo-quartz.h>
 #include "macosx_cocoa.h"
 
+#include <unistd.h>
+
 NSAutoreleasePool *arpool = NULL;
 
 @interface ClaroApplication : NSObject
@@ -141,14 +143,14 @@ NSView *cgraphics_get_native_parent( widget_t *widget )
 	widget_t *wp = (widget_t *)widget->object.parent;
 	NSWindow *parent;
 	
-	if ( !strcmp( wp->object.type, "claro.graphics.widgets.window" ) )
+	if ( object_is_of_class( OBJECT(wp), "window_widget" ) )
 	{
-		parent = (NSWindow *)widget_get_container( wp );
+		parent = (NSWindow *)widget_get_container( OBJECT(wp) );
 		return [parent contentView];
 	}
 	else
 	{
-		return (NSView *)widget_get_container( wp );
+		return (NSView *)widget_get_container( OBJECT(wp) );
 	}
 }
 
@@ -163,19 +165,19 @@ void cgraphics_widget_show( widget_t *widget )
 	NSView *osparent;
 	//NSView *parent = cgraphics_get_native_parent( widget );
 	
-	if ( !strcmp( widget->object.type, "claro.graphics.widgets.toolbar" ) )
+	if ( object_is_of_class( OBJECT(widget), "toolbar_widget" ) )
 		return;
 	
-	if ( !strcmp( widget->object.type, "claro.graphics.widgets.menubar" ) )
+	if ( object_is_of_class( OBJECT(widget), "menubar_widget" ) )
 		return;
 	
-	if ( !strcmp( widget->object.type, "claro.graphics.widgets.menu" ) )
+	if ( object_is_of_class( OBJECT(widget), "menu_widget" ) )
 		return;
 	
 	osparent = [ctl superview];
 	
 	if ( [osparent isKindOfClass:[RBSplitSubview class]] )
-		ctl = osparent;
+		ctl = (NSControl *)osparent;
 	
 	//[parent addSubview: ctl];
 	[ctl setHidden: NO];
@@ -187,7 +189,7 @@ void cgraphics_widget_hide( widget_t *widget )
 	NSView *parent = [ctl superview];
 	
 	if ( [parent isKindOfClass:[RBSplitSubview class]] )
-		ctl = parent;
+		ctl = (NSControl *)parent;
 	
 	/*[ctl retain];
 	[ctl removeFromSuperview];*/
@@ -219,9 +221,9 @@ void cgraphics_widget_disable( widget_t *widget )
 
 void cgraphics_widget_close( widget_t *widget )
 {
-	NSWindow *ctl = (NSControl *)widget->native;
+	//NSWindow *ctl = (NSWindow *)widget->native;
 	
-	if ( !strcmp( OBJECT(widget)->type, "claro.graphics.widgets.window" ) )
+	if ( object_is_of_class( OBJECT(widget), "window_widget" ) )
 	{
 		cgraphics_window_close( widget );
 		return;
@@ -230,17 +232,7 @@ void cgraphics_widget_close( widget_t *widget )
 
 widget_t *cgraphics_get_widget_window( widget_t *w )
 {
-	object_t *o ;
-	
-	o = (object_t *)w;
-	
-	if ( !strcmp( o->type, "claro.graphics.widgets.window" ) )
-		return w;
-	
-	if ( o->parent == 0 )
-		return 0;
-	
-	return cgraphics_get_widget_window( (widget_t *)o->parent );
+	return WIDGET( widget_get_window( WIDGET( w ) ) );
 }
 
 void cgraphics_post_init( widget_t *widget )
@@ -264,12 +256,12 @@ void cgraphics_update_bounds( object_t *obj )
 	if ( !( widget->size_flags & cSizeRequestChanged ) )
 		return;
 	
-	if ( !strcmp( widget->object.type, "claro.graphics.widgets.window" ) ||
-		 !strcmp( widget->object.type, "claro.graphics.widgets.workspace.window" ) ||
-		 !strcmp( widget->object.type, "claro.graphics.widgets.menu" ) )
+	if ( object_is_of_class( OBJECT(widget), "window_widget" ) ||
+		 object_is_of_class( OBJECT(widget), "workspace_window_widget" ) ||
+		 object_is_of_class( OBJECT(widget), "menu_widget" ) )
 		return;
 	
-	if ( parent && !strcmp( parent->type, "claro.graphics.widgets.splitter" ) )
+	if ( parent && object_is_of_class( OBJECT(widget), "splitter_widget" ) )
 		return;
 	
 	frame.origin.x = widget->size_req->x;

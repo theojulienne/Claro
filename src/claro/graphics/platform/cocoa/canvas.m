@@ -28,7 +28,7 @@
 /* ClaroCanvas (subclassed from NSView) */
 @interface ClaroCanvas : NSView
 {
-	widget_t *cw;
+	object_t *cw;
 	canvas_widget_t *cvsw;
 	
 	NSGraphicsContext *cg;
@@ -161,7 +161,7 @@ event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
 - (void)drawRect:(NSRect)aRect
 {
 	CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-	widget_t *widget = cw;
+	widget_t *widget = WIDGET(cw);
 	widget_t *window = cgraphics_get_widget_window( widget );
 	int window_height = window->size.h;
 	int widget_bottom, widget_height;
@@ -176,7 +176,7 @@ event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
 			cairo_surface_destroy( cvsw->surface );
 		
 		// create a new surface with this context
-		cvsw->surface = cairo_quartz_surface_create( context, cw->size_req->w, cw->size_req->h, true );
+		cvsw->surface = cairo_quartz_surface_create( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h, true );
 	}
 #endif
 	
@@ -232,7 +232,7 @@ cairo_surface_t *cairo_quartz_surface_create(CGContextRef context,
 */
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	cvsw = (canvas_widget_t *)cw;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -338,6 +338,7 @@ ATSUTextLayout cgraphics_canvas_internal_create_text_layout( canvas_widget_t *cw
 {
 	ATSUTextLayout layout;
 	ATSUStyle style = (ATSUStyle) cw->fontdata;
+	UniCharCount ulen = len;
 	int a;
 	
 	for ( a = 0; a < len + 1; a++ )
@@ -349,7 +350,7 @@ ATSUTextLayout cgraphics_canvas_internal_create_text_layout( canvas_widget_t *cw
 		 len,	 // length
 		 len,	 // total length
 		 1,		  // styleRunCount
-		 &len,	// length of style run
+		 &ulen,	// length of style run
 		 &style, 
 		 &layout );
 	
@@ -368,7 +369,7 @@ int cgraphics_canvas_text_width( widget_t *widget, const char *text, int len )
 	ATSUTextLayout layout;
 	Rect r;
 	
-	layout = cgraphics_canvas_internal_create_text_layout( cw, text, len, &textu );
+	layout = cgraphics_canvas_internal_create_text_layout( cw, text, len, (UniChar *)&textu );
 	
 	ATSUMeasureTextImage( layout, 0, len, 0, 0, &r );
 	
@@ -390,7 +391,7 @@ int cgraphics_canvas_text_display_count( widget_t *widget, const char *text, int
 	ATSUTextLayout layout;
 	UniCharArrayOffset os;
 	
-	layout = cgraphics_canvas_internal_create_text_layout( cw, text, c, &textu );
+	layout = cgraphics_canvas_internal_create_text_layout( cw, text, c, (UniChar *)&textu );
 	
 	ATSUBreakLine( layout, 0, width<<16, false, &os );
 	
@@ -412,7 +413,7 @@ void cgraphics_canvas_show_text( widget_t *widget, int x, int y, const char *tex
 	
 	STATE_SAVE
 	
-	layout = cgraphics_canvas_internal_create_text_layout( cw, text, len, &textu );
+	layout = cgraphics_canvas_internal_create_text_layout( cw, text, len, (UniChar *)&textu );
 	
 	STATE_FLIP
 	
@@ -447,9 +448,6 @@ void cgraphics_canvas_fill_rect( widget_t *widget, int x, int y, int w, int h, d
 
 void cgraphics_canvas_draw_image( widget_t *widget, image_t *image, int x, int y )
 {
-	canvas_widget_t *cw = (canvas_widget_t *)widget;
-	CGContextRef context = (CGContextRef)cw->surfdata;
-	CGRect rect;
 	NSImage *im = (NSImage *)image->native;
 	NSPoint p;
 	

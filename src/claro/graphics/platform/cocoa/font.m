@@ -23,7 +23,7 @@
 
 void *cgraphics_font_from_font( font_t *font )
 {
-	
+	return NULL;
 }
 
 void cgraphics_widget_set_font( widget_t *widget, font_t *font )
@@ -36,7 +36,7 @@ int cgraphics_widget_font_string_width( widget_t *w, char *text, int chars )
 	NSControl *ctl = (NSControl *)w->native;
 	NSFont *fnt;
 	
-	if ( !strcmp( OBJECT(w)->type, "claro.graphics.widgets.window" ) )
+	if ( object_is_of_class( OBJECT(w), "window_widget" ) )
 		fnt = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize: NSRegularControlSize]];
 	else
 		fnt = [ctl font];

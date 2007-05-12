@@ -62,9 +62,22 @@ void layout_parentsize_handle( object_t *obj, event_t *event )
 	layout_reparse( (layout_t *)obj, parent->size_ct, lt->col.min, lt->row.min );
 }
 
+claro_define_type_partial( layout, object, NULL, NULL, NULL, NULL );
+
+layout_t *layout_create_i( object_t *parent )
+{
+	object_t *object;
+
+	object = object_create_from_class( layout_type, parent );
+
+	object_realize( object );
+
+	return (layout_t *)object;
+}
+
 layout_t *layout_create(object_t *parent, const char *layout_spec, bounds_t bounds, int min_w, int min_h)
 {
-    layout_t *lt = (layout_t *)object_create( 0, sizeof(layout_t), "claro.graphics.layout" );
+    layout_t *lt = layout_create_i( NULL );
     int dlen = 0;
     
     assert(lt != NULL && "object create failed");

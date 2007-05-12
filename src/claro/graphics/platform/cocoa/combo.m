@@ -24,7 +24,7 @@
 /* ClaroComboBox (subclassed from NSComboBox) */
 @interface ClaroComboBox : NSComboBox
 {
-    widget_t *cw;
+    object_t *cw;
 }
 
 /* internal init function */
@@ -63,7 +63,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[self setEditable: NO];
 	
@@ -86,7 +86,7 @@
 
 - (void)doubleclicked:(id)sender
 {
-	int rowIndex = [sender selectedRow];
+	//int rowIndex = [sender selectedRow];
 }
 
 - (void)comboBoxSelectionDidChange:(NSNotification *)notification
@@ -149,7 +149,7 @@ void cgraphics_combo_new_row( widget_t *widget, list_item_t *item )
 
 void cgraphics_combo_remove_row( widget_t *widget, list_item_t *item )
 {
-	ClaroComboBox *lv = (ClaroComboBox *)widget->native;
+	//ClaroComboBox *lv = (ClaroComboBox *)widget->native;
 	
 	// delete item->row
 	

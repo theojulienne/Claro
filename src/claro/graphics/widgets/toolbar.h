@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_toolbar_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.toolbar" )
+#define assert_only_toolbar_widget(o,n)	assert_type_check( o, n, "toolbar_widget" )
 #define assert_valid_toolbar_widget(o,n)	assert_not_null( o, n, "ToolBar" ); \
 						assert_only_toolbar_widget( o, n )
 
@@ -33,6 +33,9 @@
 #define cToolbarAutoSizeButtons 4
 
 typedef struct toolbar_widget_ toolbar_widget_t;
+
+declare_class( toolbar_widget );
+#define toolbar_widget_type toolbar_widget_get_type()
 
 struct toolbar_widget_
 {

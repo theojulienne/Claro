@@ -47,7 +47,7 @@
 /* ClaroListView (subclassed from NSScrollView) */
 @interface ClaroListView : NSScrollView
 {
-    widget_t *cw;
+    object_t *cw;
     
     NSTableView *tbl;
     //NSTableColumn *tblc;
@@ -107,7 +107,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 		selector:@selector(claroClose:) name:NSWindowWillCloseNotification
@@ -150,7 +150,7 @@
 
 - (void)doubleclicked:(id)sender
 {
-	int rowIndex = [sender selectedRow];
+	//int rowIndex = [sender selectedRow];
 }
 
 - (void)selected:(id)sender

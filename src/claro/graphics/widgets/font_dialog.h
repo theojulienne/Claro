@@ -23,11 +23,14 @@
  * @{
  */
 
-#define assert_only_font_dialog_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.dialogs.font" )
+#define assert_only_font_dialog_widget(o,n)	assert_type_check( o, n, "font_dialog_widget" )
 #define assert_valid_font_dialog_widget(o,n)	assert_not_null( o, n, "Font Dialog Widget" ); \
 						assert_only_font_dialog_widget( o, n )
 
 typedef struct font_dialog_widget_ font_dialog_widget_t;
+
+declare_class( font_dialog_widget );
+#define font_dialog_widget_type font_dialog_widget_get_type()
 
 struct font_dialog_widget_
 {

@@ -23,11 +23,14 @@
  * @{
  */
 
-#define assert_only_container_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.container" )
+#define assert_only_container_widget(o,n)	assert_type_check( o, n, "container_widget" )
 #define assert_valid_container_widget(o,n)	assert_not_null( o, n, "Container Widget" ); \
 						assert_only_container_widget( o, n )
 
 typedef struct container_widget_ container_widget_t;
+
+declare_class( container_widget );
+#define container_widget_type container_widget_get_type()
 
 struct container_widget_
 {

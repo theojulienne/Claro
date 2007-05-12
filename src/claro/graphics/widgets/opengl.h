@@ -23,13 +23,16 @@
  * @{
  */
 
-#define assert_only_opengl_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.opengl" )
+#define assert_only_opengl_widget(o,n)	assert_type_check( o, n, "opengl_widget" )
 #define assert_valid_opengl_widget(o,n)	assert_not_null( o, n, "OpenGL" ); \
 					assert_only_opengl_widget( o, n )
 
 #ifdef CLARO_OPENGL
 
 typedef struct opengl_widget_ opengl_widget_t;
+
+declare_class( opengl_widget );
+#define opengl_widget_type opengl_widget_get_type()
 
 struct opengl_widget_
 {

@@ -71,6 +71,7 @@ struct LayoutHeap;
  * tuned and compared to alternatives.  Not much is faster
  * out there except for a very beefy Judy array.
  */
+
 typedef struct layout_ {
     widget_t widget;
 
@@ -98,6 +99,8 @@ typedef struct layout_ {
     struct LayoutHeap *heap;
 } layout_t;
 
+declare_class( layout );
+#define layout_type layout_get_type( )
 
 /**
  * Creates an initial layout according to the given specification

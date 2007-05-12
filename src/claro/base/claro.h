@@ -44,6 +44,16 @@
    assert_not_null( obj, "obj", "object_t" ) */
 #define assert_not_null(x,n,t) cassert(x!=NULL, "%s: Expected non-NULL %s, got NULL pointer.", n, t)
 
+typedef struct claro_ claro_t;
+
+declare_class( claro );
+#define claro_type claro_get_type( )
+
+struct claro_
+{
+	object_t object;
+};
+
 CLVEXP object_t *claro;
 
 CLFEXP void claro_base_init( );

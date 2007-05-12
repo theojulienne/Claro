@@ -19,13 +19,29 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void font_dialog_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( font_dialog, NULL, font_dialog_widget_inst_realize, NULL, NULL );
+
+void font_dialog_widget_inst_realize( object_t *object )
+{
+	cgraphics_font_dialog_widget_create( WIDGET(object) );
+}
+
 object_t *font_dialog_widget_create( object_t *parent, int flags )
 {
-	assert_only_widget( parent, "parent" );
-	return default_widget_create(parent, sizeof(font_dialog_widget_t), 
-				   "claro.graphics.widgets.dialogs.font", NO_BOUNDS, 
-				   flags, cgraphics_font_dialog_widget_create);
-	
+	object_t *object;
+
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( font_dialog_widget_type, parent );
+
+	//widget_set_bounds( object, NO_BOUNDS );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }
 
 void font_dialog_set_font( object_t *obj, const char *face, int size, int weight, int slant, int decoration )

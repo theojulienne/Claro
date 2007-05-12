@@ -22,23 +22,38 @@
 void menu_new_item_handle( object_t *obj, event_t *event );
 void menu_remove_item_handle( object_t *obj, event_t *event );
 
-object_t *menu_widget_create( object_t *parent, int flags ) 
+void menu_widget_inst_create( object_t *object );
+void menu_widget_inst_realize( object_t *object );
+
+claro_define_type_partial( menu_widget, list_widget, menu_widget_inst_create, menu_widget_inst_realize, NULL, NULL );
+
+void menu_widget_inst_create( object_t *object )
 {
-	object_t *obj;
-	
-	assert_valid_widget( parent, "parent" );
-	
-	obj = default_widget_create(parent, sizeof(menu_widget_t), 
-				   "claro.graphics.widgets.menu", NULL, 
-				   flags, cgraphics_menu_widget_create);
-	
-	list_widget_init( obj, 2, CLIST_TYPE_PTR, CLIST_TYPE_STRING );
+	list_widget_init( object, 2, CLIST_TYPE_PTR, CLIST_TYPE_STRING );
 	
 	/* handle list operations */
-	object_addhandler( obj, "new_row", menu_new_item_handle );
-	object_addhandler( obj, "remove_row", menu_remove_item_handle );
+	object_addhandler( object, "new_row", menu_new_item_handle );
+	object_addhandler( object, "remove_row", menu_remove_item_handle );
+}
+
+void menu_widget_inst_realize( object_t *object )
+{
+	cgraphics_menu_widget_create( WIDGET(object) );
+}
+
+object_t *menu_widget_create( object_t *parent, int flags )
+{
+	object_t *object;
 	
-	return obj;
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( menu_widget_type, parent );
+	
+	widget_set_flags( object, flags );
+	
+	object_realize( object );
+
+	return object;
 }
 
 list_item_t *menu_append_item( object_t *menu, list_item_t *parent, image_t *image, char *title )
@@ -77,7 +92,7 @@ list_item_t *menu_insert_separator( object_t *menu, list_item_t *parent, int pos
 
 void menu_new_item_handle( object_t *obj, event_t *event )
 {
-	list_widget_t *lw = (list_widget_t *)obj;
+	//list_widget_t *lw = (list_widget_t *)obj;
 	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
 	
 	cgraphics_menu_new_item( WIDGET(obj), item );
@@ -101,7 +116,7 @@ void menu_remove_item( object_t *menu, list_item_t *item )
 
 void menu_remove_item_handle( object_t *obj, event_t *event )
 {
-	list_widget_t *lw = (list_widget_t *)obj;
+	//list_widget_t *lw = (list_widget_t *)obj;
 	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
 	
 	cgraphics_menu_remove_item( WIDGET(obj), item );

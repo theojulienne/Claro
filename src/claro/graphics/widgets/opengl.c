@@ -21,24 +21,41 @@
 
 #ifdef CLARO_OPENGL
 
+void opengl_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( opengl, NULL, opengl_widget_inst_realize, NULL, NULL );
+
+void opengl_widget_inst_realize( object_t *object )
+{
+	cgraphics_opengl_widget_create( WIDGET(object) );
+}
+
 object_t *opengl_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
+	object_t *object;
+
 	assert_valid_widget( parent, "parent" );
-	return default_widget_create(parent, sizeof(opengl_widget_t), 
-					"claro.graphics.widgets.opengl", bounds, 
-					flags, cgraphics_opengl_widget_create);    
+
+	object = object_create_from_class( opengl_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }
 
 void opengl_flip( object_t *widget )
 {
 	assert_valid_opengl_widget( widget, "widget" );
-	cgraphics_opengl_flip( widget );
+	cgraphics_opengl_flip( WIDGET(widget) );
 }
 
 void opengl_activate( object_t *widget )
 {
 	assert_valid_opengl_widget( widget, "widget" );
-	cgraphics_opengl_activate( widget );
+	cgraphics_opengl_activate( WIDGET(widget) );
 }
 
 #endif

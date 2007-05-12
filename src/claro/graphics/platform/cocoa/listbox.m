@@ -24,7 +24,7 @@
 /* ClaroListBox (subclassed from NSScrollView) */
 @interface ClaroListBox : NSScrollView
 {
-    widget_t *cw;
+    object_t *cw;
     
     NSTableView *tbl;
     NSTableColumn *tblc;
@@ -70,7 +70,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 		selector:@selector(claroClose:) name:NSWindowWillCloseNotification
@@ -118,7 +118,7 @@
 
 - (void)doubleclicked:(id)sender
 {
-	int rowIndex = [sender selectedRow];
+	//int rowIndex = [sender selectedRow];
 }
 
 - (void)selected:(id)sender
@@ -188,7 +188,7 @@
 			{
 				cstr = item->data[0];
 				str = CFStringCreateWithCString( NULL, cstr, strlen( cstr ) );
-				item->native = str;
+				item->native = (void *)str;
 			}
 			
 			return item->native;

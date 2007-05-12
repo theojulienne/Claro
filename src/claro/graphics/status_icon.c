@@ -19,26 +19,39 @@
 #include <claro/graphics.h>
 
 
-CLFEXP object_t * status_icon_create(object_t *parent, image_t * icon, int flags)
+void status_icon_inst_realize( object_t *object );
+
+claro_define_type_partial( status_icon, object, NULL, status_icon_inst_realize, NULL, NULL );
+
+void status_icon_inst_realize( object_t *object )
 {
-    status_icon_t * status;
-    
-    status = (status_icon_t*)object_create(parent, sizeof(status_icon_t), "claro.graphics.status_icon");
-    
-    cgraphics_status_icon_create(status, flags);
-    cgraphics_status_icon_set_icon(status, icon);
-    
-    return (object_t*)status;
+	cgraphics_status_icon_create( WIDGET(object) );
 }
 
-CLFEXP void status_icon_set_icon(object_t * status, image_t * icon)
+object_t *status_icon_create( object_t *parent, image_t *icon, int flags )
+{
+	object_t *object;
+
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( status_icon_type, parent );
+
+	cgraphics_status_icon_create( object, flags );
+    cgraphics_status_icon_set_icon( object, icon );
+
+	object_realize( object );
+
+	return object;
+}
+
+void status_icon_set_icon(object_t * status, image_t * icon)
 {
     assert_valid_status_icon(status, "status");
     
     cgraphics_status_icon_set_icon((status_icon_t*)status, icon);
 }
 
-CLFEXP void status_icon_set_menu(object_t * status, object_t * menu)
+void status_icon_set_menu(object_t * status, object_t * menu)
 {
     assert_valid_status_icon(status, "status");
     assert_valid_menu_widget(menu, "menu");
@@ -46,14 +59,14 @@ CLFEXP void status_icon_set_menu(object_t * status, object_t * menu)
     cgraphics_status_icon_set_menu((status_icon_t*)status, menu);
 }
 
-CLFEXP void status_icon_set_visible(object_t * status, int visible)
+void status_icon_set_visible(object_t * status, int visible)
 {
     assert_valid_status_icon(status, "status");
     
     cgraphics_status_icon_set_visible((status_icon_t*)status, visible);
 }
 
-CLFEXP void status_icon_set_tooltip(object_t * status, const char * tooltip)
+void status_icon_set_tooltip(object_t * status, const char * tooltip)
 {
     assert_valid_status_icon(status, "status");
     

@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_canvas_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.canvas" )
+#define assert_only_canvas_widget(o,n)	assert_type_check( o, n, "canvas_widget" )
 #define assert_valid_canvas_widget(o,n)	assert_not_null( o, n, "Canvas Widget" ); \
 					assert_only_canvas_widget( o, n )
 
@@ -48,6 +48,9 @@
 /* END OLD */
 
 typedef struct canvas_widget_ canvas_widget_t;
+
+declare_class( canvas_widget );
+#define canvas_widget_type canvas_widget_get_type()
 
 struct canvas_widget_
 {

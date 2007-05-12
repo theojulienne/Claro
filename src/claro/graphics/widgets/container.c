@@ -19,25 +19,27 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void container_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( container, NULL, container_widget_inst_realize, NULL, NULL );
+
+void container_widget_inst_realize( object_t *object )
+{
+	cgraphics_container_widget_create( WIDGET(object) );
+}
+
 object_t *container_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
-	widget_t *widget;
-	container_widget_t *cw;
-	
+	object_t *object;
+
 	assert_valid_widget( parent, "parent" );
-	
-	widget = (widget_t *)object_create( parent, sizeof(container_widget_t), "claro.graphics.widgets.container" );
-	
-	cw = (container_widget_t *)widget;
-	widget->size_req = bounds;
-	
-	widget->flags = flags;
-	
-	widget_pre_init( widget );
-	
-	cgraphics_container_widget_create( widget );
-	
-	widget_post_init( widget );
-	
-	return (object_t *)widget;
+
+	object = object_create_from_class( container_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }

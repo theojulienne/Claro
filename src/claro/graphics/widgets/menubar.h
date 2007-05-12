@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_menubar_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.menubar" )
+#define assert_only_menubar_widget(o,n)	assert_type_check( o, n, "menubar_widget" )
 #define assert_valid_menubar_widget(o,n)	assert_not_null( o, n, "MenuBar" ); \
 						assert_only_menubar_widget( o, n )
 
@@ -35,6 +35,9 @@ typedef struct menubar_widget_ menubar_widget_t;
 
 #define 	cModifierShift		1 << 0
 #define	    cModifierCommand	1 << 1
+
+declare_class( menubar_widget );
+#define menubar_widget_type menubar_widget_get_type()
 
 struct menubar_widget_
 {

@@ -19,32 +19,36 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
-object_t *frame_widget_create( object_t *parent, bounds_t *bounds, int flags )
+void frame_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( frame, NULL, frame_widget_inst_realize, NULL, NULL );
+
+void frame_widget_inst_realize( object_t *object )
 {
-	object_t *obj;
-	
-	assert_valid_widget( parent, "parent" );
-	
-	obj = default_widget_create(parent, sizeof(frame_widget_t),
-					"claro.graphics.widgets.frame", bounds, 
-					flags, cgraphics_frame_widget_create);
-	
-	frame_set_text( obj, "" );
-	
-	return obj;
+	cgraphics_frame_widget_create( WIDGET(object) );
 }
 
 object_t *frame_widget_create_with_label( object_t *parent, bounds_t *bounds, int flags, const char *label )
 {
-	object_t *obj;
-	
+	object_t *object;
+
 	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( frame_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
 	
-	obj = frame_widget_create( parent, bounds, flags );
-	
-	frame_set_text( obj, label );
-	
-	return obj;
+	frame_set_text( object, label );
+
+	object_realize( object );
+
+	return object;
+}
+
+object_t *frame_widget_create( object_t *parent, bounds_t *bounds, int flags )
+{
+	return frame_widget_create_with_label( parent, bounds, flags, "" );
 }
 
 void frame_set_text( object_t *frame, const char *label )
@@ -54,6 +58,10 @@ void frame_set_text( object_t *frame, const char *label )
 	assert_valid_frame_widget( frame, "frame" );
 	
 	strscpy( fw->text, label, CLARO_FRAME_MAXIMUM );
+	
+	/* skip if object not yet realized */
+	if ( !object_is_realized( frame ) )
+		return;
 	
 	cgraphics_frame_set_text((widget_t *)frame);
 }

@@ -58,6 +58,8 @@ void munmap( void *addr, size_t len )
 
 #ifdef _WIN32
 #include <windows.h>
+#else
+#include <unistd.h>
 #endif
 
 void mssleep( int ms )

@@ -83,7 +83,7 @@ void cgraphics_treeview_new_row( widget_t *widget, list_item_t *item )
 	
 	pitem = 0;
 	
-	if ( OBJECT(item)->parent != 0 && !strcmp( OBJECT(item)->parent->type, "claro.graphics.list_item" ) )
+	if ( OBJECT(item)->parent != 0 && object_is_of_class( OBJECT(item)->parent, "list_item" ) )
 	{
 		pitem = (list_item_t *)(OBJECT(item)->parent);
 		tvins.hParent = pitem->native;

@@ -23,12 +23,15 @@
  * @{
  */
 
-#define assert_only_listbox_widget(o,n)		assert_type_check( o, n, "claro.graphics.widgets.listbox" )
+#define assert_only_listbox_widget(o,n)		assert_type_check( o, n, "listbox_widget" )
 #define assert_valid_listbox_widget(o,n)	assert_not_null( o, n, "ListBox" ); \
 						assert_only_listbox_widget( o, n )
 
 
 typedef struct listbox_widget_ listbox_widget_t;
+
+declare_class( listbox_widget );
+#define listbox_widget_type listbox_widget_get_type()
 
 struct listbox_widget_
 {

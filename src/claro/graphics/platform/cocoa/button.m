@@ -24,7 +24,7 @@
 /* ClaroPushButton (subclassed from NSButton) */
 @interface ClaroPushButton : NSButton
 {
-    widget_t *cw;
+    object_t *cw;
 }
 
 /* internal init function */
@@ -73,7 +73,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[self setButtonType:NSMomentaryPushInButton];
 	[self setBezelStyle:NSRoundedBezelStyle];

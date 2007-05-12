@@ -26,7 +26,7 @@
 /* ClaroContainer (subclassed from NSView) */
 @interface ClaroContainer : NSView
 {
-	widget_t *cw;
+	object_t *cw;
 	container_widget_t *sw;
 }
 
@@ -63,7 +63,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	sw = (container_widget_t *)cw;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -96,6 +96,6 @@ void cgraphics_container_widget_create( widget_t *widget )
 	
 	widget->native = (NSControl *)co;
 	
-	widget_set_content_size( widget, widget->size_req->w, widget->size_req->h, 1 );
+	widget_set_content_size( OBJECT(widget), widget->size_req->w, widget->size_req->h, 1 );
 }
 

@@ -28,7 +28,7 @@ list_item_t *cgraphics_find_list_item_by_id( list_t *list, NSString *id );
 /* ClaroToolBar (subclassed from NSToolbar) */
 @interface ClaroToolBar : NSToolbar
 {
-	widget_t *cw;
+	object_t *cw;
 }
 
 /* internal init function */
@@ -59,15 +59,15 @@ list_item_t *cgraphics_find_list_item_by_id( list_t *list, NSString *id );
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[self setDelegate:self];
 	[self setAllowsUserCustomization:NO];
 	[self setAutosavesConfiguration: NO]; 
 	
-	if ( cw->flags & (cToolbarShowImages|cToolbarShowText) )
+	if ( widget->flags & (cToolbarShowImages|cToolbarShowText) )
 		[self setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-	else if ( cw->flags & cToolbarShowImages )
+	else if ( widget->flags & cToolbarShowImages )
 		[self setDisplayMode: NSToolbarDisplayModeIconOnly];
 	else
 		[self setDisplayMode: NSToolbarDisplayModeLabelOnly];

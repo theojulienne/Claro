@@ -22,21 +22,34 @@
 void workspace_new_row_handle( object_t *obj, event_t *event );
 void workspace_remove_row_handle( object_t *obj, event_t *event );
 
-object_t *workspace_widget_create( object_t *parent, bounds_t *bounds, int flags )
+void workspace_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( workspace, NULL, workspace_widget_inst_realize, NULL, NULL );
+
+void workspace_widget_inst_realize( object_t *object )
 {
-	object_t *obj;
 	window_widget_t *pwin;
 	
+	cgraphics_workspace_widget_create( WIDGET(object) );
+	
+	pwin = (window_widget_t *)widget_get_window( object );
+	pwin->workspace = WIDGET(object);
+}
+
+object_t *workspace_widget_create( object_t *parent, bounds_t *bounds, int flags )
+{
+	object_t *object;
+	
 	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( workspace_widget_type, parent );
 	
-	obj = default_widget_create(parent, sizeof(workspace_widget_t), 
-					"claro.graphics.widgets.workspace", bounds, 
-					flags, cgraphics_workspace_widget_create);
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
 	
-	pwin = (window_widget_t *)cgraphics_get_widget_window( WIDGET(obj) );
-	pwin->workspace = obj;
-	
-	return obj;
+	object_realize( object );
+
+	return object;
 }
 
 void workspace_set_active( object_t *workspace, object_t *child )
@@ -70,17 +83,41 @@ void workspace_tile( object_t *workspace, int dir )
 
 /** workspace window **/
 
+void workspace_window_widget_inst_realize( object_t *object );
+
+const class_info_t workspace_window_widget_class_info =
+{
+	"workspace_window_widget",
+	sizeof( workspace_window_widget_t ),
+
+	&widget_class_info, /* parent class */
+
+	NULL, /* create func */
+	workspace_window_widget_inst_realize, /* realize func */
+
+	NULL, /* finalize func */
+	NULL, /* destroy func */
+};
+
+void workspace_window_widget_inst_realize( object_t *object )
+{
+	cgraphics_workspace_window_widget_create( WIDGET(object) );
+}
+
 object_t *workspace_window_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
-	object_t *obj;
+	object_t *object;
 	
-	assert_valid_workspace_widget( parent, "parent" );
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( &workspace_window_widget_class_info, parent );
 	
-	obj = default_widget_create(parent, sizeof(workspace_window_widget_t), 
-					"claro.graphics.widgets.workspace.window", bounds, 
-					flags, cgraphics_workspace_window_widget_create);
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
 	
-	return obj;
+	object_realize( object );
+
+	return object;
 }
 
 void workspace_window_set_title( object_t *window, char *title )

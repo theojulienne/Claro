@@ -18,8 +18,21 @@
 
 #include <claro/base.h>
 
-object_t *claro = 0;
+object_t *claro = NULL;
 int claro_in_loop = 0;
+
+claro_define_type_partial( claro, object, NULL, NULL, NULL, NULL );
+
+object_t *claro_object_create( )
+{
+	object_t *obj;
+	
+	obj = object_create_from_class( claro_type, NULL );
+	
+	object_realize( obj );
+	
+	return obj;
+}
 
 /* signal catcher */
 void signal_handle( int signal )
@@ -58,7 +71,7 @@ void claro_base_init( )
 	
 	object_init( );
 	
-	claro = object_create( 0, sizeof( object_t ), "claro_base" );
+	claro = claro_object_create( );
 }
 
 /* Destroy Claro */
@@ -83,7 +96,7 @@ void claro_run( )
 	/* destroy any objects awaiting destruction */
 	LIST_FOREACH_SAFE( n, tn, destroy_list.head )
 	{
-		object_destroy( OBJECT(n->data) );
+		object_actual_destroy( OBJECT(n->data) );
 		node_del( n, &destroy_list );
 		node_free( n );
 	}

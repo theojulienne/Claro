@@ -19,12 +19,29 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void progress_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( progress, NULL, progress_widget_inst_realize, NULL, NULL );
+
+void progress_widget_inst_realize( object_t *object )
+{
+	cgraphics_progress_widget_create( WIDGET(object) );
+}
+
 object_t *progress_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
+	object_t *object;
+
 	assert_valid_widget( parent, "parent" );
-	return default_widget_create(parent, sizeof(progress_widget_t), 
-					"claro.graphics.widgets.progress", bounds, 
-					flags, cgraphics_progress_widget_create);
+
+	object = object_create_from_class( progress_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }
 
 void progress_set_level(object_t *progress, double percentage)

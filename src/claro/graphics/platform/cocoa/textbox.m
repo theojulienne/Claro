@@ -31,7 +31,7 @@ int cgraphics_unikeycode_to_claro( int code )
 /* ClaroTextBox (subclassed from NSTextField) */
 @interface ClaroTextBox : NSTextField
 {
-	widget_t *cw;
+	object_t *cw;
 }
 
 /* internal init function */
@@ -54,7 +54,7 @@ int cgraphics_unikeycode_to_claro( int code )
 	NSString *chars;
 	int code;
 	
-	if ( !( cw->notify_flags & cNotifyKey ) )
+	if ( !( WIDGET(cw)->notify_flags & cNotifyKey ) )
 		return 0;
 	
 	chars = [theEvent charactersIgnoringModifiers];
@@ -96,7 +96,7 @@ int cgraphics_unikeycode_to_claro( int code )
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[self setTarget: self];
 	[self setDelegate: self];
@@ -168,5 +168,5 @@ void cgraphics_textbox_set_pos( widget_t *widget, int pos )
 
 int cgraphics_textbox_get_pos( widget_t *widget )
 {
-	
+	return 0;
 }

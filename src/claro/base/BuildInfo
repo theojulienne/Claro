@@ -7,30 +7,34 @@ targets
 	library claro-base
 		sources
 			block.c
-			hashtable.c
 			claro.c
+			classes.c
+			events.c
+			hashtable.c
 			list.c
 			log.c
 			memory.c
 			object.c
+			object_map.c
 			oscompat.c
 			store.c
-			object_map.c
 			string.c
 		includes
 			../base.h
 			block.h
-			hashtable.h
-			store.h
 			claro.h
-			object_map.h
-			object.h
-			string.h
-			memory.h
+			classes.h
+			events.h
+			hashtable.h
 			list.h
 			log.h
+			memory.h
+			object.h
+			object_map.h
 			rbtree.h
 			stdinc.h
+			store.h
+			string.h
 
 contains
 	none

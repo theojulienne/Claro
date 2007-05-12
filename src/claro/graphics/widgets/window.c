@@ -19,22 +19,32 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void window_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( window, NULL, window_widget_inst_realize, NULL, NULL );
+
+void window_widget_inst_realize( object_t *object )
+{
+	cgraphics_window_widget_create( WIDGET(object) );
+}
+
 object_t *window_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
-	object_t *window;
+	object_t *object;
+
+	object = object_create_from_class( window_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
 	
-	assert_only_widget( parent, "parent" );
+	widget_set_position( object, bounds->x, bounds->y, 0 );
+	widget_set_content_size( object, bounds->w, bounds->h, 0 );
 	
-	window = default_widget_create(parent, sizeof(window_widget_t), 
-						"claro.graphics.widgets.window", bounds, 
-						flags, cgraphics_window_widget_create);
-	
-	widget_set_position( WIDGET(window), bounds->x, bounds->y, 0 );
-	widget_set_content_size( WIDGET(window), bounds->w, bounds->h, 0 );
-	
-	object_addhandler( window, "content_resized", widget_resized_handle );
-	
-	return window;
+	object_addhandler( object, "content_resized", widget_resized_handle );
+
+	return object;
 }
 
 void window_show( object_t *w )

@@ -23,11 +23,11 @@
  * @{
  */
 
-#define assert_only_workspace_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.workspace" )
+#define assert_only_workspace_widget(o,n)	assert_type_check( o, n, "workspace_widget" )
 #define assert_valid_workspace_widget(o,n)	assert_not_null( o, n, "Workspace" ); \
 						assert_only_workspace_widget( o, n )
 
-#define assert_only_workspace_window_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.workspace.window" )
+#define assert_only_workspace_window_widget(o,n)	assert_type_check( o, n, "workspace_window_widget" )
 #define assert_valid_workspace_window_widget(o,n)	assert_not_null( o, n, "Workspace Window" ); \
 							assert_only_workspace_window_widget( o, n )
 
@@ -37,10 +37,16 @@
 typedef struct workspace_widget_ workspace_widget_t;
 typedef struct workspace_window_widget_ workspace_window_widget_t;
 
+declare_class( workspace_widget );
+#define workspace_widget_type workspace_widget_get_type()
+
 struct workspace_widget_
 {
 	widget_t widget;
 };
+
+declare_class( workspace_window_widget );
+#define workspace_window_widget_type workspace_window_widget_get_type()
 
 struct workspace_window_widget_
 {

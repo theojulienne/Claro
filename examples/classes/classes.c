@@ -16,19 +16,23 @@
  */
 
 
-/* ClaroWindow (subclassed from NSWindow) */
-@interface ClaroWindow : NSWindow
+#include <claro/base.h>
+#include "foo.h"
+
+int main( int argc, char *argv[] )
 {
-    object_t *cw;
+	claro_base_init( );
+	
+	log_fd_set_level( CL_DEBUG, stderr );
+	
+	clog( CL_INFO, "%s running using Claro!", __FILE__ );
+	
+	object_t *foo = foo_create( NULL );
+	
+	//block_heap_loginfo( );
+	object_destroy( foo );
+	
+	claro_loop( );
+	
+	return 0;
 }
-
-/* internal init function */
-- (void)setClaroWidget:(widget_t *)widget;
-
-/* notification responders */
-- (void)claroResize:(NSNotification *)aNotification;
-- (void)claroMove:(NSNotification *)aNotification;
-- (void)claroClose:(NSNotification *)aNotification;
-@end
-
-void cgraphics_window_close( widget_t *widget );

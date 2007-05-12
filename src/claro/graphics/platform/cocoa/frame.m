@@ -26,7 +26,7 @@
 /* ClaroFrame (subclassed from NSBox) */
 @interface ClaroFrame : NSBox
 {
-	widget_t *cw;
+	object_t *cw;
 	frame_widget_t *sw;
 }
 
@@ -65,7 +65,7 @@
 {
 	SaneView *sv;
 	
-	cw = widget;
+	cw = OBJECT(widget);
 	sw = (frame_widget_t *)cw;
 	
 	/* thanks, but no thanks: a normal coordinate system would be nice. */

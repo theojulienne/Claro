@@ -40,7 +40,7 @@ void cgraphics_menubar_widget_create( widget_t *widget )
 	if ( parent == 0 )
 		return;
 	
-	if ( strcasecmp( parent->object.type, "claro.graphics.widgets.window" ) )
+	if ( !object_is_of_class( OBJECT(parent), "window_widget" ) )
 		return;
 	
 	nd = parent->ndata;	
@@ -54,7 +54,7 @@ GtkMenuShell *cgraphics_menubar_get_native_parent( widget_t *widget, list_item_t
 	list_item_t *pitem = 0;
 	GtkMenuItem *mi;
 	
-	if ( strcmp( item->object.parent->type, "claro.graphics.list_item" ) ) // parent isn't an item
+	if ( !object_is_of_class( OBJECT(item->object.parent), "list_item" ) ) // parent isn't an item
 		return widget->native;
 	else
 	{

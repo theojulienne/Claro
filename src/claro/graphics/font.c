@@ -39,5 +39,5 @@ void widget_set_font( object_t *widget, char *face, int size, int weight, int sl
 
 int widget_font_string_width( object_t *w, char *text, int chars )
 {
-	return cgraphics_widget_font_string_width( w, text, chars );
+	return cgraphics_widget_font_string_width( WIDGET(w), text, chars );
 }

@@ -23,9 +23,12 @@
  * @{
  */
 
-#define assert_only_statusbar_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.statusbar" )
+#define assert_only_statusbar_widget(o,n)	assert_type_check( o, n, "statusbar_widget" )
 #define assert_valid_statusbar_widget(o,n)	assert_not_null( o, n, "StatusBar" ); \
 						assert_only_statusbar_widget( o, n )
+
+declare_class( statusbar_widget );
+#define statusbar_widget_type statusbar_widget_get_type()
 
 typedef struct statusbar_widget_ {
     widget_t widget;

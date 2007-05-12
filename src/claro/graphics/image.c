@@ -17,25 +17,32 @@
 
 
 #include <claro/graphics.h>
+#include <claro/graphics/platform.h>
+
+claro_define_type_partial( image, object, NULL, NULL, NULL, NULL );
 
 image_t *image_load( object_t *parent, const char *file )
 {
-	image_t *img;
+	object_t *object;
+
+	object = object_create_from_class( image_type, parent );
 	
-	img = (image_t *)object_create( parent, sizeof(image_t), "claro.graphics.image" );
-	
-	cgraphics_image_load( img, file );
-	
-	return img;
+	cgraphics_image_load( (image_t *)object, file );
+
+	object_realize( object );
+
+	return (image_t *)object;
 }
 
-image_t * image_load_inline_png( object_t *parent, const unsigned char * data, int len)
+image_t *image_load_inline_png( object_t *parent, const unsigned char * data, int len)
 {
-	image_t * img;
+	object_t *object;
+
+	object = object_create_from_class( image_type, parent );
 	
-	img = (image_t*)object_create( parent, sizeof(image_t), "claro.graphics.image" );
+	cgraphics_image_load_inline_png( (image_t *)object, data, len );
 
-	cgraphics_image_load_inline_png( img, data, len );
+	object_realize( object );
 
-	return img;
+	return (image_t *)object;
 }

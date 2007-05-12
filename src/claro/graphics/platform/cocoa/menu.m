@@ -21,6 +21,8 @@
 //#include <cairo-quartz.h>
 #include "../macosx_cocoa.h"
 
+NSMenu *cgraphics_menubar_get_native_parent( widget_t *widget, list_item_t *item );
+
 @interface ClaroMenuItem : NSMenuItem
 {
 	list_item_t *myitem;

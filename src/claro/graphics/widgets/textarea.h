@@ -24,11 +24,14 @@
  * @{
  */
 
-#define assert_only_textarea_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.textarea" )
+#define assert_only_textarea_widget(o,n)	assert_type_check( o, n, "textarea_widget" )
 #define assert_valid_textarea_widget(o,n)	assert_not_null( o, n, "TextArea" ); \
 						assert_only_textarea_widget( o, n )
 
 #define CLARO_TEXTAREA_MAXIMUM (1024*1024)
+
+declare_class( textarea_widget );
+#define textarea_widget_type textarea_widget_get_type()
 
 typedef struct textarea_widget_ {
     widget_t widget;

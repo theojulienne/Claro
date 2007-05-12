@@ -56,7 +56,7 @@ widget_t *cgraphics_get_widget_window( widget_t *w )
 	
 	o = (object_t *)w;
 	
-	if ( !strcmp( o->type, "claro.graphics.widgets.window" ) )
+	if ( object_is_of_class( OBJECT(o), "window_widget" ) )
 		return w;
 	
 	if ( o->parent == 0 )
@@ -120,7 +120,7 @@ LRESULT CALLBACK cg_intercept_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 				w = GetWindowLong( lParam, GWL_USERDATA );
 			}
 			
-			if ( !strcmp( w->object.type, "claro.graphics.widgets.scrollbar" ) )
+			if ( object_is_of_class( OBJECT(w), "scrollbar_widget" ) )
 			{
 				s = SB_CTL;
 				
@@ -327,7 +327,7 @@ void cgraphics_check_events( )
 			if ( cg_msgloop_proc( msg.hwnd, msg.message, msg.wParam, msg.lParam ) == 0 )
 				continue;
 			
-			if ( !strcmp( w->object.type, "claro.graphics.widgets.window" ) )
+			if ( object_is_of_class( OBJECT(w), "window_widget" ) )
 			{
 				window_widget_t *ww = (window_widget_t *)w;
 				
@@ -383,7 +383,7 @@ widget_t *cg_find_by_native( HWND hwnd )
 	{
 		tw = n->data;
 		
-		if ( strncmp( tw->object.type, "claro.graphics.widgets.", 23 ) )
+		if ( !object_is_of_class( OBJECT(tw), "widget" ) )
 			continue;
 		
 		if ( tw->native == hwnd || tw->container == hwnd )
@@ -465,11 +465,11 @@ void cgraphics_update_bounds( object_t *obj )
 	if ( !( widget->size_flags & cSizeRequestChanged ) )
 		return;
 	
-	if ( !strcmp( widget->object.type, "claro.graphics.widgets.window" ) ||
-		 !strcmp( widget->object.type, "claro.graphics.widgets.workspace.window" ) )
+	if ( object_is_of_class( OBJECT(widget), "window_widget" ) ||
+		 object_is_of_class( OBJECT(widget), "workspace_window_widget" ) )
 		return;
 	
-	if ( !strcmp( widget->object.type, "claro.graphics.widgets.workspace" ) )
+	if ( object_is_of_class( OBJECT(widget), "workspace_widget" ) )
 	{
 		widget_t *wp = cgraphics_get_widget_window( WIDGET(obj) );
 		SetWindowPos( widget->native, HWND_TOP, widget->size_req->x+wp->size_ct.x, widget->size_req->y+wp->size_ct.y, widget->size_req->w, widget->size_req->h, 0 );

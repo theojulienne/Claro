@@ -23,13 +23,16 @@
  * @{
  */
 
-#define assert_only_button_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.button" )
+#define assert_only_button_widget(o,n)	assert_type_check( o, n, "button_widget" )
 #define assert_valid_button_widget(o,n)	assert_not_null( o, n, "Button Widget" ); \
 					assert_only_button_widget( o, n )
 
 #define CLARO_BUTTON_MAXIMUM 256
 
 typedef struct button_widget_ button_widget_t;
+
+declare_class( button_widget );
+#define button_widget_type button_widget_get_type()
 
 struct button_widget_
 {

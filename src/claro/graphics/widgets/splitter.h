@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_splitter_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.splitter" )
+#define assert_only_splitter_widget(o,n)	assert_type_check( o, n, "splitter_widget" )
 #define assert_valid_splitter_widget(o,n)	assert_not_null( o, n, "Splitter" ); \
 						assert_only_splitter_widget( o, n )
 
@@ -41,6 +41,9 @@ typedef struct
 	
 	widget_t *w;
 } splitter_widget_child;
+
+declare_class( splitter_widget );
+#define splitter_widget_type splitter_widget_get_type()
 
 struct splitter_widget_
 {

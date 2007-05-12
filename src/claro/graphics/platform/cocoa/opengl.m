@@ -25,7 +25,7 @@
 
 @interface ClaroOpenGL : NSOpenGLView
 {
-	widget_t *cw;
+	object_t *cw;
 }
 
 /* internal init function */
@@ -135,7 +135,7 @@ event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 		selector:@selector(claroClose:) name:NSWindowWillCloseNotification

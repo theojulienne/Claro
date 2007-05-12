@@ -23,9 +23,12 @@
  * @{
  */
 
-#define assert_only_image_widget(o,n)		assert_type_check( o, n, "claro.graphics.widgets.image" )
+#define assert_only_image_widget(o,n)		assert_type_check( o, n, "image_widget" )
 #define assert_valid_image_widget(o,n)		assert_not_null( o, n, "Image" ); \
 						assert_only_image_widget( o, n )
+
+declare_class( image_widget );
+#define image_widget_type image_widget_get_type()
 
 typedef struct image_widget_ {
     widget_t widget;

@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_listview_widget(o,n)	assert_type_check( o, n, "claro.graphics.widgets.listview" )
+#define assert_only_listview_widget(o,n)	assert_type_check( o, n, "listview_widget" )
 #define assert_valid_listview_widget(o,n)	assert_not_null( o, n, "ListView" ); \
 						assert_only_listview_widget( o, n )
 
@@ -44,6 +44,9 @@ enum
 #define cListViewRowCheckBoxes 1
 
 typedef struct listview_widget_ listview_widget_t;
+
+declare_class( listview_widget );
+#define listview_widget_type listview_widget_get_type()
 
 struct listview_widget_
 {

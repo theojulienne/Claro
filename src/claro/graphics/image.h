@@ -29,6 +29,9 @@
 
 typedef struct image_ image_t;
 
+declare_class( image );
+#define image_type image_get_type( )
+
 struct image_
 {
     object_t object;

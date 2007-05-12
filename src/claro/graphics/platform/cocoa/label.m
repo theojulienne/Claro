@@ -26,7 +26,7 @@
 /* ClaroLabel (subclassed from NSTextField) */
 @interface ClaroLabel : NSTextField
 {
-	widget_t *cw;
+	object_t *cw;
 }
 
 /* internal init function */
@@ -59,7 +59,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 		selector:@selector(claroClose:) name:NSWindowWillCloseNotification

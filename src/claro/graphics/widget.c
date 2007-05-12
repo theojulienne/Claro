@@ -19,6 +19,55 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+
+void widget_inst_create( object_t *object );
+void widget_inst_realize( object_t *object );
+void widget_inst_finalize( object_t *object );
+void widget_inst_destroy( object_t *object );
+
+claro_define_type( widget, object );
+
+event_handler( widget_has_realized )
+{
+	if ( !object_is_of_class( object, "window" ) )
+		widget_post_init( object );
+}
+
+void widget_inst_create( object_t *object )
+{
+	object_addhandler( object, "realized", widget_has_realized );
+	printf( "widget_inst_create(%p)\n", object );
+}
+
+void widget_inst_realize( object_t *object )
+{
+	printf( "widget_inst_realize(%p)\n", object );
+}
+
+void widget_inst_finalize( object_t *object )
+{
+	printf( "widget_inst_finalize(%p)\n", object );
+}
+
+void widget_inst_destroy( object_t *object )
+{
+	printf( "widget_inst_destroy(%p)\n", object );
+}
+
+object_t *widget_create( object_t *parent )
+{
+	object_t *object;
+
+	object = object_create_from_class( &widget_class_info, parent );
+
+	/* realize the object */
+	object_realize( object );
+
+	return object;
+}
+
+
+
 bounds_t no_bounds = {0, 0, 0, 0, NULL};
 
 void bounds_set( bounds_t *bounds, int x, int y, int w, int h )
@@ -143,26 +192,26 @@ void widget_show( object_t *widget )
 {
 	/* FIXME: check for window, pass on to window_X() */
 	assert_valid_widget( widget, "widget" );
-	cgraphics_widget_show( widget );
+	cgraphics_widget_show( WIDGET(widget) );
 }
 
 void widget_hide( object_t *widget )
 {
 	/* FIXME: check for window, pass on to window_X() */
 	assert_valid_widget( widget, "widget" );
-	cgraphics_widget_hide( widget );
+	cgraphics_widget_hide( WIDGET(widget) );
 }
 
 void widget_enable( object_t *widget )
 {
 	assert_valid_widget( widget, "widget" );
-	cgraphics_widget_enable( widget );
+	cgraphics_widget_enable( WIDGET(widget) );
 }
 
 void widget_disable( object_t *widget )
 {
 	assert_valid_widget( widget, "widget" );
-	cgraphics_widget_disable( widget );
+	cgraphics_widget_disable( WIDGET(widget) );
 }
 
 void widget_close( object_t *widget )
@@ -171,14 +220,14 @@ void widget_close( object_t *widget )
 #ifdef _NIX
 	event_send( widget, "closing", "" );
 #endif
-	cgraphics_widget_close( widget );
+	cgraphics_widget_close( WIDGET(widget) );
 }
 
 void widget_focus( object_t *widget )
 {
 	/* FIXME: check for window, pass on to window_X() */
 	assert_valid_widget( widget, "widget" );
-	cgraphics_widget_focus( widget );
+	cgraphics_widget_focus( WIDGET(widget) );
 }
 
 void widget_destruct( object_t *widget )
@@ -191,7 +240,7 @@ void widget_destruct( object_t *widget )
 	/* close children too */
 	LIST_FOREACH_SAFE( n, tn, obj->children.head )
 	{
-		widget_destruct( (widget_t *)n->data );
+		widget_destruct( OBJECT(n->data ) );
 	}
 	
 	/* FIXME: close it with the platform here (AFTER :)) */
@@ -225,8 +274,8 @@ void widget_resized_handle( object_t *obj, event_t *event )
 	/* tell all children about the resize */
 	LIST_FOREACH_SAFE( n, tn, obj->children.head )
 	{
-		if ( !strncmp( OBJECT(n->data)->type, "claro.graphics.widgets.", 23 ) ||
-			 !strcmp( OBJECT(n->data)->type, "claro.graphics.layout" ) )
+		if ( object_is_of_class( OBJECT(n->data), "widget" ) ||
+			 object_is_of_class( OBJECT(n->data), "layout" ) )
 		{
 			event_send( n->data, "update", "" );
 		
@@ -243,18 +292,18 @@ void widget_update_handle( object_t *obj, event_t *event )
 	/* if owner is defined, a layout (or similar) handles size_req. always
 	 * ensure that this request is met */
 	if ( WIDGET(obj)->size_req != 0 && WIDGET(obj)->size_req->owner != 0 )
-		widget_size_request_changed( WIDGET(obj) );
+		widget_size_request_changed( OBJECT(obj) );
 }
 
 void widget_post_init( object_t *widget )
 {
 	assert_valid_widget( widget, "widget" );
 	
-	cgraphics_post_init( widget );
+	cgraphics_post_init( WIDGET(widget) );
 	
 	/* by default, show all widgets */
-	if ( strcmp( widget->type, "claro.graphics.widgets.workspace.window" ) &&
-		 strcmp( widget->type, "claro.graphics.widgets.window" ) )
+	if ( object_is_of_class( OBJECT(widget), "workspace_window_widget" ) &&
+		 object_is_of_class( OBJECT(widget), "window_widget" ) )
 		widget_show( widget );
 	
 	/* add a destroy handler to clean up after ourselves */
@@ -269,8 +318,19 @@ void widget_post_init( object_t *widget )
 	}
 }
 
-/** Common functions */
+object_t *widget_get_window( object_t *obj )
+{
+	if ( object_is_of_class( obj, "window_widget" ) )
+		return obj;
+	
+	if ( obj->parent == NULL )
+		return NULL;
+	
+	return widget_get_window( obj->parent );
+}
 
+/** Common functions */
+#if 0
 object_t *default_widget_create(object_t *parent, 
                                      size_t widget_size, const char *widget_name, bounds_t *size_req,
                                      int flags, cgraphics_create_function creator) 
@@ -302,7 +362,7 @@ object_t *default_widget_create(object_t *parent,
 	
     return (object_t *)widget;
 }
-
+#endif
 /* Returns the container of the widget, if specified, otherwise it's native widget. */
 void *widget_get_container( object_t *widget )
 {
@@ -341,6 +401,17 @@ void widget_set_cursor( object_t *widget, int cursor )
 bounds_t *get_req_bounds( object_t *widget )
 {
 	return WIDGET(widget)->size_req;
+}
+
+void widget_set_flags( object_t *widget, int flags )
+{
+	WIDGET(widget)->flags = flags;
+}
+
+void widget_set_bounds( object_t *widget, bounds_t *bounds )
+{
+	WIDGET(widget)->size_req = bounds;
+	WIDGET(widget)->size = *bounds;
 }
 
 

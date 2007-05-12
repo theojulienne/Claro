@@ -19,33 +19,37 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
-object_t *image_widget_create( object_t *parent, bounds_t *bounds, int flags )
+void image_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( image, NULL, image_widget_inst_realize, NULL, NULL );
+
+void image_widget_inst_realize( object_t *object )
 {
-	object_t *obj;
-	
-	assert_valid_widget( parent, "parent" );
-	
-	obj = default_widget_create(parent, sizeof(image_widget_t),
-						"claro.graphics.widgets.image", bounds, 
-						flags, cgraphics_image_widget_create);
-	
-	return obj;
+	cgraphics_image_widget_create( WIDGET(object) );
 }
 
 object_t *image_widget_create_with_image( object_t *parent, bounds_t *bounds, int flags, image_t *image )
 {
-	object_t *obj;
-	
+	object_t *object;
+
 	assert_valid_widget( parent, "parent" );
-	assert_valid_image( image, "image" );
+
+	object = object_create_from_class( image_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
 	
-	obj = default_widget_create(parent, sizeof(image_widget_t),
-						"claro.graphics.widgets.image", bounds, 
-						flags, cgraphics_image_widget_create);
-	
-	image_set_image( obj, image );
-	
-	return obj;
+	if ( image != NULL )
+		image_set_image( object, image );
+
+	object_realize( object );
+
+	return object;
+}
+
+object_t *image_widget_create( object_t *parent, bounds_t *bounds, int flags )
+{
+	return image_widget_create_with_image( parent, bounds, flags, NULL );
 }
 
 void image_set_image( object_t *image, image_t *src )
@@ -56,6 +60,10 @@ void image_set_image( object_t *image, image_t *src )
 	assert_valid_image( src, "src" );
 	
 	iw->src = src;
+	
+	/* skip if object not yet realized */
+	if ( !object_is_realized( image ) )
+		return;
 	
 	cgraphics_image_set_image( WIDGET(image) );
 }

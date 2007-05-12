@@ -26,7 +26,7 @@
 /* ClaroRadioButton (subclassed from NSButton) */
 @interface ClaroRadioButton : NSButton
 {
-	widget_t *cw;
+	object_t *cw;
 }
 
 /* internal init function */
@@ -71,11 +71,11 @@
 	{
 		w = (widget_t *)n->data;
 		
-		if ( w != cw )
+		if ( OBJECT(w) != cw )
 			[(NSButton *)w->native setState:NSOffState];
 	}
 	
-	[(NSButton *)cw->native setState:NSOnState];
+	[(NSButton *)WIDGET(cw)->native setState:NSOnState];
 	
 	rg->selected = OBJECT(cw);
 	
@@ -90,7 +90,7 @@
 
 - (void)setClaroWidget:(widget_t *)widget
 {
-	cw = widget;
+	cw = OBJECT(widget);
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 		selector:@selector(claroClose:) name:NSWindowWillCloseNotification

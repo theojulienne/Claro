@@ -1,0 +1,10 @@
+info
+	name "claro classes example"
+	description "Claro Classes Example"
+	version "0.1"
+
+targets
+	application classes
+		sources
+			classes.c
+			foo.c

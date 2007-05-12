@@ -19,13 +19,29 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void textbox_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( textbox, NULL, textbox_widget_inst_realize, NULL, NULL );
+
+void textbox_widget_inst_realize( object_t *object )
+{
+	cgraphics_textbox_widget_create( WIDGET(object) );
+}
+
 object_t *textbox_widget_create( object_t *parent, bounds_t *bounds, int flags )
 {
+	object_t *object;
+
 	assert_valid_widget( parent, "parent" );
-	
-	return default_widget_create(parent, sizeof(textbox_widget_t), 
-					"claro.graphics.widgets.textbox", bounds, 
-					flags, cgraphics_textbox_widget_create);
+
+	object = object_create_from_class( textbox_widget_type, parent );
+
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
+
+	object_realize( object );
+
+	return object;
 }
 
 void textbox_set_text( object_t *obj, char *text )

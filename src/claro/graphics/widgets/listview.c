@@ -22,17 +22,16 @@
 void listview_new_row_handle( object_t *obj, event_t *event );
 void listview_remove_row_handle( object_t *obj, event_t *event );
 
-void listview_handle_destroy( listview_widget_t *obj, event_t *e )
+void listview_widget_inst_realize( object_t *object );
+
+claro_define_type_partial( listview_widget, list_widget, NULL, listview_widget_inst_realize, NULL, NULL );
+
+void listview_widget_inst_realize( object_t *object )
 {
-	int a;
-	
-	for ( a = 0; a < obj->widget.columns; a++ )
-	{
-		free( obj->titles[a] );
-	}
-	
-	free( obj->titles );
+	cgraphics_listview_widget_create_columns( WIDGET(object) );
 }
+
+void listview_handle_destroy( listview_widget_t *obj, event_t *e );
 
 object_t *listview_widget_create( object_t *parent, bounds_t *bounds, int columns, int flags, ... )
 {
@@ -46,9 +45,10 @@ object_t *listview_widget_create( object_t *parent, bounds_t *bounds, int column
 	
 	assert_valid_widget( parent, "parent" );
 	
-	obj = default_widget_create(parent, sizeof(listview_widget_t), 
-										   "claro.graphics.widgets.listview", bounds, 
-										   flags, cgraphics_listview_widget_create);
+	obj = object_create_from_class( listview_widget_type, parent );
+	
+	widget_set_bounds( obj, bounds );
+	widget_set_flags( obj, flags );
 	
 	lw = (listview_widget_t *)obj;
 	
@@ -78,7 +78,6 @@ object_t *listview_widget_create( object_t *parent, bounds_t *bounds, int column
 	
 	//list_widget_init( obj, 1, CLIST_TYPE_STRING );
 	list_widget_init_ptr( obj, columns, &cols );
-	cgraphics_listview_widget_create_columns( obj );
 	
 	/* handle list operations */
 	object_addhandler( obj, "new_row", listview_new_row_handle );
@@ -87,7 +86,21 @@ object_t *listview_widget_create( object_t *parent, bounds_t *bounds, int column
 	
 	va_end( argp );
 	
+	object_realize( obj );
+	
 	return obj;
+}
+
+void listview_handle_destroy( listview_widget_t *obj, event_t *e )
+{
+	int a;
+	
+	for ( a = 0; a < obj->widget.columns; a++ )
+	{
+		free( obj->titles[a] );
+	}
+	
+	free( obj->titles );
 }
 
 list_item_t *listview_append_row( object_t *listview, ... )

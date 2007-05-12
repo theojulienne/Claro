@@ -22,23 +22,38 @@
 void toolbar_new_icon_handle( object_t *obj, event_t *event );
 void toolbar_remove_icon_handle( object_t *obj, event_t *event );
 
-object_t *toolbar_widget_create( object_t *parent, int flags ) 
+void toolbar_widget_inst_realize( object_t *object );
+void toolbar_widget_inst_create( object_t *object );
+
+claro_define_widget_partial( toolbar, toolbar_widget_inst_create, toolbar_widget_inst_realize, NULL, NULL );
+
+void toolbar_widget_inst_create( object_t *object )
 {
-	object_t *obj;
-	
-	assert_valid_window_widget( parent, "parent" );
-	
-	obj = default_widget_create(parent, sizeof(toolbar_widget_t), 
-				   "claro.graphics.widgets.toolbar", NULL, 
-				   flags, cgraphics_toolbar_widget_create);
-	
-	list_widget_init( obj, 3, CLIST_TYPE_PTR, CLIST_TYPE_STRING, CLIST_TYPE_STRING );
+	list_widget_init( object, 3, CLIST_TYPE_PTR, CLIST_TYPE_STRING, CLIST_TYPE_STRING );
 	
 	/* handle list operations */
-	object_addhandler( obj, "new_row", toolbar_new_icon_handle );
-	object_addhandler( obj, "remove_row", toolbar_remove_icon_handle );
+	object_addhandler( object, "new_row", toolbar_new_icon_handle );
+	object_addhandler( object, "remove_row", toolbar_remove_icon_handle );
+}
+
+void toolbar_widget_inst_realize( object_t *object )
+{
+	cgraphics_toolbar_widget_create( WIDGET(object) );
+}
+
+object_t *toolbar_widget_create( object_t *parent, int flags )
+{
+	object_t *object;
 	
-	return obj;
+	assert_valid_widget( parent, "parent" );
+
+	object = object_create_from_class( toolbar_widget_type, parent );
+	
+	widget_set_flags( object, flags );
+	
+	object_realize( object );
+
+	return object;
 }
 
 /*

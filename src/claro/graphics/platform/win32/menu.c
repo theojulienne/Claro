@@ -45,7 +45,7 @@ HMENU cgraphics_menu_get_native_parent( widget_t *widget, list_item_t *item )
 	
 	mii.cbSize = sizeof( MENUITEMINFO );
 	
-	if ( strcmp( item->object.parent->type, "claro.graphics.list_item" ) ) // parent isn't an item
+	if ( !object_is_of_class( OBJECT(item->object.parent), "list_item" ) ) // parent isn't an item
 		return widget->native;
 	else
 	{

@@ -19,38 +19,63 @@
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
+void radiogroup_inst_create( object_t *object );
+void radiogroup_inst_realize( object_t *object );
+
+claro_define_type_partial( radiogroup, object, radiogroup_inst_create, radiogroup_inst_realize, NULL, NULL );
+
+void radiogroup_inst_create( object_t *object )
+{
+	WIDGET(object)->ndata = NULL;
+	list_create( &((radiogroup_t *)object)->buttons );
+}
+
+void radiogroup_inst_realize( object_t *object )
+{
+	cgraphics_radiogroup_create( WIDGET(object) );
+}
+
 object_t *radiogroup_create( object_t *parent, int flags )
 {
-	radiogroup_t *obj;
-	
+	object_t *object;
+
 	assert_valid_widget( parent, "parent" );
-	
-	obj = (radiogroup_t *)object_create( parent, sizeof(radiogroup_t), "claro.graphics.widgets.radiogroup" );
-	
-	obj->ndata = 0;
-	
-	list_create( &obj->buttons );
-	
-	cgraphics_radiogroup_create( obj );
-	
-	return OBJECT(obj);
+
+	object = object_create_from_class( radiogroup_type, parent );
+
+	object_realize( object );
+
+	return object;
+}
+
+
+void radiobutton_widget_inst_realize( object_t *object );
+
+claro_define_widget_partial( radiobutton, NULL, radiobutton_widget_inst_realize, NULL, NULL );
+
+void radiobutton_widget_inst_realize( object_t *object )
+{
+	cgraphics_radiobutton_widget_create( WIDGET(object) );
 }
 
 object_t *radiobutton_widget_create( object_t *parent, object_t *group, bounds_t *bounds, const char *label, int flags )
 {
-	object_t *obj;
+	object_t *object;
 	
 	assert_valid_widget( parent, "parent" );
 	assert_valid_radiogroup_widget( group, "group" );
+
+	object = object_create_from_class( radiobutton_widget_type, parent );
 	
-	obj = default_widget_create(parent, sizeof(radiobutton_widget_t),
-					"claro.graphics.widgets.radiobutton", bounds, 
-					flags, cgraphics_radiobutton_widget_create);
+	widget_set_bounds( object, bounds );
+	widget_set_flags( object, flags );
 	
-	radiobutton_set_label( obj, label );
-	radiobutton_set_group( obj, group );
+	radiobutton_set_label( object, label );
+	radiobutton_set_group( object, group );
 	
-	return obj;
+	object_realize( object );
+
+	return object;
 }
 
 void radiobutton_set_label( object_t *obj, const char *label )
@@ -60,6 +85,11 @@ void radiobutton_set_label( object_t *obj, const char *label )
 	assert_valid_radiobutton_widget( obj, "obj" );
 	
 	strscpy( chk->text, label, RADIOBUTTON_TEXT_MAX );
+	
+	/* skip if object not yet realized */
+	if ( !object_is_realized( obj ) )
+		return;
+	
 	cgraphics_radiobutton_set_text( WIDGET(obj) );
 }
 
@@ -82,6 +112,10 @@ void radiobutton_set_group( object_t *radio, object_t *group )
 	n = node_create( );
 	
 	node_add( radio, n, &g->buttons );
+	
+	/* skip if object not yet realized */
+	if ( !object_is_realized( radio ) )
+		return;
 	
 	cgraphics_radiobutton_set_group( WIDGET(radio) );
 }
