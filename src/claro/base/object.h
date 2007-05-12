@@ -54,6 +54,4 @@ void object_queue_destruction( object_t *object );
 #define object_cmptype(o,t) (!strcmp(((object_t *)o)->type,t))
 #define OBJECT(o) ((object_t*)o)
 
-CLFEXP const char * event_get_name( event_t *event );
-
 #endif

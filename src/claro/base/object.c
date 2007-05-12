@@ -158,8 +158,4 @@ void object_set_parent( object_t *obj, object_t *parent )
 		event_send( obj, "parent_attach", "" );
 }
 
-const char *event_get_name( event_t *event )
-{
-	return event->name;
-}
 
