@@ -145,7 +145,7 @@ void object_addhandler( object_t *object, const char *event, event_func_t *func 
 	node_add( h, n, &object->event_handlers );
 }
 
-void object_addhandler_interface( object_t *object, const char *event, event_func_t *func, void *data )
+void object_addhandler_interface( object_t *object, const char *event, event_iface_func_t *func, void *data )
 {
 	node_t *n;
 	event_handler_t *h;
@@ -161,7 +161,7 @@ void object_addhandler_interface( object_t *object, const char *event, event_fun
 	node_add( h, n, &object->event_handlers );
 }
 
-char *event_get_name( event_t *event )
+const char *event_get_name( event_t *event )
 {
 	return event->name;
 }
