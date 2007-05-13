@@ -149,7 +149,7 @@ CLFEXP void widget_screen_offset( object_t *widget, int *dx, int *dy );
  */
 CLFEXP void widget_set_notify( object_t *widget, int flags );
 
-enum
+enum cWidgetCursor
 {
 	cCursorNormal=0,
 	cCursorTextEdit,
