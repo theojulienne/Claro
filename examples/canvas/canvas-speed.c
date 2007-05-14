@@ -195,7 +195,7 @@ void handle_redraw( object_t *obj, event_t *event )
 				canvas_show_text( WIDGET(cvsw), 2, (height) - (s * font_height), tptr, hln );
 				
 				// where did that leave us?
-				hlx = cgraphics_canvas_text_width( WIDGET(cvsw), tptr, hln );
+				hlx = canvas_text_width( WIDGET(cvsw), tptr, hln );
 				
 				// select the highlighting style
 				if ( is_hls )
@@ -215,7 +215,7 @@ void handle_redraw( object_t *obj, event_t *event )
 					canvas_show_text( WIDGET(cvsw), 2+hlx, (height) - (s * font_height), tptr+hln, hln2-hln );
 					
 					// again, where are we? :)
-					hlx = cgraphics_canvas_text_width( WIDGET(cvsw), tptr, hln2 );
+					hlx = canvas_text_width( WIDGET(cvsw), tptr, hln2 );
 					
 					SET_NORMAL;
 					

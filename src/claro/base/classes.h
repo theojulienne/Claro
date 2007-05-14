@@ -89,9 +89,9 @@ class_type_t * type_name##_get_type( ) \
 claro_define_type_partial(type_name, parent, type_name ## _inst_create, type_name ## _inst_realize, \
 							type_name ## _inst_finalize, type_name ## _inst_destroy)
 
-#define declare_class(type_name) extern const struct class_info_ type_name ## _class_info; \
+#define declare_class(type_name) CLVEXP const struct class_info_ type_name ## _class_info; \
 							class_type_t * type_name ## _get_type( );
 
-int object_is_of_class( object_t *object, const char *cl_name );
+CLFEXP int object_is_of_class( object_t *object, const char *cl_name );
 
 #endif

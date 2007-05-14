@@ -22,7 +22,7 @@
 #define return_if_pending_destroy(o) if (OBJECT(o)->destroy_pending==1) return;
 #define object_pending_destroy(o) (OBJECT(o)->destroy_pending==1)
 
-extern const struct class_info_ object_class_info;
+CLVEXP const struct class_info_ object_class_info;
 
 typedef struct object_
 {
@@ -49,6 +49,8 @@ CLFEXP void object_init( );
 CLFEXP void object_set_parent( object_t *obj, object_t *parent );
 
 void object_queue_destruction( object_t *object );
+
+CLFEXP int object_is_realized( object_t *object );
 
 #define object_parent(o) (((object_t *)o)->parent)
 #define object_cmptype(o,t) (!strcmp(((object_t *)o)->type,t))
