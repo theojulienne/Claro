@@ -227,7 +227,7 @@ depends
 
 flags
 	platform darwin
-		(cairo) cflags "-I/usr/local/include/cairo"
+		(cairo) cflags "-I/usr/local/include/cairo -I/usr/include/cairo"
 		(cairo) ldflags "-L/usr/local/lib -lcairo"
 		ldflags "-L../base -lclaro-base"
 	platform posix

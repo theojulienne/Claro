@@ -54,7 +54,7 @@ flags
 	libdir "^src/claro/base"
 	libdir "^src/claro/graphics"
 	platform darwin
-		(cairo) cflags "-I/usr/local/include/cairo"
+		(cairo) cflags "-I/usr/local/include/cairo -I/usr/include/cairo"
 		(cairo) ldflags "-L/usr/local/lib -lcairo"
 	platform posix
 		pkg-config "gtk+-2.0 gdk-2.0"

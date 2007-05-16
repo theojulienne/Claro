@@ -32,6 +32,7 @@ static void status_icon_pushed(object_t * status, event_t * event)
     else
     {
         window_show(w);
+		window_focus(w);
         is_shown = TRUE;
     }
 }
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
 	window_set_title(w, "Status Icon");
 	
 	menu = menu_widget_create(w, 0);
-    quit_item = menu_append_item(menu, NULL, stock_get_image("system-log-out", cStockMenu), "&Quit");
+    quit_item = menu_append_item(menu, NULL, stock_get_image("system-log-out", cStockMenu), "_Quit");
     object_addhandler(OBJECT(quit_item), "pushed", window_closed);
 
 	img = image_load(w, "icon.png");
