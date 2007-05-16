@@ -1,4 +1,4 @@
-import os
+import os, sys
 from celerid.support import setup, Extension
 
 projName = '_claro'
@@ -19,14 +19,22 @@ def getSourcefiles():
                 sources.append(dir+f)   
     sources.append(projName + '.d')       
     return sources
-    
+
+def getPythonRuntimeLib():
+    return 'python'+str(sys.version_info[0])+'.'+str(sys.version_info[1])
+
+def getPythonLibraryDir():
+    if sys.platform == 'darwin':
+        return [ '/Library/Frameworks/Python.framework/Versions/Current/lib/'+getPythonRuntimeLib()+'/config' ]
+    return []
+
 setup(
     name=projName,
     version='0.1',
     ext_modules=
         [
-        Extension(projName, getSourcefiles(), libraries=["claro-base", "claro-graphics"],
-            library_dirs=["../../src/claro/base/", "../../src/claro/graphics/"])
+        Extension(projName, getSourcefiles(), libraries=["claro-base", "claro-graphics", "cairo", getPythonRuntimeLib()],
+            library_dirs=["../../src/claro/base/", "../../src/claro/graphics/"]+getPythonLibraryDir())
         ],
   )
 
