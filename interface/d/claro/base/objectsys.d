@@ -63,7 +63,7 @@ class CEvent {
 	
 	this()
 	{
-	    throw new Exception("Cannot initiate class directly");
+	    //
 	}
 	
 	void *getArgumentAsPointer( int arg ) {
