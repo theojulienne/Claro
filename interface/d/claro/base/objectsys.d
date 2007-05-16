@@ -61,6 +61,11 @@ extern (C) {
 class CEvent {
 	event_t *evt;
 	
+	this()
+	{
+	    throw new Exception("Cannot initiate class directly");
+	}
+	
 	void *getArgumentAsPointer( int arg ) {
 		return event_get_arg_ptr( this.evt, arg );
 	}
@@ -77,6 +82,8 @@ class CObject {
 	this() {}
 	
 	void add_handler( char[] name, event_handler_t handler ) {
+		if(this.obj is null)
+		    return;
 		int d = createAndSaveDelegate(handler);
 		object_addhandler_interface( this.obj, std.string.toStringz(name), &run_delegate, cast(void*)d );
 	}

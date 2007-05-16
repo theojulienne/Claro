@@ -20,6 +20,11 @@ extern (C)
 class Bounds {
 	bounds_t *obj;
 	
+	this()
+	{
+	    throw new Exception("Cannot initiate class directly");
+	}
+	
 	this( int x, int y, int w, int h ) {
 		this.obj = new_bounds( x, y, w, h );
 	}
