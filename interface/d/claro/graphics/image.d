@@ -11,6 +11,10 @@ extern (C)
 }
 
 class Image : CObject {
+	this( ) {
+		throw new Exception("Cannot initiate class directly");
+	}
+	
 	this( image_t *me, CObject parent ) {
 		super( parent );
 		this.obj = me;

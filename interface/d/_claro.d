@@ -87,6 +87,37 @@ extern(C) void PydMain()
 		Def!(CanvasWidget.redraw),
 		Property!(CanvasWidget.redraw_delegate)
 	);
+	
+	wrap_class!(
+		Context,
+		Init!( void function( Context ) ),
+		Def!(Context.scale)
+	);
+	
+	wrap_class!(
+		ListItem
+	);
+	
+	wrap_class!(
+		Image
+	);
+	
+	wrap_class!(
+		StockSize
+	);
+	
+	wrap_class!(
+		Stock,
+		Def!( Stock.getImage )
+	);
+	
+	wrap_class!(
+		MenuBarWidget,
+		Init!(	void function(CObject),
+				void function(CObject, int)),
+		Def!(MenuBarWidget.appendItem),
+		Def!(MenuBarWidget.addKeyBinding)
+	);
     
 /*
     wrapped_class!(CEvent, "event") event;
