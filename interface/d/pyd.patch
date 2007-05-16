@@ -1,0 +1,136 @@
+Index: infrastructure/python/2.4/python.d
+===================================================================
+--- infrastructure/python/2.4/python.d	(revision 109)
++++ infrastructure/python/2.4/python.d	(working copy)
+@@ -2044,15 +2044,6 @@
+   const int CO_GENERATOR_ALLOWED = 0x1000;
+   const int CO_FUTURE_DIVISION   = 0x2000;
+ 
+-  // &PyCode_Type is accessible via PyCode_Type_p.
+-  // D translations of C macros:
+-  int PyCode_Check(PyObject *op) {
+-    return op.ob_type == PyCode_Type_p;
+-  }
+-  int PyCode_GetNumFree(PyObject *op) {
+-    return PyObject_Length((cast(PyCodeObject *) op).co_freevars);
+-  }
+-
+   const int CO_MAXBLOCKS = 20;
+ 
+   struct node {
+@@ -2543,6 +2534,17 @@
+   int PyObject_AsReadBuffer(PyObject *obj, void **buffer, int *buffer_len);
+   int PyObject_AsWriteBuffer(PyObject *obj, void **buffer, int *buffer_len);
+ 
++
++  // &PyCode_Type is accessible via PyCode_Type_p.
++  // D translations of C macros:
++  int PyCode_Check(PyObject *op) {
++    return op.ob_type == PyCode_Type_p;
++  }
++  int PyCode_GetNumFree(PyObject *op) {
++    return PyObject_Length((cast(PyCodeObject *) op).co_freevars);
++  }
++
++
+   /////////////////////////////////////////////////////////////////////////////
+   // ITERATORS
+   /////////////////////////////////////////////////////////////////////////////
+Index: infrastructure/d/python_bundle_macosx_boilerplate.c
+===================================================================
+--- infrastructure/d/python_bundle_macosx_boilerplate.c	(revision 0)
++++ infrastructure/d/python_bundle_macosx_boilerplate.c	(revision 0)
+@@ -0,0 +1,12 @@
++void gc_init();
++void gc_term();
++
++__attribute__((constructor))
++initializer() {
++    gc_init();
++}
++
++__attribute__((destructor))
++finalizer() {
++    gc_term();
++}
+Index: infrastructure/pyd/make_object.d
+===================================================================
+--- infrastructure/pyd/make_object.d	(revision 109)
++++ infrastructure/pyd/make_object.d	(working copy)
+@@ -250,6 +250,9 @@
+         if (is_wrapped!(T) && cast(T)((cast(wrapped_class_object!(Object)*)o).d_obj) !is null) {
+             return WrapPyObject_AsObject!(T)(o);
+         }
++		if (is_wrapped!(T) && PyObject_TypeCheck(o, PyNone_Type_p)) {
++            return null;
++        }
+         // Otherwise, throw up an exception.
+         could_not_convert!(T)(o);
+     } else static if (is(T == struct)) { // struct by value
+Index: dcompiler.py
+===================================================================
+--- dcompiler.py	(revision 109)
++++ dcompiler.py	(working copy)
+@@ -21,6 +21,7 @@
+ 
+ 
+ _isPlatWin = sys.platform.lower().startswith('win')
++_isPlatMac = sys.platform.lower().startswith('darwin')
+ 
+ _infraDir = os.path.join(os.path.dirname(__file__), 'infrastructure')
+ 
+@@ -38,6 +39,7 @@
+     'pyd.d',
+     'pydobject.d',
+     'struct_wrap.d',
++    'make_wrapper.d',
+ ]
+ 
+ _stFiles = [
+@@ -231,6 +233,10 @@
+             boilerplatePath = os.path.join(_infraDir, 'd',
+                 'python_dll_windows_boilerplate.d'
+             )
++        elif _isPlatMac:
++            boilerplatePath = os.path.join(_infraDir, 'd',
++                'python_bundle_macosx_boilerplate.c'
++            )
+         else:
+             boilerplatePath = os.path.join(_infraDir, 'd',
+                 'python_so_linux_boilerplate.d'
+@@ -239,6 +245,7 @@
+             raise DistutilsFileError('Required supporting code file "%s"'
+                 ' is missing.' % boilerplatePath
+             )
++        
+         sources.append((boilerplatePath, 'infra'))
+ 
+         # Extension subclass DExtension will have packed any user-supplied
+@@ -293,6 +300,10 @@
+                 includePathOpts + outOpts + userVersionAndDebugOpts +
+                 [_qp(source)] + extra_postargs
+             )
++            if os.path.splitext(source)[1][-2:] == '.c':
++                cmdElements = (
++                    [binpath] + compileOpts + outOpts + [_qp(source)]
++                )
+             cmdElements = [el for el in cmdElements if el]
+             try:
+                 self.spawn(cmdElements)
+@@ -529,6 +540,8 @@
+         self._outputOpts = ['-o', '%s']
+         # _linkOpts
+         self._linkOpts = ['-fPIC', '-nostartfiles', '-shared']
++        if _isPlatMac:
++            self._linkOpts[2] = '-bundle'
+         # _includeOpts
+         self._includeOpts = ['-I', '%s']
+         # _versionOpt
+@@ -545,6 +558,7 @@
+         self._st_support = False
+ 
+     def _def_file(self, output_dir, output_filename):
++        if _isPlatMac: return []
+         return ['-Wl,-soname,' + os.path.basename(output_filename)]
+ 
+     def library_dir_option(self, dir):
