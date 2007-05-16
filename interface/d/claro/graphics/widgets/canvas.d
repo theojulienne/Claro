@@ -35,6 +35,16 @@ class CanvasWidget : Widget {
 	
 	void internalRedrawDelegate( CEvent evt, CObject obj ) {
 		Context c = new Context( canvas_get_cairo_context(this.obj), true );
+		if ( this.redrawDelegate is null )
+			return;
 		this.redrawDelegate( this, c );
+	}
+	
+	void redraw_delegate( void delegate(CanvasWidget w, Context c) d ) {
+		redrawDelegate = d;
+	}
+	
+	void delegate(CanvasWidget w, Context c) redraw_delegate( ) {
+		return redrawDelegate;
 	}
 }

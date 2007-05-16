@@ -11,6 +11,11 @@ extern (C)
 }
 
 class WindowWidget : Widget {
+	this()
+	{
+	    super();
+	}
+	
 	this( CObject parent, Bounds b, int flags ) {
 		super( parent );
 		
@@ -34,4 +39,7 @@ class WindowWidget : Widget {
 	void title( char[] title ) {
 		window_set_title( this.obj, std.string.toStringz(title) );
 	}
+	
+	// FIXME: return the window's title
+	char[] title( ) { return ""; }
 }

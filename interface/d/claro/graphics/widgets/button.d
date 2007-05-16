@@ -27,4 +27,7 @@ class ButtonWidget : Widget {
 	void label( char[] label ) {
 		button_set_label( this.obj, std.string.toStringz(label) );
 	}
+	
+	// FIXME: return the label
+	char[] label( ) { return ""; }
 }

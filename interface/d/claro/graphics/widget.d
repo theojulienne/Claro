@@ -42,6 +42,12 @@ class Bounds {
 	int top( ) { return this.obj.y; }
 	int width( ) { return this.obj.w; }
 	int height( ) { return this.obj.h; }
+	
+	// PyD expects properties to have setters
+	int x( int _x ) { return this.obj.x; }
+	int y( int _x ) { return this.obj.y; }
+	int w( int _x ) { return this.obj.w; }
+	int h( int _x ) { return this.obj.h; }
 }
 
 class Widget : CObject {
