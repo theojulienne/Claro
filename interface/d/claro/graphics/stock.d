@@ -15,6 +15,10 @@ enum StockSize
 }
 
 class Stock {
+	this() {
+		throw new Exception("Cannot initiate class directly");
+	}
+	
 	static Image getImage( char[] stock_id, StockSize size ) {
 		return new Image( stock_get_image( std.string.toStringz(stock_id), size ), null );
 	}

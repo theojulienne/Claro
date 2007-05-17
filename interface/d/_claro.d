@@ -102,8 +102,9 @@ extern(C) void PydMain()
 		Image
 	);
 	
-	wrap_class!(
-		StockSize
+	wrap_struct!(
+		StockSize,
+		Property!( "Menu" )
 	);
 	
 	wrap_class!(

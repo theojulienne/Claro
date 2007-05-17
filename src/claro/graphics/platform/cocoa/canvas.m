@@ -177,7 +177,7 @@ event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
 			cairo_surface_destroy( cvsw->surface );
 		
 		// create a new surface with this context
-#if CAIRO_VERSION_MINOR >= 3
+#if CAIRO_VERSION_MINOR > 3
 		cvsw->surface = cairo_quartz_surface_create_for_cg_context( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h);
 #else		
 		cvsw->surface = cairo_quartz_surface_create( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h, true );
