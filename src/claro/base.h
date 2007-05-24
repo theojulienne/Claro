@@ -31,16 +31,15 @@ typedef unsigned short bool;
 #define true !(false)
 #endif
 
-#ifdef NEEDS_GLIB
-#	ifdef _NIX
-#		include <glib.h>
-#	else
-#		include <claro/base/eglib/src/glib.h>
-#	endif
+#ifdef _NIX
+#	include <glib.h>
 #else
+#	ifdef NEEDS_GLIB
+#		include <claro/base/eglib/src/glib.h>
+#	else
 // some defs to compile without the glib header..
-#define GPtrArray void
-
+#		define GPtrArray void
+#	endif
 #endif
 
 #ifndef FALSE
