@@ -32,36 +32,35 @@ static void val_free(void * v)
 	object_t * object = (object_t*)v;
 	if(!object->destroy_pending)
 		event_send( object, "destroy", "" );
-	printf("%s: %p\n", __FUNCTION__, v);
 }
 
-static hashtable_t * stock_imgs = NULL;
+static GHashTable * stock_imgs = NULL;
 
 static void stock_free(object_t * obj, event_t * event)
 {
-	hashtable_destroy(stock_imgs);
+	g_hash_table_unref(stock_imgs);
 }
 
 void _claro_menu_stock_init()
 {
-	stock_imgs = hashtable_str_create(NUM_STOCK_ITEMS, FALSE, val_free);
+	stock_imgs = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, val_free);
 	object_addhandler(claro, "destroy", stock_free);
 	
 	int i;
 	for(i = 0;i < NUM_STOCK_ITEMS;i++)
 	{	
 		image_t * img = image_load_inline_png( claro, stock_raw_[i].img, stock_raw_[i].len);
-		hashtable_insert(stock_imgs, (void*)stock_raw_[i].id, img, FALSE);
+		g_hash_table_insert(stock_imgs, (void*)stock_raw_[i].id, (void*)img);
 	}
 }
 
 image_t * _stock_menu_get_image(const char * stock_id)
 {
-	return (image_t*) hashtable_search(stock_imgs, (void*) stock_id);
+	return (image_t*) g_hash_table_lookup(stock_imgs, (void*) stock_id);
 }
 
 void _stock_menu_add_image(const char * stock_id, image_t * img)
 {
-	hashtable_insert(stock_imgs, (void*)stock_id, img, FALSE);
+	g_hash_table_insert(stock_imgs, (void*)stock_id, (void*)img);
 }
 
