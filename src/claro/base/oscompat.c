@@ -33,8 +33,6 @@ int getpwent_r( struct passwd *pwd, char *buffer, size_t bufsize, struct passwd 
 	
 	return 0;
 }
-
-char **environ = NULL;
 #endif
 
 #ifndef HAVE_MMAP

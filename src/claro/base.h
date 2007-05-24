@@ -59,6 +59,17 @@ extern "C" {
 //added by Cody, 2/8/06
 #include "base/hashtable.h"
 
+
+// if we're including something from claro that needs glib, include it
+// we don't want all apps to need to have glib in their include path
+#ifdef REF_GLIB
+#	ifdef _NIX
+#		include <glib.h>
+#	else
+#		include "base/eglib/src/glib.h"
+#	endif
+#endif
+
 #ifdef __cplusplus
 }
 #endif

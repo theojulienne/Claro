@@ -44,6 +44,7 @@ targets
 				eglib/src/gtimer.c
 				eglib/src/gunicode.c
 				eglib/src/gutf8.c
+			platform win32
 				eglib/src/vasprintf.c
 		includes
 			../base.h

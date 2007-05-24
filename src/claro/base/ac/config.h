@@ -22,8 +22,9 @@
 #ifdef _MAC
 #include "ac-config-mac.h"
 
-// mac's libc doesn't support environ, so define here. it's defined in oscompat.c
-extern char **environ;
+// mac's libc doesn't support environ in libraries directly
+#include <crt_externs.h>
+#define environ (*_NSGetEnviron())
 
 // this function isn't available on mac, see oscompat.c for basic wrapper of getpwent
 int getpwent_r( struct passwd *pwd, char *buffer, int bufsize, struct passwd **result );
