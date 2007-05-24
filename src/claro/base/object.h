@@ -35,7 +35,11 @@ typedef struct object_
 	
 	list_t event_handlers;
 	
+#ifndef OLD_CHILDREN
+	GPtrArray *children;
+#else
 	list_t children;
+#endif
 	
 	struct object_ *parent;
 	

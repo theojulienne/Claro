@@ -16,6 +16,8 @@
  */
 
 
+#define NEEDS_GLIB
+
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
@@ -233,15 +235,25 @@ void widget_focus( object_t *widget )
 void widget_destruct( object_t *widget )
 {
 	object_t *obj = (object_t *)widget;
-	node_t *n, *tn;
 	
 	assert_valid_widget( widget, "widget" );
 	
 	/* close children too */
+#ifndef OLD_CHILDREN
+	int a;
+	
+	for ( a = 0; a < obj->children->len; a++ )
+	{
+		widget_destruct( OBJECT(g_ptr_array_index( obj->children, a )) );
+	}
+#else
+	node_t *n, *tn;
+	
 	LIST_FOREACH_SAFE( n, tn, obj->children.head )
 	{
 		widget_destruct( OBJECT(n->data ) );
 	}
+#endif
 	
 	/* FIXME: close it with the platform here (AFTER :)) */
 }
@@ -269,20 +281,30 @@ void widget_destroy_handle( object_t *obj, event_t *event )
 
 void widget_resized_handle( object_t *obj, event_t *event )
 {
+	/* tell all children about the resize */
+#ifndef OLD_CHILDREN
+	int a;
+	
+	for ( a = 0; a < obj->children->len; a++ )
+	{
+		object_t *child = OBJECT(g_ptr_array_index(obj->children, a));
+#else
 	node_t *n, *tn;
 	
-	/* tell all children about the resize */
 	LIST_FOREACH_SAFE( n, tn, obj->children.head )
 	{
-		if ( object_is_of_class( OBJECT(n->data), "widget" ) ||
-			 object_is_of_class( OBJECT(n->data), "layout" ) )
+		object_t *child = OBJECT(n->data);
+#endif
+		if ( object_is_of_class( child, "widget" ) ||
+			 object_is_of_class( child, "layout" ) )
 		{
-			event_send( n->data, "update", "" );
+			event_send( child, "update", "" );
 		
 			/* and the grand-children too */
-			widget_resized_handle( n->data, event );
+			widget_resized_handle( child, event );
 		}
 	}
+
 }
 
 void widget_update_handle( object_t *obj, event_t *event )

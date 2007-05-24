@@ -31,6 +31,18 @@ typedef unsigned short bool;
 #define true !(false)
 #endif
 
+#ifdef NEEDS_GLIB
+#	ifdef _NIX
+#		include <glib.h>
+#	else
+#		include <claro/base/eglib/src/glib.h>
+#	endif
+#else
+// some defs to compile without the glib header..
+#define GPtrArray void
+
+#endif
+
 #ifndef FALSE
 #define FALSE 0
 #endif
@@ -59,16 +71,6 @@ extern "C" {
 //added by Cody, 2/8/06
 #include "base/hashtable.h"
 
-
-// if we're including something from claro that needs glib, include it
-// we don't want all apps to need to have glib in their include path
-#ifdef NEEDS_GLIB
-#	ifdef _NIX
-#		include <glib.h>
-#	else
-#		include "base/eglib/src/glib.h"
-#	endif
-#endif
 
 #ifdef __cplusplus
 }

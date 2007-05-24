@@ -15,6 +15,7 @@
  * See the LICENSE file for more details.
  */
 
+#define NEEDS_GLIB
 
 #include <claro/base.h>
 
@@ -61,7 +62,11 @@ void object_inst_create( object_t *object )
 	list_create( &object->event_handlers );
 	
 	/* init object children list */
+#ifndef OLD_CHILDREN
+	object->children = g_ptr_array_new( );
+#else
 	list_create( &object->children );
+#endif
 	
 	/* FIXME: this will be replaced by using tree traversal later */
 	/* add to global object list */
@@ -92,11 +97,18 @@ void object_inst_destroy( object_t *object )
 	/* make all our children have no parent.
 	   FIXME: there should be a flag to destroy children
 	   NOTE: widget_destroy will automatically handle children through the OS, though? */
+#ifndef OLD_CHILDREN
+	for ( ; object->children->len > 0;  )
+	{
+		object_set_parent( g_ptr_array_index( object->children, 0 ), NULL );
+	}
+#else
 	LIST_FOREACH_SAFE( nn, tn, object->children.head )
 	{
 		/* remove the parenting; this will free the current node too */
 		object_set_parent( (object_t *)nn->data, NULL );
 	}
+#endif
 	
 	/* remove all handlers */
 	LIST_FOREACH_SAFE( nn, tn, object->event_handlers.head )
@@ -132,6 +144,12 @@ void object_set_parent( object_t *obj, object_t *parent )
 	
 	if ( obj->parent != NULL )
 	{
+#ifndef OLD_CHILDREN
+		if ( g_ptr_array_remove( obj->parent->children, obj ) == false )
+		{
+			clog( CL_ERROR, "Object has a parent listed, but the parent's children list doesn't contain it." );
+		}
+#else
 		/* remove old parenting */
 		n = node_find( obj, &obj->parent->children );
 		
@@ -142,6 +160,7 @@ void object_set_parent( object_t *obj, object_t *parent )
 		}
 		else
 			clog( CL_ERROR, "Object has a parent listed, but the parent's children list doesn't contain it." );
+#endif
 	}
 	
 	if ( parent != NULL )

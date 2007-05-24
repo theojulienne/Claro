@@ -239,5 +239,8 @@ flags
 		(cairo) ldflags "-L/MinGW/lib -lcairo"
 		(opengl) ldflags "-lopengl32 -lglu32"
 		ldflags "-L../base -lclaro-base -lgdi32 -lole32  -lcomctl32 -lmsvcp60"
+	platform !posix
+		include "#src/claro/base/eglib/src"
+		include "#src/claro/base/ac"
 	platform all
 		(!cairo) define NO_CAIRO

@@ -88,6 +88,8 @@ flags
 		none
 	platform posix
 		none
+	platform win32
+		define "OLD_CHILDREN"
 	platform !posix
 		include "#src/claro/base/eglib/src"
 		include "#src/claro/base/ac"
