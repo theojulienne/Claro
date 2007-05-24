@@ -18,6 +18,25 @@
 
 #include <claro/base.h>
 
+#ifdef _MAC
+#include <pwd.h>
+// getpwent_r for mac, eglib uses it
+// obviously this isn't a real solution, but it will do until eglib supports mac properly
+int getpwent_r( struct passwd *pwd, char *buffer, size_t bufsize, struct passwd **result )
+{
+	struct passwd *foo = getpwent( );
+	
+	if ( foo == NULL )
+		return -1;
+	
+	memcpy( pwd, foo, sizeof(struct passwd) );
+	
+	return 0;
+}
+
+char **environ = NULL;
+#endif
+
 #ifndef HAVE_MMAP
 /*
  * static void mmap(void *hint, size_t len, uint32_t prot,

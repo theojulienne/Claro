@@ -19,6 +19,32 @@ targets
 			oscompat.c
 			store.c
 			string.c
+			platform !posix
+				eglib/src/garray.c
+				eglib/src/gdate.c
+				eglib/src/gdir.c
+				eglib/src/gerror.c
+				eglib/src/gfile.c
+				eglib/src/ghashtable.c
+				eglib/src/glist.c
+				eglib/src/gmarkup.c
+				eglib/src/gmem.c
+				eglib/src/gmisc.c
+				eglib/src/gmodule.c
+				eglib/src/goutput.c
+				eglib/src/gpath.c
+				eglib/src/gpattern.c
+				eglib/src/gptrarray.c
+				eglib/src/gqueue.c
+				eglib/src/gshell.c
+				eglib/src/gslist.c
+				eglib/src/gspawn.c
+				eglib/src/gstr.c
+				eglib/src/gstring.c
+				eglib/src/gtimer.c
+				eglib/src/gunicode.c
+				eglib/src/gutf8.c
+				eglib/src/vasprintf.c
 		includes
 			../base.h
 			block.h
@@ -35,6 +61,10 @@ targets
 			stdinc.h
 			store.h
 			string.h
+			platform !posix
+				eglib/src/glib.h
+				eglib/src/gmodule.h
+	
 
 contains
 	none
@@ -57,5 +87,9 @@ flags
 		none
 	platform posix
 		none
+	platform !posix
+		include "#src/claro/base/eglib/src"
+		include "#src/claro/base/ac"
+		library "iconv"
 	platform all
 		none

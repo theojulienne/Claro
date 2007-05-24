@@ -23,7 +23,7 @@
  * @{
  */
 
-#define assert_only_image(o,n)	assert_type_check( o, n, "claro.graphics.image" )
+#define assert_only_image(o,n)	assert_type_check( o, n, "image" )
 #define assert_valid_image(o,n)	assert_not_null( o, n, "Image" ); \
 				assert_only_image( o, n )
 
