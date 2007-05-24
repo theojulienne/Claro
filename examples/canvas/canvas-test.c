@@ -21,8 +21,6 @@
 #include <math.h>
 #include <assert.h>
 
-#include <gtk/gtk.h>
-
 widget_t *c;
 int red = 0, blue = 0, green = 0;
 
@@ -147,7 +145,6 @@ int main( int argc, char *argv[] )
     b = new_bounds(50, 50, 300, 300);
     
     w = window_widget_create(NULL, b, 0);
-    gtk_window_fullscreen(GTK_WINDOW(WIDGET(w)->native));
     window_set_title(w, "Canvas Clock");
 
     object_addhandler(w, "destroy", window_closed);

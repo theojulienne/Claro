@@ -38,7 +38,7 @@ static GHashTable * stock_imgs = NULL;
 
 static void stock_free(object_t * obj, event_t * event)
 {
-	g_hash_table_unref(stock_imgs);
+	g_hash_table_destroy(stock_imgs);
 }
 
 void _claro_menu_stock_init()

@@ -15,7 +15,6 @@
  * See the LICENSE file for more details.
  */
 
-
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 

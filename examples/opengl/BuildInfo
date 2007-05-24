@@ -1,0 +1,17 @@
+info
+	name "claro opengl example"
+	description "Claro OpenGL Example"
+	version "0.1"
+
+targets
+	application opengl
+		sources
+			opengl.c
+
+flags
+	platform win32
+		ldflags "-lopengl32 -lglu32"
+	platform darwin
+		ldflags "-framework OpenGL"
+	platform posix
+		none

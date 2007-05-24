@@ -242,5 +242,6 @@ flags
 	platform !posix
 		include "#src/claro/base/eglib/src"
 		include "#src/claro/base/ac"
+		define NEEDS_GLIB
 	platform all
 		(!cairo) define NO_CAIRO

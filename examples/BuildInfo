@@ -10,6 +10,7 @@ contains
 	recurse classes classes
 	recurse statusicon statusicon
 	(cairo) recurse canvas canvas
+	(opengl) recurse opengl opengl
 	recurse cursor cursor
 	recurse combo combo
 	recurse designer designer

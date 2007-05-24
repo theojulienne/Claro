@@ -29,6 +29,16 @@
 
 #ifdef CLARO_OPENGL
 
+// as an extra convenience, include the OS GL stuff here,
+// saves people from needing to do this manually
+#ifdef _MAC
+#include <AGL/GL.h>
+#else
+#include <gl\gl.h>
+#include <gl\glu.h>
+#include <gl\glaux.h>
+#endif
+
 typedef struct opengl_widget_ opengl_widget_t;
 
 declare_class( opengl_widget );

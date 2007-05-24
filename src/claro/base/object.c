@@ -166,9 +166,12 @@ void object_set_parent( object_t *obj, object_t *parent )
 	if ( parent != NULL )
 	{
 		/* add obj to parent's children list */
-		
+#ifndef OLD_CHILDREN
+		g_ptr_array_add( parent->children, obj );
+#else
 		n = node_create( );
 		node_add( obj, n, &parent->children );
+#endif
 	}
 	
 	obj->parent = parent;

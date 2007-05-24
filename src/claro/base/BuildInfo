@@ -94,5 +94,6 @@ flags
 		include "#src/claro/base/eglib/src"
 		include "#src/claro/base/ac"
 		library "iconv"
+		define NEEDS_GLIB
 	platform all
 		none
