@@ -14,4 +14,5 @@ flags
 	platform darwin
 		ldflags "-framework OpenGL"
 	platform posix
-		none
+		ldflags "-lGL -lGLU"
+

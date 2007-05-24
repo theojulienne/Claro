@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 	
 	claro_loop();
     
-    g_hash_table_unref(types);    
+    g_hash_table_destroy(types);    
 	
 	return 0;
 }

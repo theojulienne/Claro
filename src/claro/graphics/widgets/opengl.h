@@ -33,6 +33,9 @@
 // saves people from needing to do this manually
 #ifdef _MAC
 #include <AGL/GL.h>
+#elif _NIX
+#include <GL/gl.h>
+#include <GL/glu.h>
 #else
 #include <gl\gl.h>
 #include <gl\glu.h>
