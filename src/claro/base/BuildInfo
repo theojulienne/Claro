@@ -87,7 +87,7 @@ flags
 	platform darwin
 		none
 	platform posix
-		none
+		pkg-config "glib-2.0 gmodule-2.0"
 	platform win32
 		define "OLD_CHILDREN"
 	platform !posix
