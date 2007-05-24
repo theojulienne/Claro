@@ -62,7 +62,7 @@ extern "C" {
 
 // if we're including something from claro that needs glib, include it
 // we don't want all apps to need to have glib in their include path
-#ifdef REF_GLIB
+#ifdef NEEDS_GLIB
 #	ifdef _NIX
 #		include <glib.h>
 #	else
