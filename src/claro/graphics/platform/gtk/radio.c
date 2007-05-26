@@ -29,7 +29,7 @@ static gint cgraphics_radio_clicked_handler( GtkWidget *widget, widget_t *w )
 	grp->selected = rb;
 	
 	event_send( OBJECT(rb), "selected", "" );
-	event_send( OBJECT(grp), "changed", "p", rb );
+	event_send( OBJECT(grp), "changed", "p", "value", rb );
 	
 	return 1;
 }

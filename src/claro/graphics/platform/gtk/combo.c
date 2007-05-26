@@ -39,7 +39,7 @@ static void cgraphics_combo_changed_handler( GtkComboBox *widget, widget_t *cw )
 	}
 	
 	cbw->selected = item;
-	event_send( OBJECT(cw), "selected", "p", item );
+	event_send( OBJECT(cw), "selected", "p", "row", item );
 }
 
 void cgraphics_combo_widget_create( widget_t *widget )
@@ -72,5 +72,5 @@ void cgraphics_combo_select_row( widget_t *widget, list_item_t *item )
 	gtk_combo_box_set_active( widget->native, i );
 	
 	lw->selected = item;
-	event_send( OBJECT(widget), "selected", "p", item );
+	event_send( OBJECT(widget), "selected", "p", "row", item );
 }

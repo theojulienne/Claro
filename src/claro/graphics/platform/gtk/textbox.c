@@ -47,7 +47,7 @@ static gint cgraphics_textbox_keypress_handler( GtkWidget *widget, GdkEventKey *
 {
 	int ucs4 = gdk_keyval_to_unicode(e->keyval);
 	gchar * utf8 = g_ucs4_to_utf8(&ucs4, 1, NULL, NULL, NULL);
-	int r = event_send( w, "key_down", "i", (int)utf8[0] );
+	int r = event_send( w, "key_down", "i", "key", (int)utf8[0] );
 	g_free(utf8);
 	return r;
 }

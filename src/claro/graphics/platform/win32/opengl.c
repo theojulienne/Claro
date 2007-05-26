@@ -47,25 +47,25 @@ LRESULT CALLBACK cg_opengl_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 			break;
 		
 		case WM_LBUTTONDOWN:
-			event_send( OBJECT(w), "clicked", "ii", LOWORD(lParam), HIWORD(lParam) );
+			event_send( OBJECT(w), "clicked", "ii", "x", LOWORD(lParam), "y", HIWORD(lParam) );
 			break;
 		
 		case WM_LBUTTONUP:
-			event_send( OBJECT(w), "released", "ii", LOWORD(lParam), HIWORD(lParam) );
+			event_send( OBJECT(w), "released", "ii", "x", LOWORD(lParam), "y", HIWORD(lParam) );
 			break;
 		
 		case WM_RBUTTONDOWN:
-			event_send( OBJECT(w), "right_clicked", "ii", LOWORD(lParam), HIWORD(lParam) );
+			event_send( OBJECT(w), "right_clicked", "ii", "x", LOWORD(lParam), "y", HIWORD(lParam) );
 			break;
 		
 		case WM_RBUTTONUP:
-			event_send( OBJECT(w), "right_released", "ii", LOWORD(lParam), HIWORD(lParam) );
+			event_send( OBJECT(w), "right_released", "ii", "x", LOWORD(lParam), "y", HIWORD(lParam) );
 			break;
 		
 		case WM_MOUSEMOVE:
 			if ( wParam & (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON) || w->notify_flags & cNotifyMouse )
 			{
-				event_send( OBJECT(w), "mouse_moved", "ii", LOWORD(lParam), HIWORD(lParam) );
+				event_send( OBJECT(w), "mouse_moved", "ii", "x", LOWORD(lParam), "y", HIWORD(lParam) );
 				
 				// will this work fine here? hmm.
 				TRACKMOUSEEVENT tme;

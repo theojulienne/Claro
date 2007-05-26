@@ -59,7 +59,7 @@ LRESULT CALLBACK cg_listview_intercept_proc( HWND hWnd, UINT uMsg, WPARAM wParam
 				case BN_CLICKED:
 					*((int *)li->data[col]) = ( SendMessage( (HWND)lParam, BM_GETCHECK, 0, 0 ) == BST_CHECKED );
 					
-					event_send( OBJECT(li), "changed", "ii", col, *((int *)li->data[col]) );
+					event_send( OBJECT(li), "changed", "ii", "column", col, "value", *((int *)li->data[col]) );
 					
 					break;
 			}		
@@ -163,5 +163,5 @@ void cgraphics_listview_select_row( widget_t *widget, list_item_t *item )
 	SendMessage( widget->native, LVM_SETHOTITEM, i, 0 );
 	
 	lw->selected = item;
-	event_send( OBJECT(widget), "selected", "p", item );
+	event_send( OBJECT(widget), "selected", "p", "row", item );
 }

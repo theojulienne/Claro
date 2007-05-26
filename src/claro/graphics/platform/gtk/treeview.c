@@ -33,7 +33,7 @@ static gboolean cgraphics_treeview_selected_handler( GtkTreeSelection *selection
 	}
 	
 	lw->selected = selected;
-	event_send( OBJECT(lw), "selected", "p", selected );
+	event_send( OBJECT(lw), "selected", "p", "row", selected );
 	
 	return FALSE;
 }
@@ -54,7 +54,7 @@ static gboolean cgraphics_treeview_rightclick_handler( GtkWidget *widget, GdkEve
 			gtk_tree_model_get( model, &iter, 2, &selected, -1 );
 			gtk_tree_path_free( path );
 			
-			event_send( OBJECT(cw), "right_clicked", "p", selected );
+			event_send( OBJECT(cw), "right_clicked", "p", "row", selected );
 		}
 	}
 	

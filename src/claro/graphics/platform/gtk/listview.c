@@ -41,7 +41,7 @@ static void cgraphics_listview_selected_handler( GtkTreeSelection *selection, gp
 	}
 	
 	lw->selected = selected;
-	event_send( OBJECT(lw), "selected", "p", selected );
+	event_send( OBJECT(lw), "selected", "p", "row", selected );
 }
 
 void cgraphics_listview_toggled_handler( GtkCellRendererToggle *cell_renderer, gchar *path, cgcelldata *data )
@@ -62,7 +62,7 @@ void cgraphics_listview_toggled_handler( GtkCellRendererToggle *cell_renderer, g
 	unsigned int *idt = selected->data[data->column];
 	idt[0] = !idt[0];
 	gtk_list_store_set( store, &iter, data->column, idt[0], -1 );
-	event_send( OBJECT(selected), "changed", "ii", data->column, idt[0] );
+	event_send( OBJECT(selected), "changed", "ii", "column", data->column, "value", idt[0] );
 }
 
 void cgraphics_listview_widget_create( widget_t *widget )

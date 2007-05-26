@@ -284,7 +284,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							tw->selected = item;
 							
-							event_send( OBJECT(tw), "selected", "p", item );
+							event_send( OBJECT(tw), "selected", "p", "row", item );
 						}
 						break;
 					case NM_RCLICK:
@@ -315,7 +315,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 								
 								item = (list_item_t *)titem.lParam;
 								
-								event_send( OBJECT(w), "right_clicked", "pii", item, hti.pt.x, hti.pt.y );
+								event_send( OBJECT(w), "right_clicked", "pii", "item", item, "x", hti.pt.x, "y", hti.pt.y );
 							}
 						}
 						break;
@@ -336,7 +336,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							lvw->selected = li;
 							
-							event_send( OBJECT(w), "selected", "p", li );
+							event_send( OBJECT(w), "selected", "p", "row", li );
 						}
 						break;
 					/*case TVN_GETDISPINFO:
@@ -613,7 +613,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							rg->selected = OBJECT(w);
 							
 							event_send( OBJECT(w), "selected", "" );
-							event_send( OBJECT(rg), "changed", "p", w );
+							event_send( OBJECT(rg), "changed", "p", "value", w );
 						}
 						else if ( object_is_of_class( OBJECT(w), "checkbox_widget" )  )
 						{
@@ -621,7 +621,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							cb->checked = ( SendMessage( w->native, BM_GETCHECK, 0, 0 ) == BST_CHECKED );
 							
-							event_send( OBJECT(w), "changed", "i", cb->checked );
+							event_send( OBJECT(w), "changed", "i", "checked" cb->checked );
 						}
 						break;
 					case EN_CHANGE:
@@ -650,7 +650,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							lw->selected = i;
 							
-							event_send( OBJECT(w), "selected", "p", i );
+							event_send( OBJECT(w), "selected", "p", "row", i );
 						}
 						else if ( object_is_of_class( OBJECT(w), "combo_widget" ) )
 						{
@@ -663,7 +663,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							lw->selected = i;
 							
-							event_send( OBJECT(w), "selected", "p", i );
+							event_send( OBJECT(w), "selected", "p", "row", i );
 						}
 						
 						break;

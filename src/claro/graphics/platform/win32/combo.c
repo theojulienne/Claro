@@ -82,5 +82,5 @@ void cgraphics_combo_select_row( widget_t *widget, list_item_t *item )
 	SendMessage( widget->native, CB_SETCURSEL, i, 0 );
 	
 	lw->selected = item;
-	event_send( OBJECT(widget), "selected", "p", item );
+	event_send( OBJECT(widget), "selected", "p", "row", item );
 }

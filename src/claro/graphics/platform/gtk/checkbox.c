@@ -27,7 +27,7 @@ static gint cgraphics_checkbox_clicked_handler( GtkWidget *widget, widget_t *w )
 	
 	cb->checked = gtk_toggle_button_get_active( (GtkToggleButton *)widget );
 	
-	event_send( OBJECT(w), "changed", "i", cb->checked );
+	event_send( OBJECT(w), "changed", "i", "checked", cb->checked );
 	
 	return 1;
 }

@@ -35,7 +35,7 @@ static void cgraphics_listbox_selected_handler( GtkTreeSelection *selection, gpo
 	}
 	
 	lw->selected = selected;
-	event_send( OBJECT(lw), "selected", "p", selected );
+	event_send( OBJECT(lw), "selected", "p", "row", selected );
 }
 
 void cgraphics_listbox_widget_create( widget_t *widget )

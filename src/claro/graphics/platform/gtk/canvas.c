@@ -29,7 +29,7 @@ static void cgraphics_canvas_expose_handler( GtkWidget *widget, GdkEventExpose *
 	canvas_widget_t *cw = (canvas_widget_t *)w;
 	cw->cr = gdk_cairo_create(widget->window);
 
-	event_send( OBJECT(w), "redraw","p", cw->cr);
+	event_send( OBJECT(w), "redraw","p", "cairo_context", cw->cr);
 	
 	cairo_destroy(cw->cr);
 }
@@ -49,7 +49,7 @@ static gint cgraphics_canvas_mouse_move( GtkWidget *widget, GdkEventMotion *even
 	}
 	
 	if ( w->notify_flags & cNotifyMouse )
-		event_send( OBJECT(w), "mouse_moved", "ii", x, y );
+		event_send( OBJECT(w), "mouse_moved", "ii", "x", x, "y", y );
 	
 	return TRUE;
 }
@@ -64,10 +64,10 @@ static gint cgraphics_canvas_mouse_down( GtkWidget *widget, GdkEventButton *even
 	switch ( event->button )
 	{
 		case 1:
-			event_send( OBJECT(w), "clicked", "ii", x, y );
+			event_send( OBJECT(w), "clicked", "ii", "x", x, "y", y );
 			break;
 		case 3:
-			event_send( OBJECT(w), "right_clicked", "ii", x, y );
+			event_send( OBJECT(w), "right_clicked", "ii", "x", x, "y", y );
 			break;
 	}
 	
@@ -84,10 +84,10 @@ static gint cgraphics_canvas_mouse_up( GtkWidget *widget, GdkEventButton *event,
 	switch ( event->button )
 	{
 		case 1:
-			event_send( OBJECT(w), "released", "ii", x, y );
+			event_send( OBJECT(w), "released", "ii", "x", x, "y", y );
 			break;
 		case 3:
-			event_send( OBJECT(w), "right_released", "ii", x, y );
+			event_send( OBJECT(w), "right_released", "ii", "x", x, "y", y );
 			break;
 	}
 	

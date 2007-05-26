@@ -29,7 +29,7 @@ static gint cgraphics_font_dialog_response_handler( GtkWidget *widget, gint resp
 	if ( resp == GTK_RESPONSE_OK )
 		ok = 1;
 	
-	event_send( OBJECT(w), "response", "i", ok );
+	event_send( OBJECT(w), "response", "i", "response", ok );
 	
 	return 1;
 }

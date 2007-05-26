@@ -116,7 +116,7 @@ void cgraphics_treeview_select_row( widget_t *widget, list_item_t *item )
 	TreeView_SelectItem( widget->native, item->native );
 	
 	lw->selected = item;
-	event_send( OBJECT(widget), "selected", "p", item );
+	event_send( OBJECT(widget), "selected", "p", "row", item );
 }
 
 void cgraphics_treeview_expand( widget_t *widget, list_item_t *item )

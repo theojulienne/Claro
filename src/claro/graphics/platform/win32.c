@@ -206,7 +206,7 @@ LRESULT CALLBACK cg_msgloop_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		case WM_KEYUP:
 			if ( w->notify_flags & cNotifyKey )
 			{
-				if ( event_send( OBJECT(w), "key_up", "i", wParam ) == 1 )
+				if ( event_send( OBJECT(w), "key_up", "i", "key", wParam ) == 1 )
 				{
 					return 0;
 				}
@@ -218,7 +218,7 @@ LRESULT CALLBACK cg_msgloop_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 			
 			if ( w->notify_flags & cNotifyKey )
 			{
-				if ( event_send( OBJECT(w), "key_down", "i", wParam ) == 1 )
+				if ( event_send( OBJECT(w), "key_down", "i", "key", wParam ) == 1 )
 				{
 					return 0;
 				}
