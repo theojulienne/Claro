@@ -111,6 +111,8 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 	if ( strcmp( event, "mainloop" ) )
 		clog( CL_DEBUG, "%s, %d handlers called.", tmp, hn );
 	
+	g_hash_table_destroy( e.args );
+	
 	return e.handled;
 #else
 	va_list argp;
