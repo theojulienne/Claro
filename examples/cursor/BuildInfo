@@ -7,3 +7,8 @@ targets
 	application cursor
 		sources
 			cursor.c
+
+flags
+	platform !posix
+		define NEEDS_GLIB
+		include "#src/claro/base/ac"

@@ -137,7 +137,7 @@ list_item_t *listview_insert_row( object_t *listview, int pos, ... )
 
 void listview_new_row_handle( object_t *obj, event_t *event )
 {
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_listview_new_row( WIDGET(obj), item );
 }
@@ -159,12 +159,12 @@ void listview_remove_row( object_t *listview, list_item_t *item )
 void listview_remove_row_handle( object_t *obj, event_t *event )
 {
 	listview_widget_t *lw = (listview_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	if ( lw->selected == item )
 	{
-		lw->selected = 0;
-		event_send( OBJECT(lw), "selected", "p", 0 );
+		lw->selected = NULL;
+		event_send( OBJECT(lw), "selected", "p", "row", NULL );
 	}
 	
 	cgraphics_listview_remove_row( WIDGET(obj), item );

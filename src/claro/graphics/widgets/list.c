@@ -77,7 +77,7 @@ void list_widget_row_remove( object_t *list, list_item_t *item )
 	list_item_t *curr;
 	int a;
 	
-	event_send( list, "remove_row", "p", item );
+	event_send( list, "remove_row", "p", "row", item );
 	
 	LIST_FOREACH_SAFE( n, n2, item->parent->head )
 	{
@@ -120,7 +120,7 @@ void list_widget_row_move( object_t *list, list_item_t *item, int row )
 	node_t *n;
 	list_item_t *curr;
 	
-	event_send( list, "remove_row", "p", item );
+	event_send( list, "remove_row", "p", "row", item );
 	
 	LIST_FOREACH( n, item->parent->head )
 	{
@@ -139,7 +139,7 @@ void list_widget_row_move( object_t *list, list_item_t *item, int row )
 	
 	item->row = row;
 	
-	event_send( list, "new_row", "p", item );
+	event_send( list, "new_row", "p", "row", item );
 }
 
 list_item_t *list_widget_row_insert_ptr( object_t *list, list_item_t *parent, int row, va_list argpi )
@@ -238,7 +238,7 @@ list_item_t *list_widget_row_insert_ptr( object_t *list, list_item_t *parent, in
 	n = node_create( );
 	node_append( item, n, l );
 
-	event_send( list, "new_row", "p", item );
+	event_send( list, "new_row", "p", "row", item );
 
 	va_end(argp);
 	
@@ -351,7 +351,7 @@ void list_widget_edit_row_ptr( object_t *list, list_item_t *item, va_list argpi 
 
 	va_end(argp);
 	
-	event_send( list, "edit_row", "p", item );
+	event_send( list, "edit_row", "p", "row", item );
 }
 
 void list_widget_edit_row( object_t *list, list_item_t *item, ... )

@@ -80,7 +80,7 @@
 	rg->selected = OBJECT(cw);
 	
 	event_send( OBJECT(cw), "selected", "" );
-	event_send( OBJECT(rg), "changed", "p", cw );
+	event_send( OBJECT(rg), "changed", "p", "value", cw );
 }
 
 - (void)mouseUp:(NSEvent *)event

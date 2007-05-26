@@ -62,7 +62,7 @@ int cgraphics_unikeycode_to_claro( int code )
 	/* FIXME: this is crap. maybe we could handle keyDown/Up
 			  in the window and manually find the focused widget? */
 	code = cgraphics_unikeycode_to_claro( [chars characterAtIndex:0] );
-	event_send( OBJECT(cw), "key_down", "i", code );
+	event_send( OBJECT(cw), "key_down", "i", "key", code );
 	
 	return YES;
 }

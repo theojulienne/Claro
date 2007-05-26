@@ -336,7 +336,7 @@ void widget_post_init( object_t *widget )
 	/* if we have a parent, send it a child create event */
 	if ( widget->parent != NULL )
 	{
-		event_send( widget->parent, "child_create", "p", widget );
+		event_send( widget->parent, "child_create", "p", "widget", widget );
 	}
 }
 
@@ -404,7 +404,7 @@ int widget_get_notify_key( object_t *widget, event_t *event )
 {
 	assert_valid_widget( widget, "widget" );
 	
-	return event_get_arg_int( event, 0 );
+	return event_get_int( event, "key" );
 }
 
 void widget_screen_offset( object_t *widget, int *dx, int *dy )

@@ -172,7 +172,7 @@
 	}
 	
 	lw->selected = sel;
-	event_send( OBJECT(cw), "selected", "p", sel );
+	event_send( OBJECT(cw), "selected", "p", "row", sel );
 }
 
 - (void)insertRow:(list_item_t *)item
@@ -199,7 +199,7 @@
 	[tbl selectRowIndexes:[NSIndexSet indexSetWithIndex:item->row] byExtendingSelection:NO];
 		
 	lw->selected = item;
-	event_send( OBJECT(cw), "selected", "p", item );
+	event_send( OBJECT(cw), "selected", "p", "row", item );
 }
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
@@ -231,7 +231,7 @@
 				
 				uid[0] = [anObject boolValue];
 				
-				event_send( OBJECT(item), "changed", "ii", a, uid[0] );
+				event_send( OBJECT(item), "changed", "ii", "column", a, "value", uid[0] );
 			}
 			
 			[in[a] release];

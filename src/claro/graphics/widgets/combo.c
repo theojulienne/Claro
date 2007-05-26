@@ -69,7 +69,7 @@ list_item_t *combo_insert_row( object_t *combo, int pos, char *text )
 
 void combo_new_row_handle( object_t *obj, event_t *event )
 {
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_combo_new_row( WIDGET(obj), item );
 }
@@ -91,12 +91,12 @@ void combo_remove_row( object_t *combo, list_item_t *item )
 void combo_remove_row_handle( object_t *obj, event_t *event )
 {
 	combo_widget_t *lw = (combo_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	if ( lw->selected == item )
 	{
-		lw->selected = 0;
-		event_send( OBJECT(lw), "selected", "p", 0 );
+		lw->selected = NULL;
+		event_send( OBJECT(lw), "selected", "p", "row", NULL );
 	}
 	
 	cgraphics_combo_remove_row( WIDGET(obj), item );

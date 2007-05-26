@@ -108,7 +108,7 @@
 	}
 	
 	lw->selected = sel;
-	event_send( OBJECT(cw), "selected", "p", sel );
+	event_send( OBJECT(cw), "selected", "p", "row", sel );
 }
 
 - (void)selectRow:(list_item_t *)item
@@ -119,7 +119,7 @@
 	[self setObjectValue:[self objectValueOfSelectedItem]];
 		
 	lw->selected = item;
-	event_send( OBJECT(cw), "selected", "p", item );
+	event_send( OBJECT(cw), "selected", "p", "row", item );
 }
 @end
 

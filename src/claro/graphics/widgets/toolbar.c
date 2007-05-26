@@ -120,7 +120,7 @@ list_item_t *toolbar_insert_separator( object_t *toolbar, int pos )
 void toolbar_new_icon_handle( object_t *obj, event_t *event )
 {
 	list_widget_t *lw = (list_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	if ( item->parent == &lw->items )
 		cgraphics_toolbar_new_icon( WIDGET(obj), item );
@@ -147,7 +147,7 @@ void toolbar_remove_icon( object_t *toolbar, list_item_t *item )
 void toolbar_remove_icon_handle( object_t *obj, event_t *event )
 {
 	list_widget_t *lw = (list_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	if ( item->parent == &lw->items )
 		cgraphics_toolbar_remove_icon( WIDGET(obj), item );

@@ -93,7 +93,7 @@ list_item_t *menu_insert_separator( object_t *menu, list_item_t *parent, int pos
 void menu_new_item_handle( object_t *obj, event_t *event )
 {
 	//list_widget_t *lw = (list_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_menu_new_item( WIDGET(obj), item );
 }
@@ -117,7 +117,7 @@ void menu_remove_item( object_t *menu, list_item_t *item )
 void menu_remove_item_handle( object_t *obj, event_t *event )
 {
 	//list_widget_t *lw = (list_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_menu_remove_item( WIDGET(obj), item );
 }

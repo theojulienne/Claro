@@ -37,10 +37,10 @@ extern (C) {
 		return claro;
 	}
 	
-	void object_addhandler_interface( object_t *object, char *event, void function(event_t*,object_t*,void*) func, void *data );
+	void object_addhandler_interface( object_t *object, char *event, void function(object_t*,event_t*,void*) func, void *data );
 	
 	// function is always the pointer passed to addhandler, passes on to delegate
-	void run_delegate( event_t *event, object_t *object, void *data ) {
+	void run_delegate( object_t *object, event_t *event, void *data ) {
 		int dindex = cast(int)data;
 		DelegateStruct *ds = delegates[dindex];
 		event_handler_t func = ds.dg;
@@ -54,7 +54,8 @@ extern (C) {
 		func( evt, obj );
 	}
 	
-	void *event_get_arg_ptr( event_t *e, int arg );
+	void *event_get_ptr( event_t *e, char *arg );
+	int event_get_int( event_t *e, char *arg );
 }
 
 
@@ -66,8 +67,12 @@ class CEvent {
 	    //
 	}
 	
-	void *getArgumentAsPointer( int arg ) {
-		return event_get_arg_ptr( this.evt, arg );
+	void *getArgumentAsPointer( char[] arg ) {
+		return event_get_ptr( this.evt, std.string.toStringz(arg) );
+	}
+	
+	int getArgumentAsInt( char[] arg ) {
+		return event_get_int( this.evt, std.string.toStringz(arg) );
 	}
 }
 

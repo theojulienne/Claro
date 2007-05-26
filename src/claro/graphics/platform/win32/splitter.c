@@ -239,7 +239,7 @@ event_handler( cgraphics_splitter_child_vis_updated )
 
 void cgraphics_splitter_child_create_handler( object_t *obj, event_t *event )
 {
-	object_t *child = (object_t *)event_get_arg_ptr( event, 0 );
+	object_t *child = (object_t *)event_get_ptr( event, "widget" );
 	widget_t *cw = (widget_t *)child;
 	splitter_widget_t *sw = (splitter_widget_t *)obj;
 	native_splitter_widget_t *nw = (native_splitter_widget_t *)sw->widget.ndata;

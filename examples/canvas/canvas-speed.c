@@ -50,10 +50,10 @@ int mouse_endx = 0, mouse_endy = 0;
 void handle_mousedown( object_t *obj, event_t *event )
 {
 	mouse_sel = 1;
-	mouse_startx = event_get_arg_int( event, 0 );
-	mouse_starty = event_get_arg_int( event, 1 );
-	mouse_endx = event_get_arg_int( event, 0 );
-	mouse_endy = event_get_arg_int( event, 1 );
+	mouse_startx = event_get_int( event, "x" );
+	mouse_starty = event_get_int( event, "y" );
+	mouse_endx = mouse_startx;
+	mouse_endy = mouse_starty;
 	
 	canvas_redraw( c );
 }
@@ -67,8 +67,8 @@ void handle_mouseup( object_t *obj, event_t *event )
 
 void handle_mousemove( object_t *obj, event_t *event )
 {
-	mouse_endx = event_get_arg_int( event, 0 );
-	mouse_endy = event_get_arg_int( event, 1 );
+	mouse_endx = event_get_int( event, "x" );
+	mouse_endy = event_get_int( event, "y" );
 	
 	canvas_redraw( c );
 }

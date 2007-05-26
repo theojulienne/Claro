@@ -80,14 +80,14 @@ list_item_t *treeview_insert_row( object_t *treeview, list_item_t *parent, int p
 
 event_handler( treeview_edit_row_handle )
 {
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_treeview_edit_row( WIDGET(object), item );
 }
 
 void treeview_new_row_handle( object_t *obj, event_t *event )
 {
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_treeview_new_row( WIDGET(obj), item );
 }
@@ -111,12 +111,12 @@ void treeview_remove_row( object_t *treeview, list_item_t *item )
 void treeview_remove_row_handle( object_t *obj, event_t *event )
 {
 	treeview_widget_t *lw = (treeview_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	if ( lw->selected == item )
 	{
-		lw->selected = 0;
-		event_send( OBJECT(lw), "selected", "p", 0 );
+		lw->selected = NULL;
+		event_send( OBJECT(lw), "selected", "p", "row", NULL );
 	}
 	
 	cgraphics_treeview_remove_row( WIDGET(obj), item );

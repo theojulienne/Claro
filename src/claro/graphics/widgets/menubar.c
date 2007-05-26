@@ -100,7 +100,7 @@ list_item_t *menubar_insert_separator( object_t *menubar, list_item_t *parent, i
 void menubar_new_item_handle( object_t *obj, event_t *event )
 {
 	//list_widget_t *lw = (list_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_menubar_new_item( WIDGET(obj), item );
 }
@@ -124,7 +124,7 @@ void menubar_remove_item( object_t *menubar, list_item_t *item )
 void menubar_remove_item_handle( object_t *obj, event_t *event )
 {
 	//list_widget_t *lw = (list_widget_t *)obj;
-	list_item_t *item = (list_item_t *)event_get_arg_ptr( event, 0 );
+	list_item_t *item = (list_item_t *)event_get_ptr( event, "row" );
 	
 	cgraphics_menubar_remove_item( WIDGET(obj), item );
 }

@@ -94,7 +94,7 @@
 
 
 #define macroMouseEvent(e) NSPoint pt = [self getLocalMousePosition: event]; \
-event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
+event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
 
 - (void)rightMouseDown:(NSEvent *)event
 {
@@ -156,7 +156,7 @@ event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
 	NSPoint pt = [self getLocalMousePosition: event];
 	double dx=[event deltaX], dy=[event deltaY], dz=[event deltaZ];
 	
-	event_send( OBJECT(cw), "scroll_wheel", "iiddd", (int)pt.x, (int)pt.y, dx, dy, dz );
+	event_send( OBJECT(cw), "scroll_wheel", "iiddd", "x", (int)pt.x, "y", (int)pt.y, "deltaX", dx, "deltaY", dy, "deltaZ", dz );
 }
 
 - (void)drawRect:(NSRect)aRect
@@ -209,9 +209,9 @@ event_send( OBJECT(cw), e, "ii", (int)pt.x, (int)pt.y );
 #endif
 
 #ifndef NO_CAIRO
-	event_send( OBJECT(cw), "redraw", "p", cvsw->cr );
+	event_send( OBJECT(cw), "redraw", "p", "cairo_context", cvsw->cr );
 #else
-	event_send( OBJECT(cw), "redraw", "p", NULL );
+	event_send( OBJECT(cw), "redraw", "" );
 #endif
 
 #ifndef NO_CAIRO

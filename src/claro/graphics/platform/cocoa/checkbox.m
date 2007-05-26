@@ -66,7 +66,7 @@
 	
 	w->checked = ([self state] == NSOnState);
 	
-	event_send( OBJECT(cw), "changed", "i", w->checked );
+	event_send( OBJECT(cw), "changed", "i", "checked", w->checked );
 }
 
 - (void)mouseUp:(NSEvent *)event

@@ -39,6 +39,7 @@ typedef unsigned short bool;
 #	else
 // some defs to compile without the glib header..
 #		define GPtrArray void
+#		define GHashTable void
 #	endif
 #endif
 
