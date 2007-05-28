@@ -31,7 +31,7 @@ else:
 
 
 # claro.base
-e.append( Extension( "claro.wrapper.base", ["base.c"], include_dirs=['../../src'], define_macros=plat_defs, library_dirs=['../../src/claro/base/'], libraries=['claro-base'] ) )
+e.append( Extension( "claro.wrapper.base", ["base.c"], include_dirs=['../../src'] + cinc, define_macros=plat_defs, library_dirs=['../../src/claro/base/'], libraries=['claro-base'] ) )
 
 # claro.graphics
 e.append( Extension( "claro.wrapper.graphics", ["graphics.c"], include_dirs=['../../src'] + cinc, define_macros=plat_defs, library_dirs=['../../src/claro/graphics/','../../src/claro/base'], libraries=['claro-base', 'claro-graphics'] ) )
