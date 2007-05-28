@@ -76,9 +76,14 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 			default:
 				value = NULL; /* this is bad. */
 		}
-		
+
+#ifdef NEEDS_GLIB		
 		g_hash_table_insert_replace( e.args, name, value, false );
-	}
+#else
+        g_hash_table_replace(e.args, name, value);
+#endif
+	
+    }
 	
 	e.handled = 0;
 
