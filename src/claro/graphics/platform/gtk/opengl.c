@@ -46,7 +46,24 @@ static int get_glx_version()
     return _glx_version;
 }
 
-
+static void get_glx_attrib_list(int *gl_attribList )
+{
+    if (get_glx_version() >= 13)
+        gl_attribList[0] = 0;
+    else
+    {
+        int i = 0;
+            // default settings if attriblist = 0
+            gl_attribList[i++] = GLX_RGBA;
+            gl_attribList[i++] = GLX_DOUBLEBUFFER;
+            gl_attribList[i++] = GLX_DEPTH_SIZE;   gl_attribList[i++] = 1;
+            gl_attribList[i++] = GLX_RED_SIZE;     gl_attribList[i++] = 1;
+            gl_attribList[i++] = GLX_GREEN_SIZE;   gl_attribList[i++] = 1;
+            gl_attribList[i++] = GLX_BLUE_SIZE;    gl_attribList[i++] = 1;
+            gl_attribList[i++] = GLX_ALPHA_SIZE;   gl_attribList[i++] = 0;
+            gl_attribList[i++] = None;
+    }
+}
 
 
 #define GTK_TYPE_GL_AREA            (gtk_gl_area_get_type ())
@@ -97,26 +114,25 @@ gtk_gl_area_class_init (GtkGLAreaClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->realize = gtk_gl_area_realize;
-  widget_class->size_allocate = gtk_gl_area_size_allocate;
+  widget_class->size_allocate = gtk_gl_area_size_allocate; 
 }
 
-static int _glx_attr_list[] = { 5, GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, 0  }; 
+//static int _glx_attr_list[] = { 5, GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, 0  }; 
 
 static void
 gtk_gl_area_init (GtkGLArea * gl_area)
-{
+{  
     Display * dpy;
-    Window root;
-    Colormap colormap;
+    int attribList[512];
 
-    dpy = GDK_DISPLAY();        
-    root =  RootWindow(dpy, DefaultScreen(dpy));
-    
-    gl_area->glx_visual = glXChooseVisual(dpy, DefaultScreen(dpy), _glx_attr_list);
-    colormap = XCreateColormap(dpy, root, gl_area->glx_visual->visual, AllocNone);    
-    
+    dpy = GDK_DISPLAY();
+
+    get_glx_attrib_list( attribList );
+     
+    gl_area->glx_visual = glXChooseVisual(dpy, DefaultScreen(dpy), attribList); //_glx_attr_list);
+  
     gl_area->gdk_visual = gdkx_visual_get(gl_area->glx_visual->visualid);
-    gl_area->gdk_colormap = gdk_x11_colormap_foreign_new(gl_area->gdk_visual, colormap);
+    gl_area->gdk_colormap = gdk_colormap_new(gl_area->gdk_visual, TRUE);
 
     gtk_widget_set_double_buffered(GTK_WIDGET(gl_area), FALSE);
 }
@@ -177,7 +193,9 @@ gtk_gl_area_realize (GtkWidget * widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 
-  gdk_window_set_back_pixmap(widget->window, NULL, FALSE); 
+  //gdk_window_set_back_pixmap(widget->window, NULL, FALSE); 
+  gl_area->glx_context = glXCreateContext(GDK_DISPLAY(), gl_area->glx_visual, NULL, TRUE);
+
   gtk_gl_area_send_configure (GTK_GL_AREA (widget));
 }
 
@@ -218,8 +236,7 @@ gtk_gl_area_send_configure (GtkGLArea * gl_area)
   gtk_widget_event (widget, event);
   gdk_event_free (event);
 
-  gl_area->glx_context = glXCreateContext(GDK_DISPLAY(), gl_area->glx_visual, NULL, TRUE);
-  glXMakeCurrent(GDK_DISPLAY(), GDK_WINDOW_XID(widget->window), gl_area->glx_context);  
+  //glXMakeCurrent(GDK_DISPLAY(), GDK_WINDOW_XID(widget->window), gl_area->glx_context);  
 }
 
 static void gtk_gl_area_activate(GtkWidget * widget)
@@ -227,8 +244,8 @@ static void gtk_gl_area_activate(GtkWidget * widget)
     if(GTK_WIDGET_REALIZED(widget))
     {
         glXMakeCurrent(GDK_DISPLAY(), GDK_WINDOW_XID(widget->window), GTK_GL_AREA(widget)->glx_context);
-        glDrawBuffer (GL_FRONT);
-        glReadBuffer (GL_FRONT);
+        //glDrawBuffer (GL_FRONT);
+        //glReadBuffer (GL_FRONT);
     }
 }
 
