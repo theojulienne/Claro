@@ -98,7 +98,7 @@ object_t *workspace_window_widget_create( object_t *parent, bounds_t *bounds, in
 	
 	assert_valid_widget( parent, "parent" );
 
-	object = object_create_from_class( &workspace_window_widget_class_info, parent );
+	object = object_create_from_class( workspace_window_widget_type, parent );
 	
 	widget_set_bounds( object, bounds );
 	widget_set_flags( object, flags );
