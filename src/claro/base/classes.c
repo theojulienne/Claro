@@ -20,7 +20,6 @@
 
 void object_run_class_create( object_t *object, const class_info_t *class_info )
 {
-	printf( "... %s\n", class_info->name );
 	/* if we are not the root object class, run our parent create */
 	if ( class_info->parent_class != NULL )
 		object_run_class_create( object, class_info->parent_class );
@@ -44,7 +43,7 @@ object_t *object_create_from_class( class_type_t *class_type, object_t *parent )
 	
 	strcpy( obj->type, class_info->name );
 	obj->destroy_pending = 0;
-	printf( "GO:\n" );
+	
 	/* run create functions */
 	object_run_class_create( obj, obj->class_type->info );
 	
