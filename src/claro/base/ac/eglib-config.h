@@ -22,5 +22,8 @@
 #ifdef _MAC
 #include "egconf-mac.h"
 #endif
+#ifdef _WIN32
+#include "egconf-mingw.h"
+#endif
 
 #endif

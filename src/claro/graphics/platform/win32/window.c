@@ -621,7 +621,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							cb->checked = ( SendMessage( w->native, BM_GETCHECK, 0, 0 ) == BST_CHECKED );
 							
-							event_send( OBJECT(w), "changed", "i", "checked" cb->checked );
+							event_send( OBJECT(w), "changed", "i", "checked", cb->checked );
 						}
 						break;
 					case EN_CHANGE:
@@ -907,13 +907,22 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				contr.bottom -= toolr.bottom - toolr.top;
 			}
 			
-			node_t *n;
 			object_t *o;
 			int status_size = 0;
+
+#ifndef OLD_CHILDREN
+			int a;
+			
+			for ( a = 0; a < OBJECT(w)->children->len; a++ )
+			{
+				o = OBJECT( g_ptr_array_index(OBJECT(w)->children, a) );
+#else
+			node_t *n;
 			
 			LIST_FOREACH( n, OBJECT(w)->children.head )
 			{
 				o = (object_t *)n->data;
+#endif
 				
 				if ( object_is_of_class( OBJECT(o), "statusbar_widget" ) )
 				{

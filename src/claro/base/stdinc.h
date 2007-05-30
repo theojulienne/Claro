@@ -19,16 +19,28 @@
 #ifndef _CLARO_BASE_STDINC_H
 #define _CLARO_BASE_STDINC_H
 
+/* CLBVEXP should be used for any variable exported from claro base
+ *  that may be used by another library (eg claro-graphics).
+ */
+
 #ifdef _WIN32
 #	ifdef PLUGIN
 #		define CLFEXP __declspec (dllimport)
 #	else
 #		define CLFEXP __declspec (dllexport)
+#		ifdef COMPILING_BASE
+#			define CLBFEXP __declspec (dllexport)
+#		else
+#			define CLBFEXP __declspec (dllimport)
+#		endif
 #	endif
 #	define CLVEXP extern CLFEXP
+#	define CLBVEXP extern CLBFEXP
 #else
 #	define CLFEXP
+#	define CLBFEXP CLFEXP
 #	define CLVEXP extern
+#	define CLBVEXP CLVEXP
 #endif
 
 typedef unsigned int uint32;

@@ -31,7 +31,8 @@ int getpwent_r( struct passwd *pwd, char *buffer, int bufsize, struct passwd **r
 #endif
 
 #ifdef _WIN32
-#include "../eglib/winconfig.h"
+#include "egconf-mingw.h"
+#include "winconfig.h"
 #endif
 
 

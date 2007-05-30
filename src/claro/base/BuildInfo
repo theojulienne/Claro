@@ -85,15 +85,16 @@ depends
 
 flags
 	platform darwin
-		none
+		library "iconv"
 	platform posix
 		pkg-config "glib-2.0 gmodule-2.0"
 	platform win32
-		define "OLD_CHILDREN"
+		library "psapi"
+		library "wsock32"
+		ldflags "-Wl,--export-all-symbols"
 	platform !posix
 		include "#src/claro/base/eglib/src"
 		include "#src/claro/base/ac"
-		library "iconv"
 		define NEEDS_GLIB
 	platform all
-		none
+		define "COMPILING_BASE"

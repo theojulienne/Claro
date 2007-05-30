@@ -73,7 +73,7 @@ struct LayoutHeap;
  */
 
 typedef struct layout_ {
-    widget_t widget;
+    object_t widget;
 
     int curs;  // do not touch, needed by ragel
 

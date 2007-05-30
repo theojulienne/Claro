@@ -37,9 +37,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #else
-#include <gl\gl.h>
-#include <gl\glu.h>
-#include <gl\glaux.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 typedef struct opengl_widget_ opengl_widget_t;

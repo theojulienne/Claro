@@ -85,19 +85,7 @@ void workspace_tile( object_t *workspace, int dir )
 
 void workspace_window_widget_inst_realize( object_t *object );
 
-const class_info_t workspace_window_widget_class_info =
-{
-	"workspace_window_widget",
-	sizeof( workspace_window_widget_t ),
-
-	&widget_class_info, /* parent class */
-
-	NULL, /* create func */
-	workspace_window_widget_inst_realize, /* realize func */
-
-	NULL, /* finalize func */
-	NULL, /* destroy func */
-};
+claro_define_widget_partial( workspace_window, NULL, workspace_window_widget_inst_realize, NULL, NULL );
 
 void workspace_window_widget_inst_realize( object_t *object )
 {

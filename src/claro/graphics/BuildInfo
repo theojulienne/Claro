@@ -238,6 +238,8 @@ flags
 		(cairo) cflags "-I/MinGW/include/cairo"
 		(cairo) ldflags "-L/MinGW/lib -lcairo"
 		(opengl) ldflags "-lopengl32 -lglu32"
+		lfdlags "-Wl,--enable-stdcall-fixup"
+		ldflags "-Wl,--export-all-symbols"
 		ldflags "-L../base -lclaro-base -lgdi32 -lole32  -lcomctl32 -lmsvcp60"
 	platform !posix
 		include "#src/claro/base/eglib/src"

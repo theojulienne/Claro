@@ -94,7 +94,7 @@ layout_t *layout_create(object_t *parent, const char *layout_spec, bounds_t boun
     lt->bounds = bounds;
     lt->heap = layout_heap_create(dlen);  // should be good for now
     
-    lt->widget.size_req = &bounds;
+    //lt->widget.size_req = &bounds;
     
     switch(layout__execute(lt, layout_spec, dlen)) {
         case 0:

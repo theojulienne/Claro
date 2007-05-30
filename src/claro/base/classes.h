@@ -45,7 +45,7 @@ struct class_info_
 
 	int object_size;
 	
-	const class_info_t *parent_class;
+	class_info_t *parent_class;
 	
 	object_create_func *create_func;
 	object_realize_func *realize_func;
@@ -65,12 +65,12 @@ CLFEXP class_type_t *get_type_for_class( const class_info_t *info );
 /* handy macro to declare class_info for a type */
 
 #define claro_define_type_partial(type_name, parent, create_func, realize_func, finalize_func, destroy_func) \
-const class_info_t type_name##_class_info = \
+class_info_t type_name##_class_info = \
 { \
 	#type_name, \
 	sizeof( type_name##_t ), \
  \
-	& parent##_class_info, \
+	NULL, \
  \
 	create_func, \
 	realize_func, \
@@ -81,7 +81,11 @@ const class_info_t type_name##_class_info = \
 class_type_t * type_name##_get_type( ) \
 { \
 	static class_type_t *type = NULL; \
-	if ( type == NULL ) { type = get_type_for_class( &type_name##_class_info ); } \
+	if ( type == NULL ) { \
+		parent##_get_type( ); \
+		type_name##_class_info.parent_class = & parent##_class_info; \
+		type = get_type_for_class( &type_name##_class_info ); \
+	} \
 	return type; \
 }
 
@@ -89,8 +93,13 @@ class_type_t * type_name##_get_type( ) \
 claro_define_type_partial(type_name, parent, type_name ## _inst_create, type_name ## _inst_realize, \
 							type_name ## _inst_finalize, type_name ## _inst_destroy)
 
-#define declare_class(type_name) CLVEXP const struct class_info_ type_name ## _class_info; \
-							class_type_t * type_name ## _get_type( );
+/* Classes in 'base' need to be declared specially, because other claro libraries may
+   use them (eg, 'graphics') and Windows gets pissy if the import/export decl is off */
+#define declare_base_class(type_name) CLBVEXP struct class_info_ type_name ## _class_info; \
+							CLFEXP class_type_t * type_name ## _get_type( );
+
+#define declare_class(type_name) CLVEXP struct class_info_ type_name ## _class_info; \
+							CLFEXP class_type_t * type_name ## _get_type( );
 
 CLFEXP int object_is_of_class( object_t *object, const char *cl_name );
 

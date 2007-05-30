@@ -25,7 +25,7 @@ void object_inst_finalize( object_t *object );
 void object_inst_destroy( object_t *object );
 
 /* object must be defined manually, it has no parent */
-const class_info_t object_class_info =
+class_info_t object_class_info =
 {
 	"object",
 	sizeof( object_t ),
@@ -38,6 +38,15 @@ const class_info_t object_class_info =
 	object_inst_finalize, /* finalize func */
 	object_inst_destroy, /* destroy func */
 };
+
+class_type_t *object_get_type( )
+{
+	static class_type_t *type = NULL;
+	if ( type == NULL ) {
+		type = get_type_for_class( &object_class_info );
+	}
+	return type;
+}
 
 
 /* global object and destruction lists */
