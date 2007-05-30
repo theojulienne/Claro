@@ -21,7 +21,7 @@
 #include <math.h>
 #include <assert.h>
 
-widget_t *c;
+object_t *c;
 int red = 0, blue = 0, green = 0;
 
 void handle_main( object_t *obj, event_t *event )
@@ -82,10 +82,12 @@ void handle_redraw( object_t *obj, event_t *event )
     /* this code was borrowed from cairoclock.tar.gz, can't remember
      * the site it came from: Google it for the original (gtkmm) source */
 	
-    canvas_widget_t *cvsw = (canvas_widget_t *)obj;
-    cairo_t *cr = cvsw->cr;
+    //canvas_widget_t *cvsw = (canvas_widget_t *)obj;
+    widget_t * cvsw = WIDGET(obj);    
+
+    cairo_t *cr = (cairo_t*) event_get_ptr(event, "cairo_context"); //cvsw->cr;
 	
-    cairo_scale( cr, cvsw->widget.size_req->w, cvsw->widget.size_req->h );
+    cairo_scale( cr, cvsw->size_req->w, cvsw->size_req->h );
 	
     // store the current time
     time_t rawtime;
@@ -152,7 +154,7 @@ int main( int argc, char *argv[] )
     lt = layout_create(w, "[][_<a|clock|>a][{40}Red|Green|Blue]", *b, 10, 10 );
     assert(lt != NULL && "layout was failed to parse");
         
-    c = (widget_t *)canvas_widget_create( w, lt_bounds(lt, "clock"), 0 );
+    c = canvas_widget_create( w, lt_bounds(lt, "clock"), 0 );
 	
     object_addhandler(OBJECT(c), "redraw", handle_redraw );
 	        

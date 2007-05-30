@@ -57,7 +57,7 @@ int main( int argc, char *argv[] )
 	claro_base_init( );
 	claro_graphics_init( );
 	
-	//log_fd_set_level( CL_DEBUG, stderr );
+	log_fd_set_level( CL_DEBUG, stderr );
 	
 	clog( CL_INFO, "%s running using Claro!", __FILE__ );
 	b = new_bounds(50, 50, 640, 480);
