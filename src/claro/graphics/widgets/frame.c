@@ -38,10 +38,10 @@ object_t *frame_widget_create_with_label( object_t *parent, bounds_t *bounds, in
 
 	widget_set_bounds( object, bounds );
 	widget_set_flags( object, flags );
-	
-	frame_set_text( object, label );
 
 	object_realize( object );
+	
+	frame_set_text( object, label );
 
 	return object;
 }

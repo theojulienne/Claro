@@ -70,10 +70,10 @@ object_t *radiobutton_widget_create( object_t *parent, object_t *group, bounds_t
 	widget_set_bounds( object, bounds );
 	widget_set_flags( object, flags );
 	
+	object_realize( object );
+	
 	radiobutton_set_label( object, label );
 	radiobutton_set_group( object, group );
-	
-	object_realize( object );
 
 	return object;
 }
