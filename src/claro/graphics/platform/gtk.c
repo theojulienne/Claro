@@ -147,10 +147,10 @@ gboolean _cgraphics_cd_expose_handler( GtkWidget *widget, GdkEventExpose *event,
 
 gint cgraphics_resized2_handler( GtkWidget *widget, GtkAllocation *event, widget_t *w )
 {
-	if ( !strcmp( w->object.type, "claro.graphics.widgets.container" ) ||
-		 !strcmp( w->object.type, "claro.graphics.widgets.frame" ) ||
-		 !strcmp( w->object.type, "claro.graphics.widgets.workspace.window" ) ||
-		 !strcmp( w->object.type, "claro.graphics.widgets.window" )	)
+	if ( object_is_of_class( OBJECT(w), "container_widget" ) ||
+		 object_is_of_class( OBJECT(w), "frame_widget" ) ||
+		 object_is_of_class( OBJECT(w), "workspace_window_widget" ) ||
+		 object_is_of_class( OBJECT(w), "window_widget" )	)
 	{
 		if ( event->x == w->size.x && event->y == w->size.y &&
 			 event->width == w->size.w && event->height == w->size.h )
@@ -213,7 +213,7 @@ void cgraphics_widget_create( widget_t *widget )
 	else
 		g_signal_connect( G_OBJECT(widget->native), "size_allocate", G_CALLBACK(cgraphics_resized2_handler), widget );
 	
-	if ( !strcmp( parent->object.type, "claro.graphics.widgets.splitter" ) )
+	if ( object_is_of_class( OBJECT(parent), "splitter_widget" ) )
 	{
 		int splitter_num = (int)parent->ndata;
 		splitter_widget_t *sw = (splitter_widget_t *)parent;
@@ -227,7 +227,7 @@ void cgraphics_widget_create( widget_t *widget )
 		
 		parent->ndata = (void *)(splitter_num+1);
 	}
-	else if ( !strcmp( parent->object.type, "claro.graphics.widgets.workspace" ) )
+	else if ( object_is_of_class( OBJECT(parent), "workspace_widget" ) )
 	{
 	    printf("%s: creating tab widget..\n", __FUNCTION__);
 	    GtkNotebook * nb = GTK_NOTEBOOK(widget_get_container(OBJECT(parent)));
@@ -315,7 +315,7 @@ widget_t *cgraphics_get_widget_window( widget_t *w )
 	
 	o = (object_t *)w;
 	
-	if ( !strcmp( o->type, "claro.graphics.widgets.window" ) )
+	if ( object_is_of_class( OBJECT(o), "window_widget" ) )
 		return w;
 	
 	if ( o->parent == 0 )
@@ -344,7 +344,7 @@ void cgraphics_update_bounds( object_t *obj )
 	
 	gtk_widget_set_size_request( widget->native, widget->size_req->w, widget->size_req->h );
 	
-	if ( strcmp( obj->parent->type, "claro.graphics.widgets.splitter" ) )
+	if ( !object_is_of_class( OBJECT(obj->parent), "splitter_widget" ) )
 		gtk_layout_move( GTK_LAYOUT(GTK_WIDGET(widget->native)->parent), widget->native, widget->size_req->x, widget->size_req->y );
 }
 /* "borrowed" from http://mail.gnome.org/archives/gtk-app-devel-list/2004-November/msg00028.html */
