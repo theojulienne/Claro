@@ -39,10 +39,10 @@ object_t *label_widget_create_with_text( object_t *parent, bounds_t *bounds, int
 	widget_set_bounds( object, bounds );
 	widget_set_flags( object, flags );
 
+	object_realize( object );
+	
 	label_set_text( object, text );
 	label_set_justify( object, cLabelLeft );
-
-	object_realize( object );
 
 	return object;
 }
