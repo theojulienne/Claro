@@ -38,10 +38,10 @@ object_t *checkbox_widget_create_with_label( object_t *parent, bounds_t *bounds,
 
 	widget_set_bounds( object, bounds );
 	widget_set_flags( object, flags );
-	
-	checkbox_set_label( object, label );
 
 	object_realize( object );
+	
+	checkbox_set_label( object, label );
 
 	return object;
 }
