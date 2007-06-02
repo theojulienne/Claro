@@ -20,6 +20,7 @@
 #define _CLARO_BASE_CONFIG_H
 
 #ifdef _MAC
+#include "egconf-mac.h"
 #include "ac-config-mac.h"
 
 // mac's libc doesn't support environ in libraries directly
