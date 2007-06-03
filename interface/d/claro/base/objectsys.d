@@ -49,8 +49,12 @@ extern (C) {
 		auto evt = new CEvent( );
 		evt.evt = event;
 		
-		auto obj = new CObject( );
-		obj.obj = object;
+		CObject obj = CObject.forObject( object );
+		if ( obj is null )
+		{
+			obj = new CObject( );
+			obj.obj = object;
+		}
 		
 		func( evt, obj );
 	}

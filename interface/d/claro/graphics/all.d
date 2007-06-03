@@ -8,6 +8,7 @@ public
 	import claro.graphics.stock;
 	import claro.graphics.layout;
 	import claro.graphics.widgets.window;
+	import claro.graphics.widgets.menu;
 	import claro.graphics.widgets.menubar;
 	import claro.graphics.widgets.canvas;
 	import claro.graphics.widgets.combo;
