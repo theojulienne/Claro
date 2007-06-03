@@ -42,7 +42,6 @@
 
 - (void) menuItemHit: (id)sender
 {
-	printf( "XX\n" );
 	if ( myitem == NULL )
 		return;
 	
