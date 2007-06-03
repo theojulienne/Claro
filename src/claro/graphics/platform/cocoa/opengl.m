@@ -118,6 +118,13 @@ event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
 	[super mouseMoved: event];
 }
 
+- (void)mouseDragged:(NSEvent *)event
+{
+	macroMouseEvent("mouse_moved");
+	
+	[super mouseDragged: event];
+}
+
 - (void)otherMouseDragged:(NSEvent *)event
 {
 	macroMouseEvent("mouse_moved");

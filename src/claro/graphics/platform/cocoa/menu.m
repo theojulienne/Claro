@@ -60,6 +60,14 @@ void cgraphics_menu_new_item( widget_t *widget, list_item_t *item )
 	
 	[parent addItem:mitem];
 	item->native = mitem;
+	
+	if ( object_is_of_class( OBJECT(item->object.parent), "list_item" ) )
+	{
+		widget_t *w = WIDGET(item->object.parent);
+		mitem = (ClaroMenuItem *)w->native;
+		[mitem setTarget: nil];
+		[mitem setAction: nil];
+	}
 }
 
 void cgraphics_menu_remove_item( widget_t *widget, list_item_t *item )

@@ -42,7 +42,8 @@
 
 - (void) menuItemHit: (id)sender
 {
-	if ( myitem == 0 )
+	printf( "XX\n" );
+	if ( myitem == NULL )
 		return;
 	
 	event_send( OBJECT(myitem), "pushed", "" );
