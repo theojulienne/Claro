@@ -2,6 +2,7 @@ module claro.base.objectsys;
 
 import std.string;
 import std.stdio;
+import std.boxer;
 
 struct object_t {}
 struct event_t {}
@@ -56,6 +57,7 @@ extern (C) {
 	
 	void *event_get_ptr( event_t *e, char *arg );
 	int event_get_int( event_t *e, char *arg );
+	double event_get_double( event_t *e, char *arg );
 }
 
 
@@ -71,14 +73,48 @@ class CEvent {
 		return event_get_ptr( this.evt, std.string.toStringz(arg) );
 	}
 	
+	Object getArgumentAsObject( char[] arg ) {
+		object_t *obj = cast(object_t *)getArgumentAsPointer( arg );
+		
+		return CObject.forObject( obj );
+	}
+	
 	int getArgumentAsInt( char[] arg ) {
 		return event_get_int( this.evt, std.string.toStringz(arg) );
 	}
+	
+	double getArgumentAsDouble( char[] arg ) {
+		return event_get_double( this.evt, std.string.toStringz(arg) );
+	}
 }
 
+// storage space to store object_t->CObject map
+CObject c2d[object_t *];
+
 class CObject {
-	object_t *obj;
+	object_t *_obj;
 	CObject parent;
+	
+	Box appdata;
+	
+	static CObject forObject( object_t *o )
+	{
+		if ( !( o in c2d ) )
+			return null;
+		
+		return c2d[o];
+	}
+	
+	void obj( object_t *_o )
+	{
+		_obj = _o;
+		c2d[this._obj] = this;
+	}
+	
+	object_t *obj( )
+	{
+		return _obj;
+	}
 	
 	this( CObject parent ) {
 		this.parent = parent;
