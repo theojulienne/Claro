@@ -49,7 +49,7 @@ void *scalloc( size_t elsize, size_t els )
 {
 	void *buf;
 	
-	if ( !( buf = g_new0( elsize * els ) ) )
+	if ( !( buf = g_malloc0( elsize * els ) ) )
 	{
 		clog( CL_CRITICAL, "Attempt to malloc() failed in %s(): (%s:%d)", __FUNCTION__, __FILE__, __LINE__ );
 		raise( FAIL_SIGNAL );
