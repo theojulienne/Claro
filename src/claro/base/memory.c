@@ -35,7 +35,7 @@ void *smalloc( size_t size )
 {
 	void *buf;
 	
-	if ( !( buf = malloc( size ) ) )
+	if ( !( buf = g_malloc( size ) ) )
 	{
 		clog( CL_CRITICAL, "Attempt to malloc() failed in %s(): (%s:%d)", __FUNCTION__, __FILE__, __LINE__ );
 		raise( FAIL_SIGNAL );
@@ -49,7 +49,7 @@ void *scalloc( size_t elsize, size_t els )
 {
 	void *buf;
 	
-	if ( !( buf = calloc( elsize, els ) ) )
+	if ( !( buf = g_new0( elsize * els ) ) )
 	{
 		clog( CL_CRITICAL, "Attempt to malloc() failed in %s(): (%s:%d)", __FUNCTION__, __FILE__, __LINE__ );
 		raise( FAIL_SIGNAL );
@@ -63,7 +63,7 @@ void *srealloc( void *oldptr, size_t newsize )
 {
 	void *buf;
 	
-	if ( !( buf = realloc( oldptr, newsize ) ) )
+	if ( !( buf = g_realloc( oldptr, newsize ) ) )
 	{
 		clog( CL_CRITICAL, "Attempt to malloc() failed in %s(): (%s:%d)", __FUNCTION__, __FILE__, __LINE__ );
 		raise( FAIL_SIGNAL );
@@ -75,13 +75,15 @@ void *srealloc( void *oldptr, size_t newsize )
 /* does strdup()'s job, only with the above memory functions */
 char *sstrdup( const char *s )
 {
-	char *t;
+/*	char *t;
 	
 	t = smalloc( strlen(s) + 1 );
 	
 	strcpy( t, s );
 	
 	return t;
+*/
+    return g_strdup(s);
 }
 
 /* debug malloc: smalloc() with memory management */

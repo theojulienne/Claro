@@ -29,6 +29,8 @@ typedef struct
 
 static void _free_event_arg(gpointer arg)
 {
+    event_arg_t * p = (event_arg_t*)arg;
+    clog(CL_DEBUG, "%s: %c at %p\n", __FUNCTION__, p->type, p->val); 
     if(arg)
         free(arg);
 }
@@ -97,7 +99,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 #ifdef NEEDS_GLIB		
 		g_hash_table_insert_replace( e.args, name, value, false );
 #else
-        g_hash_table_replace(e.args, name, value);
+        g_hash_table_insert(e.args, name, value);
 #endif
 	
     }
