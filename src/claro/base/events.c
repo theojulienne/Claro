@@ -99,7 +99,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 #ifdef NEEDS_GLIB		
 		g_hash_table_insert_replace( e.args, name, value, false );
 #else
-        g_hash_table_insert(e.args, name, value);
+        g_hash_table_replace(e.args, name, value);
 #endif
 	
     }

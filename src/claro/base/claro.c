@@ -61,10 +61,11 @@ void claro_base_init( )
 	}
 	
 	signal( SIGTERM, signal_handle );
-	signal( SIGINT, signal_handle );
+/*	
+    signal( SIGINT, signal_handle );
 	signal( SIGQUIT, signal_handle );
 	signal( SIGABRT, signal_handle );
-	
+*/	
 	block_init( );
 	list_init( );
 	log_init( );
