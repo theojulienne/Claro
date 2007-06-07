@@ -149,7 +149,9 @@ void object_queue_destruction( object_t *object )
 
 void object_set_parent( object_t *obj, object_t *parent )
 {
+#ifdef OLD_CHILDREN
 	node_t *n;
+#endif
 	
 	if ( obj->parent != NULL )
 	{

@@ -47,8 +47,6 @@ targets
 			widgets/font_dialog.c
 			platform posix
 				platform/gtk.c
-				platform/gdkcairo.c
-				platform/gtkcairo.c
 				platform/gtk/window.c
 				platform/gtk/toolbar.c
 				platform/gtk/textbox.c

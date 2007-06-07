@@ -56,11 +56,11 @@ void widget_inst_destroy( object_t *object )
 	printf( "widget_inst_destroy(%p)\n", object );
 }
 
-object_t *widget_create( object_t *parent )
+object_t * widget_create( object_t *parent )
 {
 	object_t *object;
 
-	object = object_create_from_class( &widget_class_info, parent );
+	object = object_create_from_class( /*&widget_class_info*/ widget_get_type(), parent );
 
 	/* realize the object */
 	object_realize( object );

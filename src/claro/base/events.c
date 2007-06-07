@@ -18,6 +18,22 @@
 
 #include <claro/base.h>
 
+#ifndef OLD_EVENTS
+
+/* perhaps add free value function pointer here */
+typedef struct 
+{
+    char type;
+    gpointer val;
+} event_arg_t;
+
+static void _free_event_arg(gpointer arg)
+{
+    if(arg)
+        free(arg);
+}
+#endif
+
 int event_send( object_t *object, const char *event, const char *fmt, ... )
 {
 #ifndef OLD_EVENTS
@@ -36,7 +52,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 	e.arg_num = strlen( fmt );
 	strncpy( e.format, fmt, 16 );
 	
-	e.args = g_hash_table_new( g_str_hash, g_str_equal );
+	e.args = g_hash_table_new_full( g_str_hash, g_str_equal, NULL, _free_event_arg );
 	
 	int int_num = 0;
 	int dbl_num = 0;
@@ -47,34 +63,35 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 		if ( fmt[a] == 'd' ) dbl_num++;
 	}
 	
-	int ints[int_num];
-	double dbls[dbl_num];
+	int * ints = (int *) g_malloc0(int_num * sizeof(int));
+	double * dbls = (double *) g_malloc0(dbl_num * sizeof(double));
 	int b;
 	
 	for ( a = 0; a < e.arg_num; a++ )
 	{
 		char *name = va_arg( argp, char * );
-		void *value = NULL;
-		
+		event_arg_t * value = g_new0(event_arg_t, 1);
+        value->type = fmt[a];			
+
 		switch ( fmt[a] )
 		{
-			case 'p':
-				value = va_arg( argp, void * );
-				break;
+			case 'p':				
+                value->val = va_arg( argp, void * );			
+                break;
 			case 'i':
 				b = int_num - 1;
 				ints[b] = va_arg( argp, int );
-				value = &ints[b];
+				value->val = (gpointer) &ints[b];
 				int_num = b;
 				break;
 			case 'd':
 				b = dbl_num - 1;
 				dbls[b] = va_arg( argp, double );
-				value = &dbls[b];
+				value->val = (gpointer) &dbls[b];
 				dbl_num = b;
 				break;
 			default:
-				value = NULL; /* this is bad. */
+				value->val = NULL; /* this is bad. */
 		}
 
 #ifdef NEEDS_GLIB		
@@ -91,6 +108,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 	
 	sprintf( tmp, "Event '%s' sent to object '%s' at %p", event, object->type, object );
 	
+    /* make this shit GPtrArray */
 	LIST_FOREACH( n, object->event_handlers.head )
 	{
 		event_iface_func_t *iff;
@@ -117,7 +135,13 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 		clog( CL_DEBUG, "%s, %d handlers called.", tmp, hn );
 	
 	g_hash_table_destroy( e.args );
-	
+
+    if(ints)
+        g_free(ints);
+    
+    if(dbls)
+        g_free(dbls);	
+
 	return e.handled;
 #else
 	va_list argp;
@@ -206,8 +230,8 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 #ifndef OLD_EVENTS
 void *event_get_ptr( event_t *e, const char *key )
 {
-	void *value = g_hash_table_lookup( e->args, key );
-	return value;
+	event_arg_t * value = g_hash_table_lookup( e->args, key );
+	return value->val;
 }
 
 int event_get_int( event_t *e, const char *key )
@@ -266,7 +290,7 @@ void object_addhandler( object_t *object, const char *event, event_func_t *func 
 	event_handler_t *h;
 	
 	n = node_create( );
-	h = (event_handler_t *)smalloc( sizeof(event_handler_t) );
+	h = (event_handler_t *) g_malloc0( sizeof(event_handler_t) );
 	
 	strncpy( h->type, event, 32 );
 	h->func = func;
@@ -281,10 +305,10 @@ void object_addhandler_interface( object_t *object, const char *event, event_ifa
 	event_handler_t *h;
 	
 	n = node_create( );
-	h = (event_handler_t *)smalloc( sizeof(event_handler_t) );
+	h = (event_handler_t *) g_malloc0( sizeof(event_handler_t) );
 	
 	strncpy( h->type, event, 32 );
-	h->func = func;
+	h->func = (event_func_t*) func;
 	h->data = data;
 	
 	/* add to object's event list */
