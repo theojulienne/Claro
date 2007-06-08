@@ -23,7 +23,8 @@ contains
 	recurse splitter splitter
 	recurse workspace workspace
 	recurse customdraw customdraw
-
+	recurse atomic atomic
+	
 fail
 	recurse contextual contextual
 	

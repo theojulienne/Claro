@@ -1,0 +1,10 @@
+info
+	name "claro atomic  example"
+	description "Claro Atomic Operations Example"
+	version "0.1"
+
+targets
+	application atomic
+		sources
+			atomic.c
+
