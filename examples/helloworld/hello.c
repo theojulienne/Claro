@@ -21,10 +21,15 @@
 
 object_t *w, *t, *b;
 
-void push_my_button( object_t *obj, event_t *event )
+static void push_my_button( object_t *obj, event_t *event )
 {
 	textbox_set_text( t, "You pushed my button!" );
 	button_set_text( obj, "Ouch!" );
+}
+
+static void window_closed(object_t *window, event_t *event) 
+{
+    claro_shutdown();
 }
 
 int main( int argc, char *argv[] )
@@ -38,7 +43,8 @@ int main( int argc, char *argv[] )
 	
 	w = window_widget_create( 0, new_bounds( 100, 100, 230, 230 ), 0 );
 	window_set_title( w, "Hello, World!" );
-	
+	object_addhandler(w, "destroy", window_closed);
+
 	t = textbox_widget_create( w, new_bounds( 10, 10, 210, -1 ), 0 );
 	widget_set_notify( WIDGET(t), cNotifyKey );
 	textbox_set_text( t, "Yeehaw!" );

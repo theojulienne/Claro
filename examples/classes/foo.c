@@ -51,7 +51,7 @@ object_t *foo_create( object_t *parent )
 {
 	object_t *object;
 	
-	object = object_create_from_class( &foo_class_info, parent );
+	object = object_create_from_class( foo_get_type(), parent );
 	
 	/* realize the object */
 	object_realize( object );
