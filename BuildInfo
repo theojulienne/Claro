@@ -40,6 +40,7 @@ flags
 		define _NIX
 		cflags "-g -fPIC -DPIC -Wall"
 		define HAVE_MMAP
+		define REAL_GLIB
 	platform win32
 		cflags "-g -DPIC -Wall"
 	platform all

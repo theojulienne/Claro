@@ -31,7 +31,7 @@ typedef unsigned short bool;
 #define true !(false)
 #endif
 
-#ifdef _NIX
+#ifdef REAL_GLIB
 #	include <glib.h>
 #else
 #	ifdef NEEDS_GLIB
@@ -69,8 +69,10 @@ extern "C" {
 #include "base/object_map.h"
 #include "base/string.h"
 //added by Cody, 2/8/06
+//this crap can be removed now
 #include "base/hashtable.h"
-
+//added by Cody, 5/8/07
+#include "base/atomic.h"
 
 #ifdef __cplusplus
 }

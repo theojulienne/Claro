@@ -14,9 +14,7 @@
  * 
  * See the LICENSE file for more details.
  */
-
-#define NEEDS_GLIB
-
+
 #include <claro/base.h>
 
 void object_inst_create( object_t *object );

@@ -19,6 +19,7 @@ targets
 			oscompat.c
 			store.c
 			string.c
+			atomic.c
 			platform !posix
 				eglib/src/garray.c
 				eglib/src/gdate.c
@@ -62,6 +63,7 @@ targets
 			stdinc.h
 			store.h
 			string.h
+			atomic.h
 			platform !posix
 				eglib/src/glib.h
 				eglib/src/gmodule.h
