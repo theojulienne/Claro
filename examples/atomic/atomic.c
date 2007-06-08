@@ -22,7 +22,7 @@
 
 int main( int argc, char *argv[] )
 {
-    int atomic = -5;
+    int atomic = 0;
 	
     claro_base_init( );
 	
@@ -35,6 +35,7 @@ int main( int argc, char *argv[] )
 
     g_assert (claro_atomic_add_xfer_int(&atomic, -10) == 5);
     g_assert (atomic == -5);
+
 
     claro_atomic_add_int(&atomic, 20);
     g_assert (atomic == 15);
@@ -55,6 +56,8 @@ int main( int argc, char *argv[] )
 
     g_assert (claro_atomic_compare_xfer_int(&atomic, G_MAXINT, G_MININT));
     g_assert (atomic == G_MININT);
+
+    clog( CL_INFO, "%s SUCCESS", __FILE__ );
 
     return 0;
 }
