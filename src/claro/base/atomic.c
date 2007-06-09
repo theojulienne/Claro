@@ -14,11 +14,12 @@
  * 
  * See the LICENSE file for more details.
  */
-
+
+
 #include <claro/base.h>
 
-#ifdef REAL_GLIB
-#elif defined(_MAC) && defined(__i386__) || define(_WIN32)
+#if defined(REAL_GLIB)
+#elif defined(_MAC) && defined(__i386__) || defined(_WIN32)
 
 // these could really be better..
 
@@ -50,7 +51,7 @@ int  claro_atomic_add_xfer_int(volatile int * ptr, int val)
     return res;
 }
 
-gboolean claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_val)
+int claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_val)
 {
     int res;
  

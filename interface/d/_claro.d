@@ -102,15 +102,18 @@ extern(C) void PydMain()
 		Image
 	);
 	
-	wrap_struct!(
-		StockSize,
-		Property!( "Menu" )
+	
+	/*wrap_struct!(
+		StockSize/,
+		//Property!( "Menu" )
 	);
 	
 	wrap_class!(
 		Stock,
+		Property!( Stock.MenuSize ),
+		Property!( Stock.ToolbarSize ),
 		Def!( Stock.getImage )
-	);
+	);*/
 	
 	wrap_class!(
 		MenuBarWidget,

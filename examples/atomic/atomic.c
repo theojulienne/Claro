@@ -20,6 +20,13 @@
 
 // kinda stupid test..."borrowed" from glib test-suite
 
+// don't rely on glib being linked because it's not required outside of claro internals
+#ifndef REAL_GLIB
+#define g_assert assert
+#define G_MAXINT INT32_MAX
+#define G_MININT INT32_MIN
+#endif
+
 int main( int argc, char *argv[] )
 {
     int atomic = 0;

@@ -28,9 +28,9 @@ class ClockWindow(WindowWidget):
 	def make_menu( self ):
 		self.mb = MenuBarWidget( self )
 		file_menu = self.mb.appendItem( None, None, "File" );
-		file_quit = self.mb.appendItem( file_menu, Stock.getImage("system-log-out", 0), "Quit" )
-		self.mb.addKeyBinding( file_quit, "Q", 0 )
-		file_quit.add_handler( "pushed", self.closed )
+		#file_quit = self.mb.appendItem( file_menu, Stock.getImage("system-log-out", 0), "Quit" )
+		#self.mb.addKeyBinding( file_quit, "Q", 0 )
+		#file_quit.add_handler( "pushed", self.closed )
 	
 	def closed( self, evt, obj ):
 		shutdown( )
