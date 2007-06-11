@@ -44,6 +44,12 @@ void *smalloc( size_t size )
 	return buf;
 }
 
+void sfree(void * ptr)
+{
+    if(ptr)
+        free(ptr);
+}
+
 /* does calloc()'s job and dies if calloc() fails */
 void *scalloc( size_t elsize, size_t els )
 {
