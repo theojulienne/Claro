@@ -15,6 +15,8 @@ extern (C)
 {
 	bounds_t *new_bounds( int x, int y, int w, int h );
 	bounds_t *get_req_bounds( object_t *widget );
+	
+	void widget_set_notify( object_t *widget, int flags );
 }
 
 class Bounds {
@@ -53,6 +55,14 @@ class Bounds {
 class Widget : CObject {
 	Bounds b;
 	
+	static int NotifyMouse = 1;
+	static int NotifyKey = 2;
+	
+	static int ModifierKeyAlternate=1; // alt or alt/option
+	static int ModifierKeyControl=2; // control
+	static int ModifierKeyCommand=4; // command/windows
+	static int ModifierKeyShift=8; // shift
+	
 	this( CObject parent ) {
 		super( parent );
 	}
@@ -65,5 +75,10 @@ class Widget : CObject {
 	
 	Bounds bounds( ) {
 		return new Bounds( get_req_bounds(this.obj) );
+	}
+	
+	void notify( int flags )
+	{
+		widget_set_notify( this.obj, flags );
 	}
 }

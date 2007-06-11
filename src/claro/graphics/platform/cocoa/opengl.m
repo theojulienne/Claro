@@ -23,6 +23,8 @@
 
 #ifdef CLARO_OPENGL
 
+int cgraphics_unikeycode_to_claro( int code );
+
 @interface ClaroOpenGL : NSOpenGLView
 {
 	object_t *cw;
@@ -46,6 +48,13 @@
 - (void)claroResize:(NSNotification *)aNotification;
 - (void)claroMove:(NSNotification *)aNotification;
 - (void)claroClose:(NSNotification *)aNotification;
+
+/* event responders */
+- (BOOL) acceptsFirstResponder;
+- (void) keyUp:(NSEvent *)theEvent;
+- (void) keyDown:(NSEvent *)theEvent;
+
+- (int) claroModifiers:(NSEvent *)theEvent;
 @end
 
 @implementation ClaroOpenGL
@@ -68,7 +77,7 @@
 }
 
 #define macroMouseEvent(e) NSPoint pt = [self getLocalMousePosition: event]; \
-event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
+event_send( OBJECT(cw), e, "iii", "x", (int)pt.x, "y", (int)pt.y, "modifiers", [self claroModifiers: event] );
 
 - (void)rightMouseDown:(NSEvent *)event
 {
@@ -111,6 +120,52 @@ event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
 	return local_point;
 }
 
+
+- (BOOL) acceptsFirstResponder
+{
+	return (WIDGET(cw)->notify_flags & cNotifyKey);
+}
+
+- (int) claroModifiers:(NSEvent *)theEvent
+{
+	int mods = 0, lmods = 0;
+	
+	lmods = [theEvent modifierFlags];
+	
+	if ( lmods & NSAlternateKeyMask ) mods |= cModifierKeyAlternate;
+	if ( lmods & NSControlKeyMask ) mods |= cModifierKeyControl;
+	if ( lmods & NSCommandKeyMask ) mods |= cModifierKeyCommand;
+	if ( lmods & NSShiftKeyMask ) mods |= cModifierKeyShift;
+	
+	return mods;
+}
+
+- (void) keyUp:(NSEvent *)theEvent
+{
+	int key = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+	int mods = 0;
+	
+	if ( !( WIDGET(cw)->notify_flags & cNotifyKey ) )
+		return;
+	
+	mods = [self claroModifiers: theEvent];
+	
+	event_send( OBJECT(cw), "key_up", "ii", "key", key, "modifiers", mods );
+}
+
+- (void) keyDown:(NSEvent *)theEvent
+{
+	int key = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+	int mods = 0;
+	
+	if ( !( WIDGET(cw)->notify_flags & cNotifyKey ) )
+		return;
+	
+	mods = [self claroModifiers: theEvent];
+	
+	event_send( OBJECT(cw), "key_down", "ii", "key", key, "modifiers", mods );
+}
+
 - (void)mouseMoved:(NSEvent *)event
 {
 	macroMouseEvent("mouse_moved");
@@ -137,7 +192,11 @@ event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
 	NSPoint pt = [self getLocalMousePosition: event];
 	double dx=[event deltaX], dy=[event deltaY], dz=[event deltaZ];
 	
-	event_send( OBJECT(cw), "scroll_wheel", "iiddd", "x", (int)pt.x, "y", (int)pt.y, "deltaX", dx, "deltaY", dy, "deltaZ", dz );
+	event_send( OBJECT(cw), "scroll_wheel", "iidddi",
+			"x", (int)pt.x, "y", (int)pt.y,
+			"deltaX", dx, "deltaY", dy, "deltaZ", dz,
+			"modifiers", [self claroModifiers: event]
+	);
 }
 
 - (void)setClaroWidget:(widget_t *)widget

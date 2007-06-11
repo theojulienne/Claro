@@ -77,6 +77,15 @@ enum cWidgetNotify
 	cNotifyKey = 2,
 };
 
+/* modifier types */
+enum cWidgetModifierKeys
+{
+	cModifierKeyAlternate=1, // alt or alt/option
+	cModifierKeyControl=2, // control
+	cModifierKeyCommand=4, // command/windows
+	cModifierKeyShift=8, // shift
+};
+
 /**
  * \brief Makes the specified widget visible.
  *
