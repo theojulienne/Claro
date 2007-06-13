@@ -16,8 +16,6 @@
  */
 
 
-#define NEEDS_GLIB
-
 #include <claro/graphics.h>
 #include <claro/graphics/platform.h>
 
@@ -419,6 +417,27 @@ void widget_set_cursor( object_t *widget, int cursor )
 {
 	cgraphics_widget_set_cursor( WIDGET(widget), cursor );
 }
+
+void claro_cursor_capture( )
+{
+	cgraphics_cursor_capture( );
+}
+
+void claro_cursor_release( )
+{
+	cgraphics_cursor_release( );
+}
+
+void claro_cursor_hide( )
+{
+	cgraphics_cursor_hide( );
+}
+
+void claro_cursor_show( )
+{
+	cgraphics_cursor_show( );
+}
+
 
 bounds_t *get_req_bounds( object_t *widget )
 {

@@ -332,6 +332,13 @@ CLFEXP void widget_destroy( object_t *widget );
 CLFEXP void widget_set_flags( object_t *widget, int flags );
 CLFEXP void widget_set_bounds( object_t *widget, bounds_t *bounds );
 
+
+// not the best place for these:
+CLFEXP void claro_cursor_capture( );
+CLFEXP void claro_cursor_release( );
+CLFEXP void claro_cursor_hide( );
+CLFEXP void claro_cursor_show( );
+
 /*\@}*/
 
 /************************************************************************/

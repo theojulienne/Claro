@@ -494,4 +494,25 @@ void cgraphics_widget_set_cursor( widget_t *widget, int cursor )
 
 }
 
+
+void cgraphics_cursor_capture( )
+{
+	
+}
+
+void cgraphics_cursor_release( )
+{
+	
+}
+
+void cgraphics_cursor_hide( )
+{
+	
+}
+
+void cgraphics_cursor_show( )
+{
+	
+}
+
 /* end of platform functions */

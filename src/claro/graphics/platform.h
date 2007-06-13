@@ -234,4 +234,10 @@ void cgraphics_status_icon_set_menu(status_icon_t * status, object_t * menu);
 void cgraphics_status_icon_set_visible(status_icon_t * status, int visible);
 void cgraphics_status_icon_set_tooltip(status_icon_t * status, const char * tooltip);
 
+// cursor
+void cgraphics_cursor_capture( );
+void cgraphics_cursor_release( );
+void cgraphics_cursor_hide( );
+void cgraphics_cursor_show( );
+
 #endif

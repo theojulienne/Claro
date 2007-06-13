@@ -285,4 +285,26 @@ void cgraphics_widget_set_cursor( widget_t *widget, int cursor )
 
 }
 
+
+void cgraphics_cursor_capture( )
+{
+	CGAssociateMouseAndMouseCursorPosition( FALSE );
+}
+
+void cgraphics_cursor_release( )
+{
+	CGAssociateMouseAndMouseCursorPosition( TRUE );
+}
+
+void cgraphics_cursor_hide( )
+{
+	CGDisplayHideCursor( kCGDirectMainDisplay );
+}
+
+void cgraphics_cursor_show( )
+{
+	CGDisplayShowCursor( kCGDirectMainDisplay );
+}
+
+
 /* end of platform functions */

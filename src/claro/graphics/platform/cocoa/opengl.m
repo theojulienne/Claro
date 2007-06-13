@@ -77,7 +77,7 @@ int cgraphics_unikeycode_to_claro( int code );
 }
 
 #define macroMouseEvent(e) NSPoint pt = [self getLocalMousePosition: event]; \
-event_send( OBJECT(cw), e, "iii", "x", (int)pt.x, "y", (int)pt.y, "modifiers", [self claroModifiers: event] );
+event_send( OBJECT(cw), e, "iiiii", "x", (int)pt.x, "y", (int)pt.y, "modifiers", [self claroModifiers: event], "deltaX", (int)[event deltaX], "deltaY", (int)[event deltaY] );
 
 - (void)rightMouseDown:(NSEvent *)event
 {

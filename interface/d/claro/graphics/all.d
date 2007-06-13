@@ -7,6 +7,7 @@ public
 	import claro.graphics.image;
 	import claro.graphics.stock;
 	import claro.graphics.layout;
+	import claro.graphics.cursor;
 	import claro.graphics.widgets.window;
 	import claro.graphics.widgets.menu;
 	import claro.graphics.widgets.menubar;
