@@ -40,12 +40,12 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 {
 #ifndef OLD_EVENTS
 	va_list argp;
-	node_t *n;
+//	node_t *n;
 	event_handler_t *h;
 	event_t e;
 	int hn = 0;
 	char tmp[1024];
-	int a;
+	int a, i, len;
 
 	va_start( argp, fmt );
 
@@ -54,7 +54,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 	e.arg_num = strlen( fmt );
 	strncpy( e.format, fmt, 16 );
 	
-	e.args = g_hash_table_new_full( g_str_hash, g_str_equal, NULL, _free_event_arg );
+	e.args = claro_hashtable_str_create(TRUE, _free_event_arg);
 	
 	int int_num = 0;
 	int dbl_num = 0;
@@ -96,14 +96,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 				value->val = NULL; /* this is bad. */
 		}
 
-/*
-#ifdef NEEDS_GLIB		
-		g_hash_table_insert_replace( e.args, name, value, false );
-#else
-*/
-        g_hash_table_replace(e.args, name, value);
-//#endif
-	
+        claro_hashtable_insert(e.args, (void*)sstrdup(name), (void*)value, TRUE);
     }
 	
 	e.handled = 0;
@@ -111,8 +104,30 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 	va_end( argp );
 	
 	sprintf( tmp, "Event '%s' sent to object '%s' at %p", event, object->type, object );
+
+    len = claro_list_count(object->event_handlers);
+
+    //this should all be in a hash table too!
+    for(i = 0; i < len; i++)
+    {
+        event_iface_func_t *iff;
+		event_t *ep = &e;
+		
+		h = (event_handler_t *)claro_list_get_item(object->event_handlers, i);
+		
+		if ( strcmp( event, h->type ) )
+			continue;
+		
+		if ( h->data != NULL )
+		{
+			iff = (event_iface_func_t *)h->func;
+			(*iff)( object, ep, h->data );
+		}
+		else
+			(*h->func)( object, ep );
+    }
 	
-    /* make this shit GPtrArray */
+    /*
 	LIST_FOREACH( n, object->event_handlers.head )
 	{
 		event_iface_func_t *iff;
@@ -133,12 +148,13 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 		
 		hn++;
 	}
-	
+	*/
+
 	/* debug for everything but mainloop, which is called too often to debug! */
 	if ( strcmp( event, "mainloop" ) )
 		clog( CL_DEBUG, "%s, %d handlers called.", tmp, hn );
 	
-	g_hash_table_destroy( e.args );
+	claro_hashtable_destroy( e.args );
 
     if(ints)
         g_free(ints);
@@ -147,6 +163,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
         g_free(dbls);	
 
 	return e.handled;
+
 #else
 	va_list argp;
 	node_t *n;
@@ -234,7 +251,7 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 #ifndef OLD_EVENTS
 void *event_get_ptr( event_t *e, const char *key )
 {
-	event_arg_t * value = g_hash_table_lookup( e->args, key );
+	event_arg_t * value = claro_hashtable_lookup( e->args, key );
 	return value->val;
 }
 
@@ -290,25 +307,27 @@ double event_get_arg_double( event_t *e, int arg )
 
 void object_addhandler( object_t *object, const char *event, event_func_t *func )
 {
-	node_t *n;
+//	node_t *n;
 	event_handler_t *h;
 	
-	n = node_create( );
+//	n = node_create( );
 	h = (event_handler_t *) g_malloc0( sizeof(event_handler_t) );
 	
 	strncpy( h->type, event, 32 );
 	h->func = func;
-	
+
+    claro_list_append(object->event_handlers, (void *)h);	
+    
 	/* add to object's event list */
-	node_add( h, n, &object->event_handlers );
+//	node_add( h, n, &object->event_handlers );
 }
 
 void object_addhandler_interface( object_t *object, const char *event, event_iface_func_t *func, void *data )
 {
-	node_t *n;
+//	node_t *n;
 	event_handler_t *h;
 	
-	n = node_create( );
+//	n = node_create( );
 	h = (event_handler_t *) g_malloc0( sizeof(event_handler_t) );
 	
 	strncpy( h->type, event, 32 );
@@ -316,10 +335,13 @@ void object_addhandler_interface( object_t *object, const char *event, event_ifa
 	h->data = data;
 	
 	/* add to object's event list */
-	node_add( h, n, &object->event_handlers );
+//	node_add( h, n, &object->event_handlers );
+    
+    claro_list_append(object->event_handlers, (void *)h);	    
 }
 
 const char *event_get_name( event_t *event )
 {
 	return event->name;
 }
+

@@ -25,17 +25,30 @@ static void cgraphics_combo_changed_handler( GtkComboBox *widget, widget_t *cw )
 	combo_widget_t *cbw = (combo_widget_t *)cw;
 	int active = gtk_combo_box_get_active( widget );	
 	list_item_t *item = 0, *curr;
-	node_t *n;
-		
+//	node_t *n;
+    int i, len;
+	
 	if ( active != -1 )
 	{
-		LIST_FOREACH( n, cbw->widget.items.head )
+		/*
+        ST_FOREACH( n, cbw->widget.items.head )
 		{
 			curr = (list_item_t *)n->data;
 			
 			if ( curr->row == active )
 				item = curr;
 		}
+        */
+
+        len = claro_list_count(cbw->widget.items);
+
+        for(i = 0; i < len; i++)
+        {
+            curr = (list_item_t *)claro_list_get_item(cbw->widget.items, i);
+            
+            if(curr->row == active)
+                item = curr;
+        }
 	}
 	
 	cbw->selected = item;
@@ -74,3 +87,4 @@ void cgraphics_combo_select_row( widget_t *widget, list_item_t *item )
 	lw->selected = item;
 	event_send( OBJECT(widget), "selected", "p", "row", item );
 }
+

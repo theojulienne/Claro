@@ -18,6 +18,8 @@
 #ifndef _CLARO_BASE_EVENTS_H
 #define _CLARO_BASE_EVENTS_H
 
+#include "hashtable.h"
+
 typedef struct event_
 {
 	object_t *object; /* the object which this event was sent to */
@@ -29,7 +31,7 @@ typedef struct event_
 	char format[16]; /* format of the arguments sent */
 
 #ifndef OLD_EVENTS
-	GHashTable *args;
+	claro_hashtable_t * args;
 #else
 	void **arglist;  /* list of args, as per format. */
 #endif

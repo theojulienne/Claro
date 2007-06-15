@@ -19,17 +19,6 @@
 #ifndef _CLARO_BASE_H
 #define _CLARO_BASE_H
 
-#ifdef _NIX
-typedef unsigned short bool;
-#endif
-
-#ifndef false
-#define false 0
-#endif
-
-#ifndef true
-#define true !(false)
-#endif
 
 #ifdef REAL_GLIB
 #	include <glib.h>
@@ -42,6 +31,18 @@ typedef unsigned short bool;
 #		define GHashTable void
 #		define gboolean int
 #	endif
+#endif
+
+#ifndef bool_t
+typedef int bool_t;
+#endif
+
+#ifndef false
+#define false 0
+#endif
+
+#ifndef true
+#define true !(false)
 #endif
 
 #ifndef FALSE

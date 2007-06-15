@@ -19,26 +19,28 @@
 #ifndef _CLARO_BASE_BLOCK_H
 #define _CLARO_BASE_BLOCK_H
 
+/* 
+
 typedef struct block_ block_t;
 typedef struct block_heap_ block_heap_t;
 
-/* A block of memory allocated to the allocator */
+// A block of memory allocated to the allocator 
 struct block_
 {
 	node_t node;
 	
-	/* link back to our heap */
+	// link back to our heap 
 	block_heap_t *heap;
 	
-	/* pointer to the first item */
+	// pointer to the first item 
 	void *data;
 	
-	/* lists of items */
+	// lists of items 
 	list_t free_list;
 	list_t used_list;
 };
 
-/* A pile of blocks */
+// A pile of blocks 
 struct block_heap_
 {
 	node_t node;
@@ -54,10 +56,10 @@ struct block_heap_
 	list_t blocks;
 };
 
-/* List of all block heaps */
+// List of all block heaps 
 extern list_t block_heaps;
 
-/* Flag for block_heap_create */
+// Flag for block_heap_create 
 #define BH_DONTCARE 0
 
 #define BH_NOW 1
@@ -65,14 +67,17 @@ extern list_t block_heaps;
 
 void block_init( );
 
-/* Functions for heaps */
+// Functions for heaps 
 CLFEXP block_heap_t *block_heap_create( uint32 elem_size, uint32 block_elems, uint32 flags );
 CLFEXP void block_heap_destroy( block_heap_t *heap );
 
-/* Functions for blocks */
+// Functions for blocks 
 CLFEXP void *block_alloc( block_heap_t *heap );
 CLFEXP void block_free( block_heap_t *heap, void *data );
 
+*/
+
 CLFEXP void block_heap_loginfo( );
+
 
 #endif

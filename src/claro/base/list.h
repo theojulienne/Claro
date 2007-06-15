@@ -19,46 +19,22 @@
 #ifndef _CLARO_BASE_LIST_H
 #define _CLARO_BASE_LIST_H
 
-typedef struct node_ node_t;
-typedef struct list_ list_t;
+typedef void claro_list_t;
 
-/* macros for linked lists */
-#define LIST_FOREACH(n, head) for (n = (head); n; n = n->next)  
-#define LIST_FOREACH_NEXT(n, head) for (n = (head); n->next; n = n->next)
-#define LIST_FOREACH_PREV(n, tail) for (n = (tail); n; n = n->prev)
+CLFEXP claro_list_t * claro_list_create();
 
-#define LIST_LENGTH(list) (list)->count
+CLFEXP void claro_list_destroy(claro_list_t * list);
 
-#define LIST_FOREACH_SAFE(n, tn, head) for (n = (head), tn = n ? n->next : NULL; n != NULL; n = tn, tn = n ? n->next : NULL)
+CLFEXP void claro_list_append(claro_list_t * list, void * item);
 
-/* list node struct */
-struct node_
-{
-	node_t *next, *prev; 
-	
-	/* pointer to real structure */
-	void *data;
-};
+CLFEXP bool_t claro_list_remove(claro_list_t * list, void * item);
 
-/* node list struct */
-struct list_
-{
-	node_t *head, *tail;
-	
-	/* how many entries in the list */
-	uint32 count;
-};
+CLFEXP void * claro_list_get_item(claro_list_t * list, int index);
 
-CLFEXP void list_init( );
+CLFEXP void claro_list_set_item(claro_list_t * list, int index, void * item);
 
-CLFEXP void list_create( list_t *list );
-CLFEXP node_t *node_create( );
-CLFEXP void node_free( node_t *n );
-CLFEXP void node_add( void *data, node_t *n, list_t *l );
-#define node_append node_add
-CLFEXP void node_prepend( void *data, node_t *n, list_t *l );
-CLFEXP void node_del( node_t *n, list_t *l );
-CLFEXP node_t *node_find( void *data, list_t *l );
-CLFEXP void node_move( node_t *n, list_t *oldlist, list_t *newlist );
+CLFEXP unsigned int claro_list_count(claro_list_t * list);
+
+#define LIST_LENGTH claro_list_count
 
 #endif

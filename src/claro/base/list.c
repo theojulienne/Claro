@@ -18,163 +18,49 @@
 
 #include <claro/base.h>
 
-block_heap_t *node_heap = 0;
-
-/* init internal data structures */
-void list_init( )
+CLFEXP claro_list_t * claro_list_create()
 {
-	clog( CL_INFO, "allocating in list_init( );" );
-	node_heap = block_heap_create( sizeof(node_t), 10, BH_NOW );
+    claro_list_t * list = (claro_list_t *) g_ptr_array_new();
+    g_assert(list != NULL);
+    return list;
 }
 
-/* safety: inits a list to default values */
-void list_create( list_t *list )
-{	
-	memset( list, 0, sizeof(list_t) );
-}
-
-/* creates a new node */
-node_t *node_create( )
+CLFEXP void claro_list_destroy(claro_list_t * list)
 {
-	node_t *n;
-	
-	cassert( node_heap != 0, "node heap not initialised. Did you run claro_base_init()?" );
-	
-	/* allocate it */
-	n = (node_t *)block_alloc( node_heap );
-	
-	/* initialize */
-	n->next = n->prev = n->data = NULL;
-	
-	/* return a pointer to the new node */
-	return n;
+    g_ptr_array_free((GPtrArray *)list, TRUE);
 }
 
-/* frees a node */
-void node_free( node_t *n )
+CLFEXP void claro_list_append(claro_list_t * list, void * item)
 {
-	/* free it */
-	block_free( node_heap, n );
+    g_ptr_array_add((GPtrArray *)list, item);
 }
 
-/* adds a node to the end of a list */
-void node_add( void *data, node_t *n, list_t *l )
+CLFEXP bool_t claro_list_remove(claro_list_t * list, void * item)
 {
-	node_t *tn;
-	
-	n->data = data;
-
-	/* first node? */
-	if (!l->tail)
-	{
-		n->next = n->prev = 0;
-		
-		l->head = n;
-		l->tail = n;
-		l->count++;
-		
-		return;
-	}
-
-	/* Speed increase. */
-	tn = l->tail;
-
-	/* set our `prev' to the last node */
-	n->prev = tn;
-
-	/* set the last node's `next' to us */
-	tn->next = n;
-	
-	/* clean up our `next` pointer */
-	n->next = 0;
-
-	/* set the list's `tail' to us */
-	l->tail = n;
-
-	/* up the count */
-	l->count++;
+    return g_ptr_array_remove((GPtrArray *)list, item);
 }
 
-/* adds a node to the beginning of a list */
-void node_prepend( void *data, node_t *n, list_t *l )
+CLFEXP void * claro_list_get_item(claro_list_t * list, int index)
 {
-	node_t *hn;
-	
-	n->data = data;
-
-	/* first node? */
-	if (!l->tail)
-	{
-		n->next = n->prev = 0;
-		
-		l->head = n;
-		l->tail = n;
-		l->count++;
-		
-		return;
-	}
-
-	/* Speed increase. */
-	hn = l->head;
-
-	/* set our `next' to the first node */
-	n->next = hn;
-
-	/* set the first node's `prev' to us */
-	hn->prev = n;
-	
-	/* clean up our `prev` pointer */
-	n->prev = 0;
-
-	/* set the list's `head' to us */
-	l->head = n;
-
-	/* up the count */
-	l->count++;
+    GPtrArray * array = (GPtrArray *)list;
+    g_return_val_if_fail(array != NULL, NULL);
+	g_return_val_if_fail(index >= 0 || index < array->len, NULL);
+    return g_ptr_array_index(array, index);
 }
 
-void node_del( node_t *n, list_t *l )
+CLFEXP void claro_list_set_item(claro_list_t * list, int index, void * item)
 {
-	/* do we even have a node? */
-	if (!n)
-	{
-		clog( CL_WARNING, "node_del(): called with NULL node" );
-		return;
-	}
-
-	/* are we the head? */
-	if (!n->prev)
-		l->head = n->next;
-	else
-		n->prev->next = n->next;
-
-	/* are we the tail? */
-	if (!n->next)
-		l->tail = n->prev;
-	else
-		n->next->prev = n->prev;
-
-	/* down the count */
-	l->count--;
+    GPtrArray * array = (GPtrArray *)list;
+    g_return_if_fail(array != NULL);
+	g_return_if_fail(index >= 0 || index < array->len);
+    g_ptr_array_index(array, index) = item;
 }
 
-/* finds a node by `data' */
-node_t *node_find( void *data, list_t *l )
+CLFEXP unsigned int claro_list_count(claro_list_t * list)
 {
-	node_t *n;
-	
-	LIST_FOREACH(n, l->head)
-	{
-		if (n->data == data)
-			return n;
-	}
-
-	return NULL;
+    GPtrArray * array = (GPtrArray *)list;
+    g_return_val_if_fail(array != NULL, 0);
+    return array->len;
 }
 
-/* delete node from old list, add to new list */
-void node_move( node_t *n, list_t *oldlist, list_t *newlist )
-{
-	node_del( n, oldlist );
-	node_add( n->data, n, newlist );
-}
+

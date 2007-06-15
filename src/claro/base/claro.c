@@ -66,8 +66,8 @@ void claro_base_init( )
 	signal( SIGQUIT, signal_handle );
 	signal( SIGABRT, signal_handle );
 */	
-	block_init( );
-	list_init( );
+//	block_init( );
+//	list_init( );
 	log_init( );
 	
 	object_init( );
@@ -87,21 +87,21 @@ void claro_base_destroy( )
 	/* FIXME: clean up stuff init'd in _init() */
 }
 
-extern list_t destroy_list;
+//extern list_t destroy_list;
 
 /* Claro main loop, single-step */
 void claro_run( )
 {
-	node_t *n, *tn;
+//	node_t *n, *tn;
 	
 	/* destroy any objects awaiting destruction */
-	LIST_FOREACH_SAFE( n, tn, destroy_list.head )
+/*	LIST_FOREACH_SAFE( n, tn, destroy_list.head )
 	{
 		object_actual_destroy( OBJECT(n->data) );
 		node_del( n, &destroy_list );
 		node_free( n );
 	}
-	
+*/	
 	event_send( claro, "mainloop", "" );
 }
 

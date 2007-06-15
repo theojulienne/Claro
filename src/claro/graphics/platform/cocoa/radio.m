@@ -66,7 +66,9 @@
 	radiogroup_t *rg = rb->group;
 	node_t *n;
 	widget_t *w;
-	
+    int i, len;	
+
+    /*
 	LIST_FOREACH( n, rg->buttons.head )
 	{
 		w = (widget_t *)n->data;
@@ -74,7 +76,18 @@
 		if ( OBJECT(w) != cw )
 			[(NSButton *)w->native setState:NSOffState];
 	}
-	
+	*/
+
+    len = claro_list_count(rg->buttons);
+    
+    for(i = 0; i < len; i++)
+    {
+        w = (widget_t *)claro_list_get_item(rg->buttons, i);
+        
+        if(OBJECT(w) != cw)
+            [(NSButton *)w->native setState:NSOffState]; 
+    }
+
 	[(NSButton *)WIDGET(cw)->native setState:NSOnState];
 	
 	rg->selected = OBJECT(cw);

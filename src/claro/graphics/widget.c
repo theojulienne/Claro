@@ -238,11 +238,13 @@ void widget_destruct( object_t *widget )
 	
 	/* close children too */
 #ifndef OLD_CHILDREN
-	int a;
+	int i, len;
 	
-	for ( a = 0; a < obj->children->len; a++ )
+    len = claro_list_count(obj->children);    
+
+	for ( i = 0; i < len; i++ )
 	{
-		widget_destruct( OBJECT(g_ptr_array_index( obj->children, a )) );
+		widget_destruct( OBJECT(claro_list_get_item( obj->children, i )) );
 	}
 #else
 	node_t *n, *tn;
@@ -281,11 +283,13 @@ void widget_resized_handle( object_t *obj, event_t *event )
 {
 	/* tell all children about the resize */
 #ifndef OLD_CHILDREN
-	int a;
-	
-	for ( a = 0; a < obj->children->len; a++ )
+	int i, len;
+    
+    len = claro_list_count(obj->children);	
+
+	for ( i = 0; i < len; i++ )
 	{
-		object_t *child = OBJECT(g_ptr_array_index(obj->children, a));
+		object_t *child = OBJECT(claro_list_get_item(obj->children, i));
 #else
 	node_t *n, *tn;
 	
@@ -293,6 +297,7 @@ void widget_resized_handle( object_t *obj, event_t *event )
 	{
 		object_t *child = OBJECT(n->data);
 #endif
+
 		if ( object_is_of_class( child, "widget" ) ||
 			 object_is_of_class( child, "layout" ) )
 		{

@@ -28,25 +28,28 @@ typedef struct object_
 {
 	char type[64];
 	
-	const struct class_type_ *class_type;
+	const struct class_type_ * class_type;
 	int realized;
 	
 	int destroy_pending;
 	
-	list_t event_handlers;
-	
+	claro_list_t * event_handlers;
+
+    claro_list_t * children;
+
+/*	
 #ifndef OLD_CHILDREN
 	GPtrArray *children;
 #else
 	list_t children;
 #endif
-	
+*/
 	struct object_ *parent;
 	
 	void *appdata; /* !! this is for APPLICATION USE ONLY !! */
 } object_t;
 
-CLVEXP list_t object_list;
+//CLVEXP list_t object_list;
 
 CLFEXP void object_init( );
 

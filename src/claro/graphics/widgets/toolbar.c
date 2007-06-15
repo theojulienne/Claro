@@ -161,5 +161,5 @@ int toolbar_item_count( object_t *obj )
 	
 	assert_valid_toolbar_widget( obj, "obj" );
 	
-	return LIST_LENGTH( &lw->items );
+	return claro_list_count( &lw->items );
 }

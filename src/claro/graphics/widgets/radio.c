@@ -21,13 +21,23 @@
 
 void radiogroup_inst_create( object_t *object );
 void radiogroup_inst_realize( object_t *object );
+void radiogroup_inst_destroy(object_t * object);
 
-claro_define_type_partial( radiogroup, object, radiogroup_inst_create, radiogroup_inst_realize, NULL, NULL );
+claro_define_type_partial( radiogroup, object, radiogroup_inst_create, radiogroup_inst_realize, NULL, radiogroup_inst_destroy );
 
 void radiogroup_inst_create( object_t *object )
 {
+    radiogroup_t *g = (radiogroup_t *)object;
 	WIDGET(object)->ndata = NULL;
-	list_create( &((radiogroup_t *)object)->buttons );
+	//list_create( &((radiogroup_t *)object)->buttons );
+    g->buttons = claro_list_create();
+}
+
+void radiogroup_inst_destroy(object_t * object)
+{
+    g_return_if_fail(object != NULL);
+    radiogroup_t *g = (radiogroup_t *)object;
+    claro_list_destroy(g->buttons);
 }
 
 void radiogroup_inst_realize( object_t *object )
@@ -97,7 +107,7 @@ void radiobutton_set_group( object_t *radio, object_t *group )
 {
 	radiobutton_widget_t *r = (radiobutton_widget_t *)radio;
 	radiogroup_t *g = (radiogroup_t *)group;
-	node_t *n;
+	//node_t *n;
 	
 	assert_valid_radiobutton_widget( radio, "radio" );
 	assert_valid_radiogroup_widget( group, "group" );
@@ -109,13 +119,15 @@ void radiobutton_set_group( object_t *radio, object_t *group )
 	
 	r->group = g;
 	
-	n = node_create( );
-	
-	node_add( radio, n, &g->buttons );
-	
+	//n = node_create( );	
+	//node_add( radio, n, &g->buttons );
+
+    claro_list_append(g->buttons, (void*)radio);	
+
 	/* skip if object not yet realized */
 	if ( !object_is_realized( radio ) )
 		return;
 	
 	cgraphics_radiobutton_set_group( WIDGET(radio) );
 }
+

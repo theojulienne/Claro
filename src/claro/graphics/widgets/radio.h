@@ -39,7 +39,7 @@ declare_class( radiogroup );
 typedef struct radiogroup_
 {
 	object_t widget;
-	list_t buttons;
+	claro_list_t * buttons;
 	
 	object_t *selected;
 	

@@ -48,14 +48,14 @@ class_type_t *object_get_type( )
 
 
 /* global object and destruction lists */
-list_t object_list = {};
-list_t destroy_list = {};
+//list_t object_list = {};
+//list_t destroy_list = {};
 
 /* object system initialization */
 void object_init( )
 {
-	list_create( &object_list );
-	list_create( &destroy_list );
+//	list_create( &object_list );
+//	list_create( &destroy_list );
 }
 
 
@@ -63,22 +63,26 @@ void object_init( )
 
 void object_inst_create( object_t *object )
 {
-	node_t *n;
+/*	node_t *n;
 	
-	/* init object event list */
+	// init object event list 
 	list_create( &object->event_handlers );
 	
-	/* init object children list */
+	// init object children list 
 #ifndef OLD_CHILDREN
 	object->children = g_ptr_array_new( );
 #else
 	list_create( &object->children );
 #endif
 	
-	/* FIXME: this will be replaced by using tree traversal later */
-	/* add to global object list */
+	// FIXME: this will be replaced by using tree traversal later 
+	// add to global object list 
 	n = node_create( );
 	node_add( object, n, &object_list );
+*/
+    
+    object->event_handlers = claro_list_create();
+    object->children = claro_list_create();
 }
 
 void object_inst_realize( object_t *object )
@@ -91,19 +95,44 @@ void object_inst_finalize( object_t *object )
 	event_send( object, "finalized", "" );
 }
 
+//this is all REALLY goofy - going to go away with ref-counting
+
 void object_inst_destroy( object_t *object )
 {
-	node_t *n, *nn, *tn;
+/*	node_t *n, *nn, *tn;
 	
 	if ( !( n = node_find( object, &object_list ) ) )
 		return;
+*/
+    int i, len;
 	
+    g_return_if_fail(object != NULL);
+
 	/* clean up parenting */
 	object_set_parent( object, NULL );
 	
+    len = claro_list_count(object->children);
+    
+    for(i = 0; i < len; i++)
+    {
+        object_set_parent(claro_list_get_item(object->children, i), NULL);
+    }
+
+    claro_list_destroy(object->children);
+
+    len = claro_list_count(object->event_handlers);
+
+    for(i = 0; i < len; i++)
+    {
+        sfree(claro_list_get_item(object->event_handlers, i));
+    }    
+    
+    claro_list_destroy(object->event_handlers);
+
 	/* make all our children have no parent.
 	   FIXME: there should be a flag to destroy children
 	   NOTE: widget_destroy will automatically handle children through the OS, though? */
+/*
 #ifndef OLD_CHILDREN
 	for ( ; object->children->len > 0;  )
 	{
@@ -112,12 +141,12 @@ void object_inst_destroy( object_t *object )
 #else
 	LIST_FOREACH_SAFE( nn, tn, object->children.head )
 	{
-		/* remove the parenting; this will free the current node too */
+		// remove the parenting; this will free the current node too 
 		object_set_parent( (object_t *)nn->data, NULL );
 	}
 #endif
 	
-	/* remove all handlers */
+	// remove all handlers 
 	LIST_FOREACH_SAFE( nn, tn, object->event_handlers.head )
 	{
 		free( nn->data );
@@ -125,28 +154,47 @@ void object_inst_destroy( object_t *object )
 		node_free( nn );
 	}
 	
-	/* remove the object from the global list, kill the node */
+	// remove the object from the global list, kill the node 
 	node_del( n, &object_list );
 	node_free( n );
-	
+*/	
 	/* clean up the memory */
 	free( object );
 }
 
-int object_is_realized( object_t *object ) {
+int object_is_realized( object_t *object ) 
+{
+    g_return_val_if_fail(object != NULL, 0);
 	return object->realized;
 }
 
 void object_queue_destruction( object_t *object )
 {
+    g_return_if_fail(object != NULL);
+/*
 	node_t *n;
 	
 	n = node_create( );
 	node_add( object, n, &destroy_list );
+*/
 }
 
-void object_set_parent( object_t *obj, object_t *parent )
+void object_set_parent( object_t *object, object_t *parent )
 {
+    g_return_if_fail(object != NULL);
+
+    if ( object->parent != NULL )
+        g_assert(claro_list_remove(object->parent->children, object) == TRUE);
+
+    if(parent != NULL)
+        claro_list_append(parent->children, object);
+        
+    object->parent = parent;
+
+    if(parent != NULL)
+        event_send( object, "parent_attach", "" );
+
+/*
 #ifdef OLD_CHILDREN
 	node_t *n;
 #endif
@@ -159,7 +207,7 @@ void object_set_parent( object_t *obj, object_t *parent )
 			clog( CL_ERROR, "Object has a parent listed, but the parent's children list doesn't contain it." );
 		}
 #else
-		/* remove old parenting */
+		// remove old parenting 
 		n = node_find( obj, &obj->parent->children );
 		
 		if ( n != NULL )
@@ -174,7 +222,7 @@ void object_set_parent( object_t *obj, object_t *parent )
 	
 	if ( parent != NULL )
 	{
-		/* add obj to parent's children list */
+		// add obj to parent's children list 
 #ifndef OLD_CHILDREN
 		g_ptr_array_add( parent->children, obj );
 #else
@@ -187,6 +235,7 @@ void object_set_parent( object_t *obj, object_t *parent )
 	
 	if ( parent != NULL )
 		event_send( obj, "parent_attach", "" );
+*/
 }
 
 

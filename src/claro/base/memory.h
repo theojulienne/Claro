@@ -34,7 +34,7 @@ CLFEXP void *d_realloc( void *oldptr, size_t newsize );
 CLFEXP void d_free( void *ptr, char *file, int line );
 #else
 CLFEXP void *smalloc(size_t size);
-CLFEXP void sfree(void * ptr);
+CLFEXP void sfree(void * ptr);  
 CLFEXP void *scalloc(size_t elsize, size_t els);
 CLFEXP void *srealloc(void *oldptr, size_t newsize);
 #endif

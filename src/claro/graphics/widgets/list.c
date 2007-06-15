@@ -26,8 +26,6 @@
 claro_define_type_partial( list_item, object, NULL, NULL, NULL, NULL );
 claro_define_widget_partial( list, NULL, NULL, NULL, NULL );
 
-
-
 void list_widget_init_ptr( object_t *obj, unsigned int col_num, int *cols )
 {
 	list_widget_t *lw = (list_widget_t *)obj;
@@ -37,7 +35,8 @@ void list_widget_init_ptr( object_t *obj, unsigned int col_num, int *cols )
 	
 	memcpy( lw->coltypes, cols, sizeof(int) * col_num );
 	
-	list_create( &lw->items );
+//	list_create( &lw->items );
+    lw->items = claro_list_create();
 }
 
 void list_widget_init_vaptr( object_t *obj, unsigned int col_num, va_list argpi )
@@ -73,13 +72,29 @@ void list_widget_init( object_t *obj, unsigned int col_num, ... )
 void list_widget_row_remove( object_t *list, list_item_t *item )
 {
 	list_widget_t *lw = (list_widget_t *)list;
-	node_t *n, *n2;
+//	node_t *n, *n2;
 	list_item_t *curr;
-	int a;
+	int a, i, len;
 	
 	event_send( list, "remove_row", "p", "row", item );
 	
-	LIST_FOREACH_SAFE( n, n2, item->parent->head )
+    len = claro_list_count(item->parent);
+
+    for(i = 0; i < len; i++)
+    {
+        curr = (list_item_t *)claro_list_get_item(item->parent, i);
+        
+        if(curr == item)
+        {
+            g_assert(claro_list_remove(item->parent, curr) == TRUE);
+            continue;
+        }
+
+        if ( curr->row > item->row )
+			curr->row--;
+    }
+
+/*	LIST_FOREACH_SAFE( n, n2, item->parent->head )
 	{
 		curr = (list_item_t *)n->data;
 		
@@ -90,10 +105,13 @@ void list_widget_row_remove( object_t *list, list_item_t *item )
 			continue;
 		}
 		
-		/* fix row numbers */
+		// fix row numbers 
 		if ( curr->row > item->row )
 			curr->row--;
 	}
+*/
+
+    
 	
 	for ( a = 0; a < lw->columns; a++ )
 	{
@@ -117,11 +135,28 @@ void list_widget_row_remove( object_t *list, list_item_t *item )
 
 void list_widget_row_move( object_t *list, list_item_t *item, int row )
 {
-	node_t *n;
+//	node_t *n;
 	list_item_t *curr;
-	
-	event_send( list, "remove_row", "p", "row", item );
-	
+    int i, len;
+
+    event_send( list, "remove_row", "p", "row", item );	
+    
+    len = claro_list_count(item->parent);
+
+    for(i = 0; i < len; i++)
+    {
+        curr = (list_item_t *)claro_list_get_item(item->parent, i);
+        
+	    if(curr == item)
+            continue;
+
+        if ( curr->row > item->row )
+			curr->row--;
+		
+		if ( curr->row >= row )
+			curr->row++;
+	}
+/*
 	LIST_FOREACH( n, item->parent->head )
 	{
 		curr = (list_item_t *)n->data;
@@ -129,14 +164,14 @@ void list_widget_row_move( object_t *list, list_item_t *item, int row )
 		if ( curr == item )
 			continue;
 		
-		/* fix row numbers */
+		// fix row numbers 
 		if ( curr->row > item->row )
 			curr->row--;
 		
 		if ( curr->row >= row )
 			curr->row++;
 	}
-	
+*/	
 	item->row = row;
 	
 	event_send( list, "new_row", "p", "row", item );
@@ -147,9 +182,10 @@ list_item_t *list_widget_row_insert_ptr( object_t *list, list_item_t *parent, in
 	va_list argp;
 	list_widget_t *lw = (list_widget_t *)list;
 	list_item_t *item, *curr;
-	list_t *l;
-	node_t *n;
+	claro_list_t *l;
+	//node_t *n;
 	int a;
+    int i, len;
 
 	va_copy(argp, argpi);
 	
@@ -198,13 +234,14 @@ list_item_t *list_widget_row_insert_ptr( object_t *list, list_item_t *parent, in
 		}
 	}
 	
-	list_create( &item->children );
-	
+	//list_create( &item->children );
+    item->children = claro_list_create();	
+
 	/* pick the parent list.. */
-	if ( parent != 0 )
-		l = &parent->children;
+	if ( parent != NULL )
+		l = parent->children;
 	else
-		l = &lw->items;
+		l = lw->items;
 	
 	item->parent = l;
 	item->parent_item = parent;
@@ -225,18 +262,29 @@ list_item_t *list_widget_row_insert_ptr( object_t *list, list_item_t *parent, in
 		item->row = row;
 		
 		/* increment row numbers that are in our new spot or further */
-		LIST_FOREACH( n, l->head )
+		/*LIST_FOREACH( n, l->head )
 		{
 			curr = (list_item_t *)n->data;
 			
 			if ( curr->row >= row )
 				curr->row++;
-		}
+		}*/
+
+        len = claro_list_count(l);
+
+        for(i = 0; i < len; i++)
+        {
+            curr = (list_item_t *)claro_list_get_item(l, i);
+            if(curr->row >= row)
+                curr->row++;
+        }
 	}
 
 	/* create a node, append to the list */
-	n = node_create( );
-	node_append( item, n, l );
+	//n = node_create( );
+	//node_append( item, n, l );
+
+    claro_list_append(l, (void *)item);
 
 	event_send( list, "new_row", "p", "row", item );
 
@@ -277,14 +325,25 @@ list_item_t *list_widget_get_row( object_t *list, list_item_t *parent, int row )
 {
 	list_widget_t *lw = (list_widget_t *)list;
 	list_item_t *curr;
-	list_t *l;
-	node_t *n;
-	
+	claro_list_t *l;
+	//node_t *n;
+    int i, len;	
+
 	if ( parent != 0 )
-		l = &parent->children;
+		l = parent->children;
 	else
-		l = &lw->items;
+		l = lw->items;
 	
+    len = claro_list_count(l);
+
+    for(i = 0; i < len; i++)
+    {
+        curr = (list_item_t*)claro_list_get_item(l, i);
+        if(curr->row == row)
+            return curr;
+    }
+
+    /*
 	LIST_FOREACH( n, l->head )
 	{
 		curr = (list_item_t *)n->data;
@@ -292,7 +351,8 @@ list_item_t *list_widget_get_row( object_t *list, list_item_t *parent, int row )
 		if ( curr->row == row )
 			return curr;
 	}
-	
+	*/
+
 	return NULL;
 }
 

@@ -56,8 +56,8 @@ typedef struct list_item_
 	
 	void **data;
 	
-	list_t children;
-	list_t *parent;
+	claro_list_t * children;
+	claro_list_t * parent;
 	struct list_item_ *parent_item;
 	
 	// drawing related info, not always required
@@ -79,7 +79,7 @@ typedef struct list_widget_
 	int columns;
 	int *coltypes;
 	
-	list_t items;
+	claro_list_t * items;
 } list_widget_t;
 
 /* functions */

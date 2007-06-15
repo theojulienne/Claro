@@ -19,109 +19,99 @@
 #ifndef _CLARO_BASE_HASHTABLE_H
 #define _CLARO_BASE_HASHTABLE_H
 
-struct hashtable_;
-
-typedef struct hashtable_ hashtable_t;
+typedef void claro_hashtable_t;
 
 /*****************************************************************************
- * create_hashtable
-   
- * @name                    hashtable_str_create
- * @param   minsize         minimum initial size of hashtable
+ * claro_hashtable_str_create
+ *     
+ *  You MUST use ALL static or ALL dynamic strings for keys here. 
+ *  Mixing them will result in very bad behavior. If you need to add a static 
+ *  string, use sstrdup().
+ *
+ * @name                    claro_hashtable_str_create
  * @param   copy_strings    whether to copy all string keys, or to use static strings
- * @param   val_free_fn       function for freeing values
+ * @param   val_free_fn     function for freeing values or NULL
  * @return                  newly created hashtable or NULL on failure
  */
  
-CLFEXP hashtable_t *
-hashtable_str_create(unsigned int minsize, int copy_strings, void    (*val_free_fn) (void*));
+CLFEXP claro_hashtable_t *
+claro_hashtable_str_create(bool_t copy_strings, void (*val_free_fn) (void*));
 
 /*****************************************************************************
- * create_hashtable
+ * claro_hashtable_create
    
- * @name                    create_hashtable
- * @param   minsize         minimum initial size of hashtable
- * @param   hashfunction    function for hashing keys
+ * @name                    claro_hashtable_create
+ * @param   hash_fn         function for hashing keys
  * @param   key_eq_fn       function for determining key equality
+ * @param   key_free_fn     function for freeing keys or NULL
+ * @param   val_free_fn     function for freeing values or NULL
  * @return                  newly created hashtable or NULL on failure
  */
 
-CLFEXP hashtable_t *
-hashtable_create(unsigned int minsize,
-                 unsigned int (*hashfunction) (void*),
-                 int (*key_eq_fn) (void*,void*),
-				 void (*key_free_fn) (void*),
-				 void	 (*val_free_fn) (void*)	);
+CLFEXP claro_hashtable_t *
+claro_hashtable_create(unsigned int (*hash_fn) (const void*),
+                        bool_t (*key_eq_fn) (const void*,const void*),
+				        void (*key_free_fn) (void*),
+				        void (*val_free_fn) (void*));
 
 /*****************************************************************************
- * hashtable_insert
+ * claro_hashtable_insert
    
- * @name        hashtable_insert
- * @param   h   the hashtable to insert into
- * @param   k   the key - hashtable claims ownership and will free on removal
- * @param   v   the value - does not claim ownership
- * @param   replace replace the key with a new value? 
- * @return      non-zero for successful insertion
- *
- * This function will cause the table to expand if the insertion would take
- * the ratio of entries to table size over the maximum load factor.
- *
- * This function does not check for repeated insertions with a duplicate key.
- * The value returned when using a duplicate key is undefined -- when
- * the hashtable changes size, the order of retrieval of duplicate key
- * entries is reversed.
- * If in doubt, remove before insert.
+ * @name                claro_hashtable_insert
+ * @param   hashtable   the hashtable to use
+ * @param   key         key to use- will be freed upon removal/replacement
+ * @param   value       value to use- will be freed upon removal/replacement- must exist during the lifetime of the hashtable
+ * @param   replace     replace the key with a new value ? (freeing the old if free_val_fn was supplied)
  */
 
-CLFEXP int 
-hashtable_insert(hashtable_t *h, void *k, void *v, int replace);
+CLFEXP void 
+claro_hashtable_insert(claro_hashtable_t * hashtable, void * key, void * value, bool_t replace);
 
 
 /*****************************************************************************
- * hashtable_search
+ * claro_hashtable_lookup
    
- * @name        hashtable_search
- * @param   h   the hashtable to search
- * @param   k   the key to search for  - does not claim ownership
- * @return      the value associated with the key, or NULL if none found
+ * @name                claro_hashtable_lookup
+ * @param   hashtable   the hashtable to use
+ * @param   key         the key to use
+ * @return              the associated value, or NULL if not found
  */
 
 CLFEXP void *
-hashtable_search(hashtable_t *h, void *k);
+claro_hashtable_lookup(claro_hashtable_t * hashtable, const void * key);
 
 /*****************************************************************************
- * hashtable_remove
+ * claro_hashtable_remove
    
- * @name        hashtable_remove
- * @param   h   the hashtable to remove the item from
- * @param   k   the key to search for  - does not claim ownership
- * @return      the value associated with the key, or NULL if none found
+ * @name                claro_hashtable_remove
+ * @param   hashtable   the hashtable to use
+ * @param   key         the key to use
+ * @return              true if the value was successfully found and removed
  */
 
-CLFEXP void * /* returns value */
-hashtable_remove(hashtable_t *h, void *k);
+CLFEXP bool_t
+claro_hashtable_remove(claro_hashtable_t * hashtable, const void * key);
 
 /*****************************************************************************
- * hashtable_count
+ * claro_hashtable_count
    
- * @name        hashtable_count
- * @param   h   the hashtable
- * @return      the number of items stored in the hashtable
+ * @name                claro_hashtable_count
+ * @param   hashtable   the hashtable to use
+ * @return              the number of elements in the hashtable
  */
 CLFEXP unsigned int
-hashtable_count(hashtable_t *h);
+claro_hashtable_count(claro_hashtable_t * hashtable);
 
 
 /*****************************************************************************
- * hashtable_destroy
+ * claro_hashtable_destroy
    
- * @name        hashtable_destroy
- * @param   h   the hashtable
- * @param       free_values     whether to call 'free' on the remaining values
+ * @name                claro_hashtable_destroy
+ * @param   hashtable   the hashtable to use
  */
 
 CLFEXP void
-hashtable_destroy(hashtable_t *h);
+claro_hashtable_destroy(claro_hashtable_t * hashtable);
 
 #endif
 
