@@ -37,7 +37,7 @@ void claro_atomic_add_int(volatile int * ptr, int val);
 
 int  claro_atomic_add_xfer_int(volatile int * ptr, int val);
 
-int claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_val);
+bool_t claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_val);
 
 #endif
 

@@ -125,10 +125,12 @@
 {
 	list_widget_t *list = (list_widget_t *)cw;
 	listbox_widget_t *lw = (listbox_widget_t *)cw;
-	list_item_t *item, *sel=0;
-	node_t *n;
+	list_item_t *item, *sel = NULL;
+//	node_t *n;
 	int rowIndex = [sender selectedRow];
-	
+    int i, len;	
+
+    /*
 	LIST_FOREACH( n, list->items.head )
 	{
 		item = (list_item_t *)n->data;
@@ -138,7 +140,18 @@
 			sel = item;
 		}
 	}
-	
+	*/
+
+    len = claro_list_count(list->items);
+
+    for(i = 0; i < len; i++)
+    {
+        item = (list_item_t *)claro_list_get_item(list->items, i);
+        
+        if(item->row == rowIndex)
+            sel = item;
+    }
+
 	lw->selected = sel;
 	event_send( OBJECT(cw), "selected", "p", "row", sel );
 }

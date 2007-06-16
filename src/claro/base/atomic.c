@@ -60,7 +60,7 @@ int  claro_atomic_add_xfer_int(volatile int * ptr, int val)
     return res;
 }
 
-int claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_val)
+bool_t claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_val)
 {
     int res;
  
@@ -89,7 +89,57 @@ void _claro_atomic_init()
         clog(CL_ERROR, "Couldn't initialize mutex for atomic operations.");
 }
 
+int claro_atomic_get_int(volatile int * ptr)
+{
+    
+}
 
+void claro_atomic_set_int(volatile int * ptr, int new_val)
+{
+
+}
+
+void claro_atomic_add_int(volatile int * ptr, int val)
+{
+    pthread_mutex_lock (&_atomic_mutex);
+
+    *ptr += val;
+
+    pthread_mutex_unlock (&_atomic_mutex);
+}
+
+int claro_atomic_add_xfer_int(volatile int * ptr, int val)
+{
+    int res;
+    
+    pthread_mutex_lock (&_atomic_mutex);
+
+    res = *ptr;
+    *ptr += val;
+
+    pthread_mutex_unlock (&_atomic_mutex);
+
+    return res;
+}
+
+bool_t claro_atomic_compare_xfer_int(volatile int * ptr, int old_val, int new_val)
+{
+    bool_t res;
+    
+    pthread_mutex_lock (&_atomic_mutex);
+
+    if (*ptr == old_val)
+    {
+        res = TRUE;
+        *ptr = new_val;
+    }
+    else
+        res = FALSE;
+    
+    pthread_mutex_unlock (&_atomic_mutex);
+
+    return res;
+}
 
 #endif
 
