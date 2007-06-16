@@ -77,6 +77,8 @@ bool_t claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_va
 */
 #else
 
+#include <pthread.h>
+
 static pthread_mutex_t _atomic_mutex;
 
 void _claro_atomic_init()
@@ -91,12 +93,24 @@ void _claro_atomic_init()
 
 int claro_atomic_get_int(volatile int * ptr)
 {
-    
+	int res;
+	
+	pthread_mutex_lock (&_atomic_mutex);
+
+    res = *ptr;
+
+    pthread_mutex_unlock (&_atomic_mutex);
+
+	return res;
 }
 
 void claro_atomic_set_int(volatile int * ptr, int new_val)
 {
+	pthread_mutex_lock (&_atomic_mutex);
 
+    *ptr = new_val;
+
+    pthread_mutex_unlock (&_atomic_mutex);
 }
 
 void claro_atomic_add_int(volatile int * ptr, int val)

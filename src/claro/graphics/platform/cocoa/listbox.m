@@ -187,10 +187,31 @@
 {
 	list_widget_t *list = (list_widget_t *)cw;
 	list_item_t *item;
-	node_t *n;
+//	node_t *n;
 	CFStringRef str;
 	char *cstr;
+	int i, len;
 	
+	len = claro_list_count(list->items);
+	
+	for(i = 0; i < len; i++)
+	{
+		item = (list_item_t *)claro_list_get_item(list->items, i);
+		
+		if ( item->row == rowIndex )
+		{
+			if ( item->native == 0 )
+			{
+				cstr = item->data[0];
+				str = CFStringCreateWithCString( NULL, cstr, strlen( cstr ) );
+				item->native = (void *)str;
+			}
+			
+			return item->native;
+		}
+	}
+
+/*	
 	LIST_FOREACH( n, list->items.head )
 	{
 		item = (list_item_t *)n->data;
@@ -207,7 +228,7 @@
 			return item->native;
 		}
 	}
-	
+*/	
 	return 0;
 }
 @end

@@ -228,7 +228,7 @@
 	NSObject **in;
 	int a, i, len;
 	
-    len = list_claro_count(list->items);
+    len = claro_list_count(list->items);
 
     for(i = 0; i < len; i++)
     {
