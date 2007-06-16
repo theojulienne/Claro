@@ -71,10 +71,24 @@ int claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_val)
     return res == old_val;
 }
 
+/*
 #elif defined(__ppc__) && defined(_MAC)
 #error "FIXME: someone should implement and test PPC atomic routines"
+*/
 #else
-#error "platform not supported by atomic.c"
+
+static pthread_mutex_t _atomic_mutex;
+
+void _claro_atomic_init()
+{
+    int res;
+    
+    res = pthread_mutex_init(&_atomic_mutex, NULL);
+
+    if(res != 0)
+        clog(CL_ERROR, 
+}
+
 #endif
 
 

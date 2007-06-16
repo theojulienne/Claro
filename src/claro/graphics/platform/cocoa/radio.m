@@ -64,7 +64,7 @@
 	
 	radiobutton_widget_t *rb = (radiobutton_widget_t *)cw;
 	radiogroup_t *rg = rb->group;
-	node_t *n;
+//	node_t *n;
 	widget_t *w;
     int i, len;	
 
