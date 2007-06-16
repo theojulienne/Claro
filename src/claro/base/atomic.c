@@ -19,7 +19,16 @@
 #include <claro/base.h>
 
 #if defined(REAL_GLIB)
+
+void _claro_atomic_init()
+{
+}
+
 #elif defined(_MAC) && defined(__i386__) || defined(_WIN32)
+
+void _claro_atomic_init()
+{
+}
 
 // these could really be better..
 

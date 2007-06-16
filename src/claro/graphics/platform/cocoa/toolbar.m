@@ -23,7 +23,7 @@
 
 /* Toolbar */
 
-list_item_t *cgraphics_find_list_item_by_id( list_t *list, NSString *id );
+list_item_t *cgraphics_find_list_item_by_id( claro_list_t *list, NSString *id );
 
 /* ClaroToolBar (subclassed from NSToolbar) */
 @interface ClaroToolBar : NSToolbar
@@ -115,11 +115,13 @@ list_item_t *cgraphics_find_list_item_by_id( list_t *list, NSString *id );
 
 @end
 
-list_item_t *cgraphics_find_list_item_by_id( list_t *list, NSString *id )
+list_item_t *cgraphics_find_list_item_by_id( claro_list_t *list, NSString *id )
 {
-	node_t *n;
+//	node_t *n;
 	list_item_t *item;
-	
+    int i, len;	
+
+/*
 	LIST_FOREACH( n, list->head )
 	{
 		item = (list_item_t *)n->data;
@@ -132,7 +134,22 @@ list_item_t *cgraphics_find_list_item_by_id( list_t *list, NSString *id )
 		if ( item != NULL )
 			return item;
 	}
-	
+*/
+    len = claro_list_count(list);
+    
+    for(i = 0; i < len; i++)
+    {
+        item = (list_item_t *)claro_list_get_item(list, i);
+        
+        if ( [id isEqualToString:(NSString *)item->nativeid] )
+			return item;
+
+        item = cgraphics_find_list_item_by_id( &item->children, id );
+
+        if ( item != NULL )
+			return item;
+    }
+    	
 	return NULL;
 }
 
