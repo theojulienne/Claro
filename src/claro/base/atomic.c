@@ -77,61 +77,56 @@ bool_t claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_va
 */
 #else
 
-#include <pthread.h>
+#include "mutex.h"
 
-static pthread_mutex_t _atomic_mutex;
+static claro_mutex_t _atomic_mutex;
 
 void _claro_atomic_init()
 {
-    int res;
-    
-    res = pthread_mutex_init(&_atomic_mutex, NULL);
-
-    if(res != 0)
-        clog(CL_ERROR, "Couldn't initialize mutex for atomic operations.");
+	claro_mutex_create(&_atomic_mutex);
 }
 
 int claro_atomic_get_int(volatile int * ptr)
 {
 	int res;
 	
-	pthread_mutex_lock (&_atomic_mutex);
+	claro_mutex_lock (&_atomic_mutex);
 
     res = *ptr;
 
-    pthread_mutex_unlock (&_atomic_mutex);
+    claro_mutex_unlock (&_atomic_mutex);
 
 	return res;
 }
 
 void claro_atomic_set_int(volatile int * ptr, int new_val)
 {
-	pthread_mutex_lock (&_atomic_mutex);
+	claro_mutex_lock (&_atomic_mutex);
 
     *ptr = new_val;
 
-    pthread_mutex_unlock (&_atomic_mutex);
+    claro_mutex_unlock (&_atomic_mutex);
 }
 
 void claro_atomic_add_int(volatile int * ptr, int val)
 {
-    pthread_mutex_lock (&_atomic_mutex);
+    claro_mutex_lock (&_atomic_mutex);
 
     *ptr += val;
 
-    pthread_mutex_unlock (&_atomic_mutex);
+    claro_mutex_unlock (&_atomic_mutex);
 }
 
 int claro_atomic_add_xfer_int(volatile int * ptr, int val)
 {
     int res;
     
-    pthread_mutex_lock (&_atomic_mutex);
+    claro_mutex_lock (&_atomic_mutex);
 
     res = *ptr;
     *ptr += val;
 
-    pthread_mutex_unlock (&_atomic_mutex);
+    claro_mutex_unlock (&_atomic_mutex);
 
     return res;
 }
@@ -140,7 +135,7 @@ bool_t claro_atomic_compare_xfer_int(volatile int * ptr, int old_val, int new_va
 {
     bool_t res;
     
-    pthread_mutex_lock (&_atomic_mutex);
+    claro_mutex_lock (&_atomic_mutex);
 
     if (*ptr == old_val)
     {
@@ -150,7 +145,7 @@ bool_t claro_atomic_compare_xfer_int(volatile int * ptr, int old_val, int new_va
     else
         res = FALSE;
     
-    pthread_mutex_unlock (&_atomic_mutex);
+    claro_mutex_unlock (&_atomic_mutex);
 
     return res;
 }
