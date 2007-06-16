@@ -157,10 +157,12 @@
 {
 	list_widget_t *list = (list_widget_t *)cw;
 	listview_widget_t *lw = (listview_widget_t *)cw;
-	list_item_t *item, *sel=0;
-	node_t *n;
+	list_item_t *item, *sel= NULL;
+//	node_t *n;
 	int rowIndex = [sender selectedRow];
-	
+    int i, len;	
+
+/*
 	LIST_FOREACH( n, list->items.head )
 	{
 		item = (list_item_t *)n->data;
@@ -170,7 +172,18 @@
 			sel = item;
 		}
 	}
-	
+*/
+
+    len = claro_list_count(list->items);
+
+    for(i = 0; i < len; i++)
+    {
+        item = (list_item_t *)claro_list_get_item(list->items, i);
+        
+        if(item->row == rowIndex)
+            sel = item;
+    }
+    	
 	lw->selected = sel;
 	event_send( OBJECT(cw), "selected", "p", "row", sel );
 }
@@ -211,10 +224,37 @@
 {
 	list_widget_t *list = (list_widget_t *)cw;
 	list_item_t *item;
-	node_t *n;
+//	node_t *n;
 	NSObject **in;
-	int a;
+	int a, i, len;
 	
+    len = list_claro_count(list->items);
+
+    for(i = 0; i < len; i++)
+    {
+        item = (list_item_t *)claro_list_get_item(list->items, i);
+        
+        if(item->row == rowIndex)
+        {
+            in = item->native;
+        
+            a = [aTableColumn columnId];
+
+            if(list->coltypes[a] == CLIST_TYPE_UINT)
+            {
+                unsigned int *uid = item->data[a];
+				
+				uid[0] = [anObject boolValue];
+				
+				event_send( OBJECT(item), "changed", "ii", "column", a, "value", uid[0] );
+            }
+
+            [in[a] release];
+			in[a] = NULL;
+        }
+    }
+
+    /*
 	LIST_FOREACH( n, list->items.head )
 	{
 		item = (list_item_t *)n->data;
@@ -238,6 +278,8 @@
 			in[a] = 0;
 		}
 	}
+    */
+
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(ClaroTableColumn *)aTableColumn row:(int)rowIndex
@@ -245,13 +287,52 @@
 	//listview_widget_t *lw = (listview_widget_t *)cw;
 	list_widget_t *list = (list_widget_t *)cw;
 	list_item_t *item;
-	node_t *n;
+//	node_t *n;
 	NSString *str;
 	NSNumber *num;
 	char *cstr;
 	NSObject **in;
-	int a;
+	int a, i, len;
 	
+    len = claro_list_count(list->items);
+
+    for(i = 0; i < len; i++)
+    {
+        item = (list_item_t *)claro_list_get_item(list->items, i);
+		
+		if ( item->row == rowIndex )
+		{
+			in = item->native;
+			
+			a = [aTableColumn columnId];
+			
+			if ( in[a] == 0 )
+			{
+				if ( list->coltypes[a] == CLIST_TYPE_STRING )
+				{
+					cstr = item->data[a];
+					str = [[NSString alloc] initWithCString:cstr encoding:NSUTF8StringEncoding];
+					in[a] = str;
+				}
+				else if ( list->coltypes[a] == CLIST_TYPE_UINT )
+				{
+					unsigned int chk = *((int *)item->data[a]);
+					num = [[NSNumber alloc] initWithUnsignedInt:chk];
+					in[a] = num;
+				}
+				else if ( list->coltypes[a] == CLIST_TYPE_DOUBLE )
+				{
+					double dbl = *((double *)item->data[a]);
+					num = [[NSNumber alloc] initWithDouble:dbl];
+					in[a] = num;
+				}
+			}
+			
+			return in[a];
+		}
+    }
+
+    /*
 	LIST_FOREACH( n, list->items.head )
 	{
 		item = (list_item_t *)n->data;
@@ -287,7 +368,8 @@
 			return in[a];
 		}
 	}
-	
+	*/
+
 	return 0;
 }
 @end

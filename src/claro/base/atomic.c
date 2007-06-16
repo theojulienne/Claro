@@ -86,8 +86,10 @@ void _claro_atomic_init()
     res = pthread_mutex_init(&_atomic_mutex, NULL);
 
     if(res != 0)
-        clog(CL_ERROR, 
+        clog(CL_ERROR, "Couldn't initialize mutex for atomic operations.");
 }
+
+
 
 #endif
 
