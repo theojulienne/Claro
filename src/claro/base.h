@@ -70,11 +70,10 @@ extern "C" {
 #include "base/store.h"
 #include "base/object_map.h"
 #include "base/string.h"
-//added by Cody, 2/8/06
-//this crap can be removed now
+
+//added by Cody, 6/16/07
 #include "base/hashtable.h"
-//added by Cody, 5/8/07
-#include "base/atomic.h"
+#include "base/atomic.h"#include "base/boxed.h"
 
 #ifdef __cplusplus
 }

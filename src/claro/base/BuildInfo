@@ -20,6 +20,7 @@ targets
 			store.c
 			string.c
 			atomic.c
+			boxed.c
 			platform !posix
 				eglib/src/garray.c
 				eglib/src/gdate.c

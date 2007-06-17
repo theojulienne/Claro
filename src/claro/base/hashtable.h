@@ -19,7 +19,10 @@
 #ifndef _CLARO_BASE_HASHTABLE_H
 #define _CLARO_BASE_HASHTABLE_H
 
-typedef void claro_hashtable_t;
+typedef struct _claro_hashtable claro_hashtable_t;
+
+//PRIVATE
+void _claro_hashtable_init();
 
 /*****************************************************************************
  * claro_hashtable_str_create
@@ -104,14 +107,25 @@ claro_hashtable_count(claro_hashtable_t * hashtable);
 
 
 /*****************************************************************************
- * claro_hashtable_destroy
+ * claro_hashtable_unref
    
- * @name                claro_hashtable_destroy
+ * @name                claro_hashtable_unref
  * @param   hashtable   the hashtable to use
  */
 
 CLFEXP void
-claro_hashtable_destroy(claro_hashtable_t * hashtable);
+claro_hashtable_unref(claro_hashtable_t * hashtable);
+
+/*****************************************************************************
+ * claro_hashtable_ref
+   
+ * @name                claro_hashtable_ref
+ * @param   hashtable   the hashtable to use
+ * @return              the hashtable
+ */
+
+CLFEXP claro_hashtable_t *
+claro_hashtable_ref(claro_hashtable_t * hashtable);
 
 #endif
 

@@ -41,6 +41,8 @@ bool_t claro_atomic_compare_xfer_int(volatile int	* ptr, int old_val, int new_va
 
 #endif
 
+void _claro_atomic_init();
+
 //_CLARO_BASE_ATOMIC_H
 #endif
 

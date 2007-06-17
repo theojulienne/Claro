@@ -54,7 +54,7 @@ int main( int argc, char *argv[] )
     
     assert(claro_hashtable_count(hash) == 0);    
     
-    claro_hashtable_destroy(hash);
+    claro_hashtable_unref(hash);
 
     hash = claro_hashtable_str_create(TRUE, NULL);
     assert(hash != NULL);    
@@ -72,7 +72,7 @@ int main( int argc, char *argv[] )
     }
 
     assert(claro_hashtable_count(hash) == 100);
-    claro_hashtable_destroy(hash);
+    claro_hashtable_unref(hash);
 
 	object_t *foo = foo_create( NULL );
 	

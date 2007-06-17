@@ -46,29 +46,38 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 	int hn = 0;
 	char tmp[1024];
 	int a, i, len;
-
-	va_start( argp, fmt );
+    bool_t mainloop;
+    int int_num = 0;
+	int dbl_num = 0;
+    int * ints = NULL;
+	double * dbls = NULL; 
+	int b;
 
 	strcpy( e.name, event );
 	e.object = object;
 	e.arg_num = strlen( fmt );
 	strncpy( e.format, fmt, 16 );
 	
-	e.args = claro_hashtable_str_create(TRUE, _free_event_arg);
-	
-	int int_num = 0;
-	int dbl_num = 0;
-	
+    mainloop = strcmp( event, "mainloop" ) == 0 ? TRUE : FALSE;
+
+    e.args = NULL;
+
+    if(mainloop)
+        goto call_handlers;
+    
+    e.args = claro_hashtable_str_create(TRUE, _free_event_arg);
+
 	for ( a = 0; a < e.arg_num; a++ )
 	{
 		if ( fmt[a] == 'i' ) int_num++;
 		if ( fmt[a] == 'd' ) dbl_num++;
 	}
 	
-	int * ints = (int *) g_malloc0(int_num * sizeof(int));
-	double * dbls = (double *) g_malloc0(dbl_num * sizeof(double));
-	int b;
+	ints = (int *) g_malloc0(int_num * sizeof(int));
+	dbls = (double *) g_malloc0(dbl_num * sizeof(double));
 	
+    va_start( argp, fmt );
+
 	for ( a = 0; a < e.arg_num; a++ )
 	{
 		char *name = va_arg( argp, char * );
@@ -99,11 +108,13 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
         claro_hashtable_insert(e.args, (void*)sstrdup(name), (void*)value, TRUE);
     }
 	
-	e.handled = 0;
-
 	va_end( argp );
 	
 	sprintf( tmp, "Event '%s' sent to object '%s' at %p", event, object->type, object );
+
+call_handlers:
+
+    e.handled = 0;
 
     len = claro_list_count(object->event_handlers);
 
@@ -151,10 +162,11 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
 	*/
 
 	/* debug for everything but mainloop, which is called too often to debug! */
-	if ( strcmp( event, "mainloop" ) )
-		clog( CL_DEBUG, "%s, %d handlers called.", tmp, hn );
+    if(!mainloop)    
+        clog( CL_DEBUG, "%s, %d handlers called.", tmp, hn );
 	
-	claro_hashtable_destroy( e.args );
+    if(e.args)
+	    claro_hashtable_unref( e.args );
 
     if(ints)
         g_free(ints);
@@ -344,4 +356,4 @@ const char *event_get_name( event_t *event )
 {
 	return event->name;
 }
-
+ 
