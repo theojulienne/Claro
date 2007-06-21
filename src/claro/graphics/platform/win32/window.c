@@ -47,10 +47,10 @@ HICON cnull_icon = 0;
 
 widget_t *cg_find_by_native( HWND hwnd );
 
-extern list_t tblist;
-extern list_t mblist;
+extern claro_list_t * tblist;
+extern claro_list_t * mblist;
 
-list_t claro_dialog_list;
+claro_list_t * claro_dialog_list;
 widget_t *claro_current_dialog=0;
 
 void cgraphics_window_adjust_size( window_widget_t *wp )
@@ -76,17 +76,19 @@ void cgraphics_window_adjust_size( window_widget_t *wp )
 
 void dialog_stack_push( widget_t *w )
 {
-	node_t *n;
+//	node_t *n;
 	widget_t *p;
 	
 	if ( claro_current_dialog == 0 )
 	{
-		list_create( &claro_dialog_list );
+		claro_dialog_list = claro_list_create();
 	}
 	
-	n = node_create( );
-	node_add( w, n, &claro_dialog_list );
-	
+	//n = node_create( );
+	//node_add( w, n, &claro_dialog_list );
+
+	claro_list_append(claro_dialog_list, w);
+
 	claro_current_dialog = w;
 	
 	p = w->object.parent;
@@ -99,29 +101,36 @@ void dialog_stack_push( widget_t *w )
 
 void dialog_stack_pop( widget_t *w )
 {
-	node_t *n, *nn;
-	
+//	node_t *n, *nn;
+	int i, len;
+
 	if ( claro_current_dialog != w )
 		return;
 	
 	claro_current_dialog = 0;
 	
-	LIST_FOREACH_SAFE( n, nn, claro_dialog_list.head )
+/*	LIST_FOREACH_SAFE( n, nn, claro_dialog_list.head )
 	{
 		if ( nn == 0 )
 		{
-			/* last node! we're the gonner. */
+//			 last node! we're the gonner. 
 			
 			node_del( n, &claro_dialog_list );
 			node_free( n );
 			
 			break;
 		}
-		
-		/* current dialog could be us, because we're not the last */
+	
+		// current dialog could be us, because we're not the last 
 		claro_current_dialog = n->data;
 	}
-	
+*/
+
+	len = claro_list_count(claro_dialog_list);
+
+	if(len > 0)
+		claro_current_dialog = (widget_t *)claro_list_get_item(claro_dialog_list, len-1);
+
 	if ( claro_current_dialog == 0 )
 	{
 		widget_t *p;
@@ -597,9 +606,10 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							
 							radiobutton_widget_t *rb = (radiobutton_widget_t *)w;
 							radiogroup_t *rg = rb->group;
-							node_t *n;
+		//					node_t *n;
+							int i, len;		
 							widget_t *cw;
-							
+							/*
 							LIST_FOREACH( n, rg->buttons.head )
 							{
 								cw = (widget_t *)n->data;
@@ -607,7 +617,17 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 								if ( cw != w )
 									SendMessage( cw->native, BM_SETCHECK, BST_UNCHECKED, 0 );
 							}
-							
+							*/
+
+							len = claro_list_count(rg->buttons);
+							for(i = 0; i < len; i++)
+							{
+								cw = (widget_t *)claro_list_get_item(rg->buttons, i);
+								
+								if ( cw != w )
+									SendMessage( cw->native, BM_SETCHECK, BST_UNCHECKED, 0 );
+							}
+
 							SendMessage( w->native, BM_SETCHECK, BST_CHECKED, 0 );
 							
 							rg->selected = OBJECT(w);
@@ -723,8 +743,22 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				{
 					list_item_t *li = NULL;
 					list_item_t *tli;
-					node_t *n;
-					
+					//node_t *n;
+					int i, len;
+
+					len = claro_list_count(mblist);
+					for(i = 0; i < len; i++)
+					{
+						tli = (list_item_t *)claro_list_get_item(mblist, i);
+						
+						if ( tli->nativeid == draws->itemID )
+						{
+							li = tli;
+							break;
+						}
+					}
+
+					/*
 					LIST_FOREACH( n, mblist.head )
 					{
 						tli = (list_item_t *)n->data;
@@ -735,7 +769,8 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							break;
 						}
 					}
-					
+					*/
+
 					if ( li != 0 && li->data[0] != 0 )
 					{
 						image_t *im = li->data[0];
@@ -788,8 +823,9 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							image_t *img;
 							list_item_t *item;
 							list_item_t *tli;
-							node_t *n;
-							
+							//node_t *n;
+							int i, len;
+
 							case CDDS_PREPAINT:
 								return CDRF_NOTIFYITEMDRAW;
 							case CDDS_ITEMPREPAINT:
@@ -797,6 +833,20 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							case CDDS_ITEMPOSTPAINT:
 								item = NULL;
 								
+								i = claro_list_count(tblist);
+
+								for(i = 0; i < len; i++)
+								{
+									tli = (list_item_t *)claro_list_get_item(tblist, i);
+									
+									if ( tli->nativeid == cd->dwItemSpec )
+									{
+										item = tli;
+										break;
+									}
+								}
+
+								/*
 								LIST_FOREACH( n, tblist.head )
 								{
 									tli = (list_item_t *)n->data;
@@ -807,7 +857,8 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 										break;
 									}
 								}
-								
+								*/
+
 								img = NULL;
 								
 								if ( item != 0 )
@@ -911,11 +962,16 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			int status_size = 0;
 
 #ifndef OLD_CHILDREN
-			int a;
+			int i, len;
 			
-			for ( a = 0; a < OBJECT(w)->children->len; a++ )
+			len = claro_list_count(OBJECT(w)->children);
+			for(i = 0; i < len; i++)
 			{
-				o = OBJECT( g_ptr_array_index(OBJECT(w)->children, a) );
+				o = OBJECT(claro_list_get_item(OBJECT(w)->children, i));
+
+			/*for ( a = 0; a < OBJECT(w)->children->len; a++ )
+			{
+				o = OBJECT( g_ptr_array_index(OBJECT(w)->children, a) );*/
 #else
 			node_t *n;
 			
@@ -983,11 +1039,14 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					{
 						list_item_t *li = NULL;
 						list_item_t *tli;
-						node_t *n;
-						
-						LIST_FOREACH( n, tblist.head )
+						//node_t *n;
+						int i, len;
+
+						len = claro_list_count(tblist);
+
+						for(i = 0; i < len; i++)
 						{
-							tli = (list_item_t *)n->data;
+							tli = (list_item_t *)claro_list_get_item(tblist, i);
 							
 							if ( tli->nativeid == LOWORD( wParam ) )
 							{
@@ -996,6 +1055,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 							}
 						}
 						
+
 						if ( li != NULL )
 							event_send( OBJECT(li), "pushed", "" );
 					}
@@ -1005,11 +1065,13 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					{
 						list_item_t *li = NULL;
 						list_item_t *tli;
-						node_t *n;
+						int i, len;
+
+						len = claro_list_count(tblist);
 						
-						LIST_FOREACH( n, mblist.head )
+						for(i = 0; i < len; i++)
 						{
-							tli = (list_item_t *)n->data;
+							tli = (list_item_t *)claro_list_get_item(tblist, i);
 							
 							if ( tli->nativeid == LOWORD( wParam ) )
 							{

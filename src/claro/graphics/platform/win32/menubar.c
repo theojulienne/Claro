@@ -20,7 +20,7 @@
 
 /* Menubar */
 
-list_t mblist;
+claro_list_t * mblist;
 int mblist_cmdid = 0;
 
 void cgraphics_window_adjust_size( window_widget_t *wp );
@@ -81,16 +81,17 @@ void cgraphics_menubar_new_item( widget_t *widget, list_item_t *item )
 {
 	HMENU parent;
 	MENUITEMINFO mii;
-	node_t *n;
+//	node_t *n;
 	
 	mii.cbSize = sizeof( MENUITEMINFO );
 	
 	parent = cgraphics_menubar_get_native_parent( widget, item );
 	
 	/* if none so far, just for safely clean the list :) */
-	if ( mblist_cmdid == 0 ) {
+	if ( mblist_cmdid == 0 ) 
+	{
 		mblist_cmdid++;
-		list_create( &mblist );
+	//	list_create( &mblist );
 	}
 	
 	/* that's our cmdid! prepare the next one, too.. */
@@ -98,9 +99,11 @@ void cgraphics_menubar_new_item( widget_t *widget, list_item_t *item )
 	mblist_cmdid++;
 	
 	/* save into cmdid mapping list */
-	n = node_create( );
-	node_add( item, n, &mblist );
-	
+//	n = node_create( );
+//	node_add( item, n, &mblist );
+
+	claro_list_append(mblist, (void *)item);
+
 	if ( item->data[1] == 0 )
 	{
 		mii.fMask = MIIM_FTYPE;

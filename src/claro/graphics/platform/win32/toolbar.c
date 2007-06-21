@@ -26,7 +26,7 @@
 
 #define MAX_TB_ICONS 4096
 
-list_t tblist;
+claro_list_t * tblist;
 int tblist_cmdid = 0;
 
 void cgraphics_toolbar_widget_create( widget_t *widget )
@@ -80,7 +80,7 @@ void cgraphics_toolbar_new_icon( widget_t *widget, list_item_t *item )
 	TBADDBITMAP tbb;
 	TBBUTTON tbut;
 	DWORD dwBtnSize;
-	node_t *n;
+//	node_t *n;
 	int a;
 	image_t *img = item->data[0];
 	const char *txt = item->data[1];
@@ -133,7 +133,6 @@ void cgraphics_toolbar_new_icon( widget_t *widget, list_item_t *item )
 	/* if none so far, just for safely clean the list :) */
 	if ( tblist_cmdid == 0 ) {
 		tblist_cmdid++;
-		list_create( &tblist );
 	}
 	
 	/* that's our cmdid! prepare the next one, too.. */
@@ -141,9 +140,11 @@ void cgraphics_toolbar_new_icon( widget_t *widget, list_item_t *item )
 	tblist_cmdid++;
 	
 	/* save into cmdid mapping list */
-	n = node_create( );
-	node_add( item, n, &tblist );
-	
+//	n = node_create( );
+//	node_add( item, n, &tblist );
+
+	claro_list_append(tblist, (void *)item);
+
 	tbut.idCommand = item->nativeid;
 	tbut.fsState = TBSTATE_ENABLED;
 	tbut.dwData = 0;

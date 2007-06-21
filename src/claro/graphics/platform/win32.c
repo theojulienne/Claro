@@ -21,6 +21,9 @@
 HFONT nicerfont;
 int cg_isxplater = 0;
 
+extern claro_list_t * tblist;
+extern claro_list_t * mblist;
+
 /* called at initialisation */
 void cgraphics_init( )
 {
@@ -48,6 +51,9 @@ void cgraphics_init( )
 	}
 	
 	cg_isxplater = 0; // eh, for now ignore this because listview doesn't like compositing
+
+	tblist = claro_list_create();
+	mblist = claro_list_create();
 }
 
 widget_t *cgraphics_get_widget_window( widget_t *w )
@@ -315,7 +321,7 @@ extern widget_t *claro_current_dialog;
 void cgraphics_check_events( )
 {
 	MSG msg;
-	node_t *n, *n2;
+//	node_t *n, *n2;
 	widget_t *w;
 	
 	while ( PeekMessage( &msg, 0, 0, 0, PM_REMOVE ) )
@@ -369,17 +375,21 @@ void cgraphics_check_events( )
 	*/
 }
 
-extern list_t object_list;
+//extern claro_list_t object_list;
 
 widget_t *cg_find_by_native( HWND hwnd )
 {
+/*	
 	widget_t *tw;
 	node_t *n;
-	
+*/
 	if ( hwnd == 0 )
 		return 0;
-	
-	LIST_FOREACH( n, object_list.head )
+
+	return (widget_t *)GetWindowLong( hwnd, GWL_USERDATA );
+
+/*
+LIST_FOREACH( n, object_list.head )
 	{
 		tw = n->data;
 		
@@ -393,6 +403,7 @@ widget_t *cg_find_by_native( HWND hwnd )
 	}
 	
 	return 0;
+*/
 }
 
 int curr_classname_id = 1;
