@@ -240,4 +240,11 @@ void cgraphics_cursor_release( );
 void cgraphics_cursor_hide( );
 void cgraphics_cursor_show( );
 
+/** Slider */
+void cgraphics_slider_widget_create( widget_t *widget );
+void cgraphics_slider_set_value( widget_t *slider, double value );
+void cgraphics_slider_set_range( widget_t *slider, double minimum, double maximum );
+void cgraphics_slider_set_style( widget_t *slider, int style );
+double cgraphics_slider_get_value( widget_t *slider );
+
 #endif

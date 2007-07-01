@@ -37,6 +37,7 @@ targets
 			widgets/list.c
 			widgets/listbox.c
 			widgets/listview.c
+			widgets/slider.c
 			widgets/combo.c
 			widgets/menubar.c
 			widgets/menu.c
@@ -76,6 +77,7 @@ targets
 				platform/gtk/system.c
 				platform/gtk/font_dialog.c
 				platform/gtk/status_icon.c
+				platform/gtk/slider.c
 			platform darwin
 				platform/macosx_cocoa.m
 				platform/cocoa/window.m
@@ -109,6 +111,7 @@ targets
 				platform/cocoa/RBSplitView/RBSplitSubview.m
 				platform/cocoa/font_dialog.m
 				platform/cocoa/status_icon.m
+				platform/cocoa/slider.m
 			platform win32
 				platform/win32.c
 				platform/win32/window.c
@@ -140,6 +143,7 @@ targets
 				platform/win32/system.c
 				platform/win32/font_dialog.c
 				platform/win32/status_icon.c
+				platform/win32/slider.c
 		includes
 			../graphics.h
 			graphics.h

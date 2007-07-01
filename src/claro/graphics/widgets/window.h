@@ -33,6 +33,8 @@ struct layout_;
 #define cWindowModalDialog 1
 #define cWindowCenterParent 2
 #define cWindowNoResizing 4
+#define cWindowToolStyle 8
+#define cWindowFloating 16
 
 declare_class( window_widget );
 #define window_widget_type window_widget_get_type()

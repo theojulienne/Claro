@@ -61,6 +61,7 @@ extern "C" {
 #include "graphics/widgets/dialog.h"
 #include "graphics/widgets/label.h"
 #include "graphics/widgets/progress.h"
+#include "graphics/widgets/slider.h"
 #include "graphics/widgets/radio.h"
 #include "graphics/widgets/splitter.h"
 #include "graphics/widgets/statusbar.h"

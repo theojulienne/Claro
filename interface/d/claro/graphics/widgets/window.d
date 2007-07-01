@@ -11,6 +11,12 @@ extern (C)
 }
 
 class WindowWidget : Widget {
+	static const int ModalDialog = 1;
+	static const int CenterParent = 2;
+	static const int NoResizing = 4;
+	static const int ToolStyle = 8;
+	static const int Floating = 16;
+	
 	this()
 	{
 	    super();

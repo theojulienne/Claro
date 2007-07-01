@@ -31,4 +31,19 @@
 - (void)claroClose:(NSNotification *)aNotification;
 @end
 
+/* ClaroPanelWindow (subclassed from NSPanel) */
+@interface ClaroPanelWindow : NSPanel
+{
+    object_t *cw;
+}
+
+/* internal init function */
+- (void)setClaroWidget:(widget_t *)widget;
+
+/* notification responders */
+- (void)claroResize:(NSNotification *)aNotification;
+- (void)claroMove:(NSNotification *)aNotification;
+- (void)claroClose:(NSNotification *)aNotification;
+@end
+
 void cgraphics_window_close( widget_t *widget );

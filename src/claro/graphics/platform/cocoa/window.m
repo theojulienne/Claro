@@ -73,11 +73,60 @@
 
 @end
 
+@implementation ClaroPanelWindow
+
+- (void)claroResize:(NSNotification *)aNotification
+{
+	NSRect frame = [self contentRectForFrameRect:[self frame]];
+	widget_set_size( cw, frame.size.width, frame.size.height, 1 );
+	widget_set_content_size( cw, frame.size.width, frame.size.height, 1 );
+}
+
+- (void)claroMove:(NSNotification *)aNotification
+{
+	NSRect frame = [self frame];
+	widget_set_position( cw, frame.origin.x, frame.origin.y, 1 );
+	widget_set_content_position( cw, 0, 0, 1 );
+}
+
+- (void)claroClose:(NSNotification *)aNotification
+{
+	widget_destroy( cw );
+}
+
+- (void)setClaroWidget:(widget_t *)widget
+{
+	SaneView *sv;
+	cw = OBJECT(widget);
+	
+	/* thanks, but no thanks: a normal coordinate system would be nice. */
+	sv = [[SaneView alloc] initWithFrame: [[self contentView] frame]];
+	[self setContentView:sv];
+	[sv setBackgroundColor: [NSColor windowBackgroundColor]];
+	[sv release];
+	
+	[self setAcceptsMouseMovedEvents: YES];
+	
+	/* event handlers */
+	[[NSNotificationCenter defaultCenter] addObserver:self
+		selector:@selector(claroClose:) name:NSWindowWillCloseNotification
+		object:self];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+		selector:@selector(claroResize:) name:NSWindowDidResizeNotification
+		object:self];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+		selector:@selector(claroMove:) name:NSWindowDidMoveNotification
+		object:self];
+}
+
+@end
+
 /* called when a window widget needs creating */
 void cgraphics_window_widget_create( widget_t *widget )
 {
 	int m = 0;
-	ClaroWindow *window;
 	
 	m |= NSTitledWindowMask;
 	m |= NSClosableWindowMask;
@@ -85,23 +134,49 @@ void cgraphics_window_widget_create( widget_t *widget )
 	if ( !( widget->flags & cWindowFixedSize ) )
 		m |= NSResizableWindowMask;
 	
+	if ( widget->flags & cWindowToolStyle )
+		m |= NSUtilityWindowMask;
+	
 	//m |= NSTexturedBackgroundWindowMask;
 	//m |= NSUtilityWindowMask;
 	
-	window = [[ClaroWindow alloc]
-		initWithContentRect: NSMakeRect( widget->size_req->x, widget->size_req->y, widget->size_req->w, widget->size_req->h )
-		styleMask: m			       
-		backing: NSBackingStoreBuffered
-		defer: NO
-		];
+	if ( widget->flags & cWindowToolStyle )
+	{
+		ClaroPanelWindow *window = [[ClaroPanelWindow alloc]
+			initWithContentRect: NSMakeRect( widget->size_req->x, widget->size_req->y, widget->size_req->w, widget->size_req->h )
+			styleMask: m			       
+			backing: NSBackingStoreBuffered
+			defer: NO
+			];
 	
-	[window setClaroWidget:widget];
+		[window setClaroWidget:widget];
 	
-	widget_set_content_size( OBJECT(widget), widget->size_req->w, widget->size_req->h, 1 );
+		widget_set_content_size( OBJECT(widget), widget->size_req->w, widget->size_req->h, 1 );
+		
+		[window setLevel: NSFloatingWindowLevel];
 	
-	[window makeKeyWindow];
+		widget->native = (NSControl *)(void *)window;
+	}
+	else
+	{
+		ClaroWindow *window = [[ClaroWindow alloc]
+			initWithContentRect: NSMakeRect( widget->size_req->x, widget->size_req->y, widget->size_req->w, widget->size_req->h )
+			styleMask: m			       
+			backing: NSBackingStoreBuffered
+			defer: NO
+			];
 	
-	widget->native = (NSControl *)(void *)window;
+		[window setClaroWidget:widget];
+	
+		widget_set_content_size( OBJECT(widget), widget->size_req->w, widget->size_req->h, 1 );
+	
+		if ( widget->flags & cWindowFloating )
+			[window setLevel: NSFloatingWindowLevel];
+		else
+			[window makeKeyWindow];
+	
+		widget->native = (NSControl *)(void *)window;
+	}
 }
 
 void cgraphics_window_show( window_widget_t *w )
