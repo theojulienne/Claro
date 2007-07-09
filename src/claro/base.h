@@ -63,6 +63,7 @@ extern "C" {
 #include "base/block.h"
 #include "base/object.h"
 #include "base/classes.h"
+#include "base/typebox.h"
 #include "base/events.h"
 #include "base/claro.h"
 #include "base/log.h"
@@ -73,7 +74,8 @@ extern "C" {
 
 //added by Cody, 6/16/07
 #include "base/hashtable.h"
-#include "base/atomic.h"#include "base/boxed.h"
+#include "base/atomic.h"
+#include "base/boxed.h"
 
 #ifdef __cplusplus
 }

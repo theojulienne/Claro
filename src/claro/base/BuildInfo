@@ -6,7 +6,9 @@ info
 targets
 	library claro-base
 		sources
+			atomic.c
 			block.c
+			boxed.c
 			claro.c
 			classes.c
 			events.c
@@ -19,8 +21,7 @@ targets
 			oscompat.c
 			store.c
 			string.c
-			atomic.c
-			boxed.c
+			typebox.c
 			platform !posix
 				eglib/src/garray.c
 				eglib/src/gdate.c

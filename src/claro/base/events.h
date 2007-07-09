@@ -30,11 +30,7 @@ typedef struct event_
 	int arg_num;     /* number of arguments */
 	char format[16]; /* format of the arguments sent */
 
-#ifndef OLD_EVENTS
 	claro_hashtable_t * args;
-#else
-	void **arglist;  /* list of args, as per format. */
-#endif
 } event_t;
 
 typedef void event_func_t( object_t *object, event_t *event );
@@ -51,15 +47,9 @@ typedef struct event_handler_
 
 #define event_handler(n) void n ( object_t *object, event_t *event )
 
-#ifndef OLD_EVENTS
 CLFEXP void *event_get_ptr( event_t *e, const char *key );
 CLFEXP double event_get_double( event_t *e, const char *key );
 CLFEXP int event_get_int( event_t *e, const char *key );
-#else
-CLFEXP void *event_get_arg_ptr( event_t *e, int arg );
-CLFEXP double event_get_arg_double( event_t *e, int arg );
-CLFEXP int event_get_arg_int( event_t *e, int arg );
-#endif
 
 /* event functions */
 
