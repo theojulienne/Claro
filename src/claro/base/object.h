@@ -37,19 +37,10 @@ typedef struct object_
 
     claro_list_t * children;
 
-/*	
-#ifndef OLD_CHILDREN
-	GPtrArray *children;
-#else
-	list_t children;
-#endif
-*/
 	struct object_ *parent;
 	
 	void *appdata; /* !! this is for APPLICATION USE ONLY !! */
 } object_t;
-
-//CLVEXP list_t object_list;
 
 CLFEXP void object_init( );
 
