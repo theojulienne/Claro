@@ -45,6 +45,11 @@ claro_typebox_t *claro_typebox_create( char type_code, ... )
 	
 	switch ( type_code )
 	{
+		case 'o': // object will end up being a b as well, right now this will crash
+		case 'b':
+			box->value.val = va_arg( argp, void * );
+			claro_boxed_ref( box->value.val );
+			break;
 		case 'p':
 			box->value.val = va_arg( argp, void * );
 			break;
@@ -67,6 +72,12 @@ claro_typebox_t *claro_typebox_create( char type_code, ... )
 
 void claro_typebox_destroy( claro_typebox_t *box )
 {
+	// unreference any 
+	if ( box->type == 'o' || box->type == 'b' )
+	{
+		claro_boxed_unref( box->value.val );
+	}
+	
 	free( box );
 }
 
