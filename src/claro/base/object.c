@@ -14,7 +14,8 @@
  * 
  * See the LICENSE file for more details.
  */
-
+
+
 #include <claro/base.h>
 
 void object_inst_create( object_t *object );
@@ -54,8 +55,6 @@ class_type_t *object_get_type( )
 /* object system initialization */
 void object_init( )
 {
-//	list_create( &object_list );
-//	list_create( &destroy_list );
 }
 
 
@@ -63,24 +62,6 @@ void object_init( )
 
 void object_inst_create( object_t *object )
 {
-/*	node_t *n;
-	
-	// init object event list 
-	list_create( &object->event_handlers );
-	
-	// init object children list 
-#ifndef OLD_CHILDREN
-	object->children = g_ptr_array_new( );
-#else
-	list_create( &object->children );
-#endif
-	
-	// FIXME: this will be replaced by using tree traversal later 
-	// add to global object list 
-	n = node_create( );
-	node_add( object, n, &object_list );
-*/
-    
     object->event_handlers = claro_list_create();
     object->children = claro_list_create();
 }
