@@ -36,22 +36,22 @@ event_handler( widget_has_realized )
 void widget_inst_create( object_t *object )
 {
 	object_addhandler( object, "realized", widget_has_realized );
-	printf( "widget_inst_create(%p)\n", object );
+//	printf( "widget_inst_create(%p)\n", object );
 }
 
 void widget_inst_realize( object_t *object )
 {
-	printf( "widget_inst_realize(%p)\n", object );
+//	printf( "widget_inst_realize(%p)\n", object );
 }
 
 void widget_inst_finalize( object_t *object )
 {
-	printf( "widget_inst_finalize(%p)\n", object );
+//	printf( "widget_inst_finalize(%p)\n", object );
 }
 
 void widget_inst_destroy( object_t *object )
 {
-	printf( "widget_inst_destroy(%p)\n", object );
+//	printf( "widget_inst_destroy(%p)\n", object );
 }
 
 object_t * widget_create( object_t *parent )

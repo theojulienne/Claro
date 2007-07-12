@@ -22,12 +22,17 @@
 
 void *cgraphics_font_from_font( font_t *font )
 {
-	
+	return NULL; 
 }
 
 void cgraphics_widget_set_font( widget_t *widget, font_t *font )
 {
-	
+    printf("%s: %s\n", __FUNCTION__, font->face);
+    GtkWidget * w = GTK_WIDGET(widget->native);
+    PangoFontDescription * font_desc = pango_font_description_copy(w->style->font_desc);
+    pango_font_description_set_family(font_desc, font->face);
+    gtk_widget_modify_font(w, font_desc);
+    pango_font_description_free(font_desc);	
 }
 
 int cgraphics_widget_font_string_width( widget_t *w, char *text, int chars )

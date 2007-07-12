@@ -33,7 +33,7 @@ void cgraphics_label_widget_create(widget_t *widget)
 void cgraphics_label_update_text(widget_t *widget)
 {
 	label_widget_t *w = (label_widget_t *)widget;
-	gtk_label_set_text( GTK_LABEL(w->widget.native), w->text );
+	gtk_label_set_markup( GTK_LABEL(w->widget.native), w->text );
 }
 
 void cgraphics_label_update_justify(widget_t *widget)

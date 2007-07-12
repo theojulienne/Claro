@@ -51,6 +51,11 @@ void cgraphics_listbox_widget_create( widget_t *widget )
 	gtk_container_add( widget->native, widget->container );
 	gtk_widget_show( GTK_WIDGET( widget->container ) );
 	
+    GtkWidget * w = GTK_WIDGET(widget->container);
+    PangoFontDescription * font_desc = pango_font_description_from_string("Monospace");
+    gtk_widget_modify_font(w, font_desc);
+    pango_font_description_free(font_desc);	
+
 	cgraphics_widget_create( widget );
 	
 	renderer = gtk_cell_renderer_text_new( );

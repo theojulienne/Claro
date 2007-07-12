@@ -1,4 +1,4 @@
-/* Claro Graphics - an abstraction layer for native UI libraries
+ /* Claro Graphics - an abstraction layer for native UI libraries
  * 
  * $Id$
  * 
@@ -22,22 +22,22 @@
 
 static void cgraphics_scrollbar_value_changed( GtkAdjustment *adjustment, widget_t *widget )
 {
-	event_send( widget, "scroll", "" );
+	event_send( (object_t *)widget, "scroll", "" );
 }
 
 void cgraphics_scrollbar_widget_create( widget_t *widget )
 {
 	scrollbar_widget_t *sb = (scrollbar_widget_t *)widget;
-	widget->ndata = gtk_adjustment_new( 1, 1, 1, 1, 1, 1 );
 	
 	if ( widget->flags & cScrollbarVertical )
-		widget->native = gtk_vscrollbar_new( widget->ndata );
+		widget->native = (void *)gtk_vscrollbar_new( NULL );
 	else
-		widget->native = gtk_hscrollbar_new( widget->ndata );
+		widget->native = (void *)gtk_hscrollbar_new( NULL );
 	
 	cgraphics_widget_create( widget );
 	
-	g_signal_connect( G_OBJECT(widget->ndata), "value-changed", G_CALLBACK(cgraphics_scrollbar_value_changed), widget );
+	g_signal_connect( G_OBJECT(gtk_range_get_adjustment(GTK_RANGE(widget->native))), 
+        "value-changed", G_CALLBACK(cgraphics_scrollbar_value_changed), widget );
 	
 	sb->min = sb->max = 0;
 	cgraphics_scrollbar_set_range( widget );
@@ -51,7 +51,7 @@ int cgraphics_scrollbar_get_sys_width( )
 void cgraphics_scrollbar_set_range( widget_t *w )
 {
 	scrollbar_widget_t *sb = (scrollbar_widget_t *)w;
-	GtkAdjustment *a = (GtkAdjustment *)w->ndata;
+	GtkAdjustment *a = gtk_range_get_adjustment(GTK_RANGE(w->native));
 	
 	a->lower = sb->min;
 	a->upper = sb->max + 1;
@@ -63,19 +63,17 @@ void cgraphics_scrollbar_set_range( widget_t *w )
 
 void cgraphics_scrollbar_set_pos( widget_t *w, int pos )
 {
-	scrollbar_widget_t *sb = (scrollbar_widget_t *)w;
-	GtkAdjustment *a = (GtkAdjustment *)w->ndata;
+//	scrollbar_widget_t *sb = (scrollbar_widget_t *)w;
+	GtkAdjustment *a = gtk_range_get_adjustment(GTK_RANGE(w->native));
 	
 	a->value = pos;
 	
 	g_signal_emit_by_name( G_OBJECT(a), "changed" );
 	
-	event_send( w, "scroll", "" );
+	event_send( (object_t *)w, "scroll", "" );
 }
 
 int cgraphics_scrollbar_get_pos( widget_t *w )
 {
-	GtkAdjustment *a = (GtkAdjustment *)w->ndata;
-	
-	return a->value;
+    return (int)gtk_range_get_value(GTK_RANGE(w->native));
 }

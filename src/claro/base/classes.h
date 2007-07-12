@@ -41,7 +41,7 @@ struct class_type_
 
 struct class_info_
 {
-	char name[32];
+	char * name;
 
 	int object_size;
 	
@@ -54,13 +54,22 @@ struct class_info_
 	object_destroy_func *destroy_func;
 };
 
+// references 
+
+CLFEXP void * claro_ref(void * object);
+CLFEXP void claro_unref(void * object);
+
 /* class-related object functions */
 CLFEXP object_t *object_create_from_class( class_type_t *class_type, object_t *parent );
 CLFEXP void object_realize( object_t *object );
 CLFEXP void object_destroy( object_t *object );
 CLFEXP void object_actual_destroy( object_t *object );
 
-CLFEXP class_type_t *get_type_for_class( const class_info_t *info );
+CLFEXP class_info_t * claro_register_class( const class_info_t * info);
+
+CLFEXP class_type_t * get_type_for_class( const class_info_t *info );
+
+CLFEXP class_type_t * get_type_for_name( const char * name );
 
 /* handy macro to declare class_info for a type */
 
@@ -84,7 +93,7 @@ class_type_t * type_name##_get_type( ) \
 	if ( type == NULL ) { \
 		parent##_get_type( ); \
 		type_name##_class_info.parent_class = & parent##_class_info; \
-		type = get_type_for_class( &type_name##_class_info ); \
+		type = get_type_for_class( claro_register_class ( &type_name##_class_info ) ); \
 	} \
 	return type; \
 }

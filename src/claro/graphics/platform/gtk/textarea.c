@@ -22,36 +22,28 @@
 
 /* Textarea */
 
-static gint cgraphics_textarea_changed_handler( GtkWidget *widget, widget_t *w )
+static gint cgraphics_textarea_changed_handler( GtkTextBuffer * buffer, widget_t *w )
 {
 	event_send( OBJECT(w), "changed", "" );		
 	return 1;
 }
 
-static gint cgraphics_textarea_modified_handler( GtkWidget *widget, widget_t *w )
-{
-	event_send( OBJECT(w), "modified", "" );
-	return 1;
-}
-
-
 void cgraphics_textarea_widget_create(widget_t *widget)
 {
-	widget->native = gtk_text_view_new ();
+	widget->native = (void *)gtk_text_view_new ();
 	
-	widget->ndata  = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget->native));
+	widget->ndata  = (void *)gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget->native));
 	
 	cgraphics_widget_create(widget);
 	
-	g_signal_connect( G_OBJECT(widget->native), "changed", G_CALLBACK(cgraphics_textarea_changed_handler), widget );
-	g_signal_connect( G_OBJECT(widget->native), "modified-changed", G_CALLBACK(cgraphics_textarea_modified_handler), widget );
+	g_signal_connect( G_OBJECT(widget->ndata), "changed", G_CALLBACK(cgraphics_textarea_changed_handler), widget );
 }
 
 
-void cgraphics_textarea_set_text( widget_t *obj )
+void cgraphics_textarea_set_text( widget_t *obj, const char * text )
 {
-	textarea_widget_t *tw = (textarea_widget_t *)obj;
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(obj->ndata), tw->text, -1);
+//	textarea_widget_t *tw = (textarea_widget_t *)obj;
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(obj->ndata), text, -1);
 }
 
 
@@ -65,3 +57,4 @@ char *cgraphics_textarea_get_text( widget_t *obj)
 	
 	return gtk_text_buffer_get_text(GTK_TEXT_BUFFER(obj->ndata), &start, &end, FALSE);
 }
+

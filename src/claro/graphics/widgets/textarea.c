@@ -49,17 +49,17 @@ void textarea_set_text( object_t *obj, const char *text )
 	textarea_widget_t *tw = (textarea_widget_t *)obj;
 	
 	assert_valid_textarea_widget( obj, "obj" );
-	
-	strncpy( tw->text, text, CLARO_TEXTAREA_MAXIMUM-1 );
-	tw->text[CLARO_TEXTAREA_MAXIMUM] = 0;
-	
-	cgraphics_textarea_set_text((widget_t *)obj);
+		
+	cgraphics_textarea_set_text((widget_t *)obj, text);
 }
 
 
-char *textarea_get_text( object_t *obj)
+char * textarea_get_text( object_t *obj)
 {
 	textarea_widget_t *tw = (textarea_widget_t *)obj;
-	assert_valid_textarea_widget( obj, "obj" );
-	return &tw->text;
+	
+    assert_valid_textarea_widget( obj, "obj" );
+    	
+    return cgraphics_textarea_get_text((widget_t *)obj);
 }
+

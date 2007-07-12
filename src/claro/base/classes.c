@@ -18,6 +18,35 @@
 
 #include <claro/base.h>
 
+
+
+static GHashTable * _type_table;
+
+/* object system initialization */
+void object_init( )
+{
+    _type_table = g_hash_table_new(g_str_hash, g_str_equal);
+}
+
+void * claro_ref(void * object)
+{
+    return object;    
+}
+
+void claro_unref(void * object)
+{
+}
+
+class_info_t * claro_register_class(const class_info_t * info)
+{
+    class_info_t * found_info = g_hash_table_lookup(_type_table, info->name);    
+    g_assert(found_info == NULL);
+
+    g_hash_table_insert(_type_table, info->name, info);
+
+    return info;
+}
+
 void object_run_class_create( object_t *object, const class_info_t *class_info )
 {
 	/* if we are not the root object class, run our parent create */
@@ -41,8 +70,9 @@ object_t *object_create_from_class( class_type_t *class_type, object_t *parent )
 	obj->class_type = class_type;
 	obj->realized = 0;
 	
-	strcpy( obj->type, class_info->name );
-	obj->destroy_pending = 0;
+	//strcpy( obj->type, class_info->name );
+    obj->type = class_info->name;	
+    obj->destroy_pending = 0;
 	
 	/* run create functions */
 	object_run_class_create( obj, obj->class_type->info );

@@ -91,6 +91,60 @@ object_t *listview_widget_create( object_t *parent, bounds_t *bounds, int column
 	return obj;
 }
 
+CLFEXP object_t *listview_widget_create_with_columns( object_t *parent, bounds_t *bounds, int num_columns, int flags, claro_listview_column_t * columns )
+{
+	int c;
+	int cols[num_columns];
+	listview_widget_t *lw;
+	object_t *obj;
+	
+	assert_valid_widget( parent, "parent" );
+	
+	obj = object_create_from_class( listview_widget_type, parent );
+	
+	widget_set_bounds( obj, bounds );
+	widget_set_flags( obj, flags );
+	
+	lw = (listview_widget_t *)obj;
+	
+	lw->titles = (char **)malloc( sizeof(char *) * num_columns );
+	
+	for ( c = 0; c < num_columns; c++ )
+	{
+		char *tmp = columns[c].name;
+		int type = columns[c].type;
+		
+		lw->titles[c] = sstrdup( tmp );
+		
+		switch ( type )
+		{
+			case CLISTVIEW_TYPE_CHECKBOX:
+				cols[c] = CLIST_TYPE_UINT;
+				break;
+			case CLISTVIEW_TYPE_PROGRESS:
+				cols[c] = CLIST_TYPE_DOUBLE;
+				break;
+			default:
+			case CLISTVIEW_TYPE_TEXT:
+				cols[c] = CLIST_TYPE_STRING;
+				break;
+		}
+	}
+	
+	//list_widget_init( obj, 1, CLIST_TYPE_STRING );
+	list_widget_init_ptr( obj, columns, &cols );
+	
+	/* handle list operations */
+	object_addhandler( obj, "new_row", listview_new_row_handle );
+	object_addhandler( obj, "remove_row", listview_remove_row_handle );
+	object_addhandler( obj, "destroy", listview_handle_destroy );
+	
+	object_realize( obj );
+	
+	return obj;  
+}
+
+
 void listview_handle_destroy( listview_widget_t *obj, event_t *e )
 {
 	int a;

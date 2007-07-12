@@ -52,11 +52,6 @@ class_type_t *object_get_type( )
 //list_t object_list = {};
 //list_t destroy_list = {};
 
-/* object system initialization */
-void object_init( )
-{
-}
-
 
 /* class instance functions for object */
 
@@ -64,6 +59,7 @@ void object_inst_create( object_t *object )
 {
     object->event_handlers = claro_list_create();
     object->children = claro_list_create();
+    object->appdata = NULL;
 }
 
 void object_inst_realize( object_t *object )
@@ -91,7 +87,8 @@ void object_inst_destroy( object_t *object )
 
 	/* clean up parenting */
 	object_set_parent( object, NULL );
-	
+
+// iterate children- this should decrement the reference along with setting 'parent' to NULL	
     len = claro_list_count(object->children);
     
     for(i = 0; i < len; i++)
@@ -100,6 +97,8 @@ void object_inst_destroy( object_t *object )
     }
 
     claro_list_destroy(object->children);
+
+// iterate the event handlers- this should be a hashtable of event names to a list
 
     len = claro_list_count(object->event_handlers);
 
@@ -140,6 +139,7 @@ void object_inst_destroy( object_t *object )
 	node_free( n );
 */	
 	/* clean up the memory */
+
 	free( object );
 }
 
@@ -148,6 +148,9 @@ int object_is_realized( object_t *object )
     g_return_val_if_fail(object != NULL, 0);
 	return object->realized;
 }
+
+
+// this is now a bit pointless
 
 void object_queue_destruction( object_t *object )
 {

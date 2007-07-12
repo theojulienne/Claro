@@ -12,6 +12,9 @@ namespace Claro
         [DllImport(Global.ClaroBase)]
 		private static extern void sfree(IntPtr p);
 
+        [DllImport("msvcrt")]
+		private static extern int strlen(IntPtr p);
+
 		public const string ClaroGraphics = "claro-graphics";
         public const string ClaroBase = "claro-base";
         internal const string GLib = "glib-2.0";
@@ -37,20 +40,15 @@ namespace Claro
             return raw;
         }
 
-        private unsafe int strlen(byte * p)
-        {
-            int len = 0;
-            while(p++)
-                len++;
-            return len;
-        }
-
-        public unsafe string Utf8PtrToString(IntPtr p, bool needs_free)
+        public static unsafe string Utf8PtrToString(IntPtr p, bool needs_free)
         {
             if(p == IntPtr.Zero)
                 throw new ArgumentException("p");
-            byte * bptr = (byte*)p.ToPointer();
-            int utf8_len = strlen(bptr);
+            //byte * bptr = (byte*)p.ToPointer();
+            int utf8_len = strlen(p);
+                        
+            if(needs_free)
+                sfree(p);
         }	
     }
 }

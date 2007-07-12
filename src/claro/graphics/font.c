@@ -24,6 +24,8 @@ void widget_set_font( object_t *widget, char *face, int size, int weight, int sl
 	char *tface;
 	widget_t *rwidget = WIDGET(widget);
 	
+    printf("%s()\n", __FUNCTION__);
+
 	rwidget->font.used = 2; // mark as changed so font wont be cached
 	tface = strdup( face );
 	if ( rwidget->font.face != 0 )
@@ -34,7 +36,10 @@ void widget_set_font( object_t *widget, char *face, int size, int weight, int sl
 	rwidget->font.slant = slant;
 	rwidget->font.decoration = decoration;
 	
-	cgraphics_widget_set_font( rwidget, &rwidget->font );
+    font_t * font = &rwidget->font;
+	//cgraphics_widget_set_font( rwidget, &rwidget->font );
+   
+     printf("%s: %s DONE\n", __FUNCTION__, font->face);
 }
 
 int widget_font_string_width( object_t *w, char *text, int chars )

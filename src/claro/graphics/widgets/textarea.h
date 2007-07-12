@@ -28,14 +28,12 @@
 #define assert_valid_textarea_widget(o,n)	assert_not_null( o, n, "TextArea" ); \
 						assert_only_textarea_widget( o, n )
 
-#define CLARO_TEXTAREA_MAXIMUM (1024*1024)
 
 declare_class( textarea_widget );
 #define textarea_widget_type textarea_widget_get_type()
 
 typedef struct textarea_widget_ {
     widget_t widget;
-    char text[CLARO_TEXTAREA_MAXIMUM];
 } textarea_widget_t;
 
 /**
@@ -54,15 +52,15 @@ CLFEXP object_t *textarea_widget_create( object_t *parent, bounds_t *bounds, int
  * \param obj A valid TextArea widget
  * \param text The new text
  */
-CLFEXP void textarea_set_text( object_t *obj, const char *text );
+CLFEXP void textarea_set_text( object_t *obj, const char * text );
 
 /**
  * \brief Retrieve the text of a textarea
  * 
  * \param obj A valid TextArea widget
- * \return Pointer to an internal reference of the text. Should not be changed.
+ * \return Caller-owned, must be freed (with g_free or sfree)
  */
-CLFEXP char *textarea_get_text( object_t *obj );
+CLFEXP char * textarea_get_text( object_t *obj );
 
 /*\@}*/
 #endif

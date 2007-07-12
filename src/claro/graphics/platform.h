@@ -157,7 +157,7 @@ void cgraphics_radiobutton_set_group(widget_t *radio);
 
 /* Textarea */
 void cgraphics_textarea_widget_create(widget_t *widget);
-void cgraphics_textarea_set_text( widget_t *obj );
+void cgraphics_textarea_set_text( widget_t *obj, const char * text );
 char *cgraphics_textarea_get_text( widget_t *obj);
 
 /* Frame */

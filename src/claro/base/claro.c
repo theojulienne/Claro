@@ -69,13 +69,13 @@ void claro_base_init( )
 //	block_init( );
 //	list_init( );
 
+    log_init( );
+
     _claro_atomic_init();
    
     _claro_boxed_init();    
 
     _claro_hashtable_init();
-
-    log_init( );
 
 	object_init( );
 	

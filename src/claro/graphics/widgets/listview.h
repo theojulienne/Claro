@@ -58,6 +58,13 @@ struct listview_widget_
 	list_item_t *selected;
 };
 
+typedef struct
+{
+    const char * name;
+    int type;
+} claro_listview_column_t;
+
+
 /* functions */
 
 /**
@@ -72,6 +79,9 @@ struct listview_widget_
  * \return A new ListView widget object.
  */
 CLFEXP object_t *listview_widget_create( object_t *parent, bounds_t *bounds, int columns, int flags, ... );
+
+
+CLFEXP object_t *listview_widget_create_with_columns( object_t *parent, bounds_t *bounds, int num_columns, int flags, claro_listview_column_t * columns );
 
 /**
  * \brief Append a row to a ListView widget

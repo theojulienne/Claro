@@ -93,7 +93,7 @@ void claro_log( int level, char *application, char *file, int line, const char *
 	struct tm *tm_ptr;
 	time_t tm;
 	char tm_str[60];
-    int i, len;	
+    int i, len = 0;	
     
 	tm = time( NULL );
 	tm_ptr = localtime( &tm );
@@ -110,8 +110,9 @@ void claro_log( int level, char *application, char *file, int line, const char *
 		fprintf( stderr, "%s %s\n", place, buf );
 	}
 */
-
-    len = claro_list_count(log_outputs);
+    
+    if(log_outputs)
+        len = claro_list_count(log_outputs);
 
     if(len == 0)
         fprintf( stderr, "%s %s\n", place, buf );    

@@ -56,11 +56,14 @@ static gint cgraphics_textbox_keypress_handler( GtkWidget *widget, GdkEventKey *
 void cgraphics_textbox_widget_create( widget_t *widget )
 {
 	widget->native = gtk_entry_new( );
-	
+
+    if(widget->flags & cTextBoxTypePassword)
+        gtk_entry_set_visibility(GTK_ENTRY(widget->native), FALSE);        	
+
 	cgraphics_widget_create( widget );
 	
 	g_signal_connect( G_OBJECT(widget->native), "changed", G_CALLBACK(cgraphics_textbox_changed_handler), widget );
-	g_signal_connect( G_OBJECT(widget->native), "key_press_event", G_CALLBACK(cgraphics_textbox_keypress_handler), widget );
+    g_signal_connect( G_OBJECT(widget->native), "key_press_event", G_CALLBACK(cgraphics_textbox_keypress_handler), widget );
 }
 
 void cgraphics_textbox_update_text( textbox_widget_t *widget )

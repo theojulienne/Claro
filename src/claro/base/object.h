@@ -26,20 +26,24 @@ CLBVEXP struct class_info_ object_class_info;
 
 typedef struct object_
 {
-	char type[64];
+    // this can be removed soon..
+	char * type;
 	
 	const struct class_type_ * class_type;
-	int realized;
 	
+    volatile int ref_count;
+    
+    int realized;
+    // this one too 	
 	int destroy_pending;
 	
 	claro_list_t * event_handlers;
 
     claro_list_t * children;
 
-	struct object_ *parent;
+	struct object_ * parent;
 	
-	void *appdata; /* !! this is for APPLICATION USE ONLY !! */
+	void * appdata; /* !! this is for APPLICATION USE ONLY !! */
 } object_t;
 
 CLFEXP void object_init( );
