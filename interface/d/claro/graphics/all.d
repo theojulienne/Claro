@@ -16,5 +16,6 @@ public
 	import claro.graphics.widgets.button;
 	import claro.graphics.widgets.textbox;
 	import claro.graphics.widgets.opengl;
+	import claro.graphics.widgets.slider;
 	import claro.graphics.widgets.label;
 }
