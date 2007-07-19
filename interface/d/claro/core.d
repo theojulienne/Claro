@@ -36,6 +36,11 @@ class Claro
 		claro_shutdown( );
 	}
 	
+	static void run( )
+	{
+		claro_run( );
+	}
+	
 	class Graphics
 	{
 		static void init( )
