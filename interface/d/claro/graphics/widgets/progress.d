@@ -8,8 +8,8 @@ private import claro.graphics.widget;
 extern (C) {
 	object_t *progress_widget_create( object_t *parent, bounds_t *bounds, int flags );
 	void progress_set_range( object_t *progress, double minimum, double maximum );
-	void progress_set_value( object_t *progress, double value );
-	void progress_set_style( object_t *progress, int style );
+	void progress_set_level( object_t *progress, double value );
+	void progress_set_orientation( object_t *progress, int style );
 	double progress_get_value( object_t *progress );
 }
 
