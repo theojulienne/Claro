@@ -17,6 +17,10 @@ extern (C)
 	bounds_t *get_req_bounds( object_t *widget );
 	
 	void widget_set_notify( object_t *widget, int flags );
+	
+	void widget_disable( object_t *widget );
+	void widget_enable( object_t *widget );
+	void widget_focus( object_t *widget );
 }
 
 class Bounds {
@@ -80,5 +84,21 @@ class Widget : CObject {
 	void notify( int flags )
 	{
 		widget_set_notify( this.obj, flags );
+	}
+	
+	void disabled( bool val )
+	{
+		if ( val ) widget_disable( this.obj );
+		else widget_enable( this.obj );
+	}
+	
+	void enabled( bool val )
+	{
+		disabled = !val;
+	}
+	
+	void focus( )
+	{
+		widget_focus( this.obj );
 	}
 }
