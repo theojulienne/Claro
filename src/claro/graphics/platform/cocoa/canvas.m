@@ -132,7 +132,7 @@ event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
 	NSPoint local_point = [self convertPoint:event_location fromView:nil];
 	NSRect frame = [self frame];
 	
-	local_point.y = frame.size.height - local_point.y;
+	//local_point.y = frame.size.height - local_point.y;
 	
 	return local_point;
 }
