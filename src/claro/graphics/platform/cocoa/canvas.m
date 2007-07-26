@@ -144,6 +144,13 @@ event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
 	[super mouseMoved: event];
 }
 
+- (void)mouseDragged:(NSEvent *)event
+{
+	macroMouseEvent("mouse_moved");
+	
+	[super mouseDragged: event];
+}
+
 - (void)otherMouseDragged:(NSEvent *)event
 {
 	macroMouseEvent("mouse_moved");
@@ -277,8 +284,11 @@ void cgraphics_canvas_widget_create( widget_t *widget )
 		initWithFrame: NSMakeRect( widget->size_req->x, widget->size_req->y, widget->size_req->w, widget->size_req->h )
 		];
 	
-	[parent addSubview: cv];
 	[cv setClaroWidget:widget];
+	[parent addSubview: cv];
+	
+	[[cv window] makeFirstResponder:cv];
+	[[cv window] setAcceptsMouseMovedEvents:YES];
 	
 	widget->native = (NSControl *)cv;
 }
