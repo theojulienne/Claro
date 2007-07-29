@@ -113,11 +113,11 @@ void cgraphics_frame_widget_create( widget_t *widget )
 void cgraphics_frame_set_text( frame_widget_t *widget )
 {
 	ClaroFrame *pb = (ClaroFrame *)widget->widget.native;
-	CFStringRef str;
+	NSString *str;
+
+	str = [[NSString alloc] initWithCString:widget->text encoding:NSUTF8StringEncoding];
 	
-	str = CFStringCreateWithCString( NULL, widget->text, strlen( widget->text ) );
+	[pb setTitle:str];
 	
-	[pb setTitle:(NSString *)str];
-	
-	CFRelease( str );
+	[str release];
 }

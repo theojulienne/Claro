@@ -236,13 +236,13 @@ void cgraphics_window_focus( window_widget_t *w )
 void cgraphics_window_update_title( window_widget_t *w )
 {
 	ClaroWindow *window = (ClaroWindow *)w->widget.native;
-	CFStringRef str;
+	NSString *str;
+
+	str = [[NSString alloc] initWithCString:w->title encoding:NSUTF8StringEncoding];
 	
-	str = CFStringCreateWithCString( NULL, w->title, strlen( w->title ) );
+	[window setTitle:str];
 	
-	[window setTitle:(NSString *)str];
-	
-	CFRelease( str );
+	[str release];
 }
 
 void cgraphics_window_minimise( widget_t *w )

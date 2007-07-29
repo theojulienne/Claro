@@ -188,7 +188,7 @@
 	list_widget_t *list = (list_widget_t *)cw;
 	list_item_t *item;
 //	node_t *n;
-	CFStringRef str;
+	NSString *str;
 	char *cstr;
 	int i, len;
 	
@@ -203,7 +203,7 @@
 			if ( item->native == 0 )
 			{
 				cstr = item->data[0];
-				str = CFStringCreateWithCString( NULL, cstr, strlen( cstr ) );
+				str = [[NSString alloc] initWithCString:cstr encoding:NSUTF8StringEncoding];
 				item->native = (void *)str;
 			}
 			
@@ -211,24 +211,6 @@
 		}
 	}
 
-/*	
-	LIST_FOREACH( n, list->items.head )
-	{
-		item = (list_item_t *)n->data;
-		
-		if ( item->row == rowIndex )
-		{
-			if ( item->native == 0 )
-			{
-				cstr = item->data[0];
-				str = CFStringCreateWithCString( NULL, cstr, strlen( cstr ) );
-				item->native = (void *)str;
-			}
-			
-			return item->native;
-		}
-	}
-*/	
 	return 0;
 }
 @end

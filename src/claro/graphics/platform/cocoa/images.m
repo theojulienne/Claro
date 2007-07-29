@@ -23,13 +23,13 @@
 
 void cgraphics_image_load( image_t *img, const char *file )
 {
-	CFStringRef str;
+	NSString *str;
+
+	str = [[NSString alloc] initWithCString:file encoding:NSUTF8StringEncoding];
 	
-	str = CFStringCreateWithCString( NULL, file, strlen( file ) );
+	img->native = [[NSImage alloc] initByReferencingFile:str];
 	
-	img->native = [[NSImage alloc] initByReferencingFile:(NSString *)str];
-	
-	CFRelease( str );
+	[str release];
 }
 
 void cgraphics_image_load_inline_png( image_t *img, const unsigned char * data, int len )
