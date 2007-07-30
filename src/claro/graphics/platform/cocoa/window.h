@@ -44,6 +44,8 @@
 - (void)claroResize:(NSNotification *)aNotification;
 - (void)claroMove:(NSNotification *)aNotification;
 - (void)claroClose:(NSNotification *)aNotification;
+
+- (BOOL) canBecomeKeyWindow;
 @end
 
 void cgraphics_window_close( widget_t *widget );

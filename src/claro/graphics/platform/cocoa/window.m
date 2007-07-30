@@ -51,8 +51,17 @@
 	
 	/* thanks, but no thanks: a normal coordinate system would be nice. */
 	sv = [[SaneView alloc] initWithFrame: [[self contentView] frame]];
+	
+	if ( !( widget->flags & cWidgetCustomDraw ) )
+	{
+		[sv setBackgroundColor: [NSColor windowBackgroundColor]];
+	}
+	else
+	{
+		[sv setBackgroundColor: [NSColor clearColor]];
+	}
+	
 	[self setContentView:sv];
-	[sv setBackgroundColor: [NSColor windowBackgroundColor]];
 	[sv release];
 	
 	[self setAcceptsMouseMovedEvents: YES];
@@ -94,6 +103,11 @@
 	widget_destroy( cw );
 }
 
+- (BOOL) canBecomeKeyWindow
+{
+    return YES;
+}
+
 - (void)setClaroWidget:(widget_t *)widget
 {
 	SaneView *sv;
@@ -101,8 +115,17 @@
 	
 	/* thanks, but no thanks: a normal coordinate system would be nice. */
 	sv = [[SaneView alloc] initWithFrame: [[self contentView] frame]];
+
+	if ( !( widget->flags & cWidgetCustomDraw ) )
+	{
+		[sv setBackgroundColor: [NSColor windowBackgroundColor]];
+	}
+	else
+	{
+		[sv setBackgroundColor: [NSColor clearColor]];
+	}
+
 	[self setContentView:sv];
-	[sv setBackgroundColor: [NSColor windowBackgroundColor]];
 	[sv release];
 	
 	[self setAcceptsMouseMovedEvents: YES];
@@ -137,6 +160,11 @@ void cgraphics_window_widget_create( widget_t *widget )
 	if ( widget->flags & cWindowToolStyle )
 		m |= NSUtilityWindowMask;
 	
+	if ( widget->flags & cWidgetCustomDraw )
+	{
+		m = NSBorderlessWindowMask;
+	}
+	
 	//m |= NSTexturedBackgroundWindowMask;
 	//m |= NSUtilityWindowMask;
 	
@@ -165,6 +193,16 @@ void cgraphics_window_widget_create( widget_t *widget )
 			backing: NSBackingStoreBuffered
 			defer: NO
 			];
+	
+		if ( widget->flags & cWidgetCustomDraw )
+		{
+			/* This code is a TEST ONLY. This will probably change later */
+			[window setBackgroundColor: [NSColor clearColor]];
+			[window setLevel: NSStatusWindowLevel];
+			[window setAlphaValue:1.0];
+			[window setOpaque:NO];
+			[window setHasShadow: YES];
+		}
 	
 		[window setClaroWidget:widget];
 	
