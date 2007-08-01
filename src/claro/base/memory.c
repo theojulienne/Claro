@@ -81,14 +81,6 @@ void *srealloc( void *oldptr, size_t newsize )
 /* does strdup()'s job, only with the above memory functions */
 char *sstrdup( const char *s )
 {
-/*	char *t;
-	
-	t = smalloc( strlen(s) + 1 );
-	
-	strcpy( t, s );
-	
-	return t;
-*/
     return g_strdup(s);
 }
 
