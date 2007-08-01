@@ -14,9 +14,6 @@ contains
 skip
 	recurse net src/claro/net
 
-broken
-	(posix) recurse contextual src/claro/contextual
-
 
 depends
 	platform win32
