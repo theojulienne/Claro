@@ -92,6 +92,26 @@ bounds_t *new_bounds( int x, int y, int w, int h )
 	return bounds;
 }
 
+void bounds_set_x(bounds_t * bounds, int x)
+{
+	bounds->x = x;
+}
+ 
+void bounds_set_y(bounds_t * bounds, int y)
+{
+	bounds->y = y;
+}
+
+void bounds_set_w(bounds_t * bounds, int w)
+{
+	bounds->w = w;
+}
+
+void bounds_set_h(bounds_t * bounds, int h)
+{
+	bounds->h = h;
+} 
+
 void widget_size_request_changed( object_t *widget )
 {
 	assert_valid_widget( widget, "widget" );

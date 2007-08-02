@@ -186,6 +186,8 @@ CLFEXP int widget_get_notify_key( object_t *widget, event_t *event );
 /**
  * \brief Updates the bounds structure with new values
  *
+ *  TO BE REMOVED SOON
+ *
  * This function should \b always be used instead of setting the
  * members manually. In the future, there may be a \b real reason
  * for this.
@@ -199,7 +201,22 @@ CLFEXP int widget_get_notify_key( object_t *widget, event_t *event );
 CLFEXP void bounds_set( bounds_t *bounds, int x, int y, int w, int h );
 
 /**
+ *  Wrapper functions
+ *
+ **/
+ 
+CLFEXP void bounds_set_x(bounds_t * bounds, int x);
+ 
+CLFEXP void bounds_set_y(bounds_t * bounds, int y);
+
+CLFEXP void bounds_set_w(bounds_t * bounds, int w);
+
+CLFEXP void bounds_set_h(bounds_t * bounds, int h);
+
+/**
  * \brief Create a new bounds object
+ *
+ *	THIS SHOULD BE "claro_create"
  *
  * Creates a new bounds_t for the specified bounds.
  *

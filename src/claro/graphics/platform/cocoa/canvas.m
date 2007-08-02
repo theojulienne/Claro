@@ -207,7 +207,7 @@ event_send( OBJECT(cw), e, "iiiii", "x", (int)pt.x, "y", (int)pt.y, "modifiers",
 #if CAIRO_VERSION_MINOR > 3
 		cvsw->surface = cairo_quartz_surface_create_for_cg_context( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h);
 #else		
-		cvsw->surface = cairo_quartz_surface_create( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h, true );
+		cvsw->surface = cairo_quartz_surface_create( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h);
 #endif
 	}
 #endif
