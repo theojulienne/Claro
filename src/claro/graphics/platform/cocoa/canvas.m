@@ -55,6 +55,8 @@
 - (void)claroMove:(NSNotification *)aNotification;
 - (void)claroClose:(NSNotification *)aNotification;
 
+- (int) claroModifiers:(NSEvent *)theEvent;
+
 /* override this to make it normal */
 - (BOOL)isFlipped;
 
@@ -81,6 +83,20 @@
 */
 }
 
+- (int) claroModifiers:(NSEvent *)theEvent
+{
+	int mods = 0, lmods = 0;
+	
+	lmods = [theEvent modifierFlags];
+	
+	if ( lmods & NSAlternateKeyMask ) mods |= cModifierKeyAlternate;
+	if ( lmods & NSControlKeyMask ) mods |= cModifierKeyControl;
+	if ( lmods & NSCommandKeyMask ) mods |= cModifierKeyCommand;
+	if ( lmods & NSShiftKeyMask ) mods |= cModifierKeyShift;
+	
+	return mods;
+}
+
 - (void)claroMove:(NSNotification *)aNotification
 {
 	NSRect frame = [self frame];
@@ -94,7 +110,7 @@
 
 
 #define macroMouseEvent(e) NSPoint pt = [self getLocalMousePosition: event]; \
-event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
+event_send( OBJECT(cw), e, "iiiii", "x", (int)pt.x, "y", (int)pt.y, "modifiers", [self claroModifiers: event], "deltaX", (int)[event deltaX], "deltaY", (int)[event deltaY] );
 
 - (void)rightMouseDown:(NSEvent *)event
 {
@@ -163,7 +179,11 @@ event_send( OBJECT(cw), e, "ii", "x", (int)pt.x, "y", (int)pt.y );
 	NSPoint pt = [self getLocalMousePosition: event];
 	double dx=[event deltaX], dy=[event deltaY], dz=[event deltaZ];
 	
-	event_send( OBJECT(cw), "scroll_wheel", "iiddd", "x", (int)pt.x, "y", (int)pt.y, "deltaX", dx, "deltaY", dy, "deltaZ", dz );
+	event_send( OBJECT(cw), "scroll_wheel", "iidddi",
+			"x", (int)pt.x, "y", (int)pt.y,
+			"deltaX", dx, "deltaY", dy, "deltaZ", dz,
+			"modifiers", [self claroModifiers: event]
+	);
 }
 
 - (void)drawRect:(NSRect)aRect
