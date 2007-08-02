@@ -22,11 +22,9 @@
 
 /* Button */
 
-static gint cgraphics_button_clicked_handler( GtkWidget *widget, widget_t *w )
+static void cgraphics_button_clicked_handler( GtkWidget *widget, widget_t *w )
 {
 	event_send( OBJECT(w), "pushed", "" );
-	
-	return 1;
 }
 
 void cgraphics_button_widget_create( widget_t *widget )

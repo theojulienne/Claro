@@ -21,6 +21,8 @@
 
 typedef struct _claro_hashtable claro_hashtable_t;
 
+typedef void hashtable_key_iter_func(const void * key, const void * value, void * user_arg);
+
 //PRIVATE
 void _claro_hashtable_init();
 
@@ -126,6 +128,30 @@ claro_hashtable_unref(claro_hashtable_t * hashtable);
 
 CLFEXP claro_hashtable_t *
 claro_hashtable_ref(claro_hashtable_t * hashtable);
+
+/*****************************************************************************
+ * claro_hashtable_iter_keys
+   
+ * @name                claro_hashtable_iter_keys
+ * @param   hashtable   the hashtable to use
+ * @param   iter_func   the key iteration callback
+ * @param   arg         the user argument to pass in
+ * @return              the hashtable
+ */
+
+CLFEXP void 
+claro_hashtable_iter_keys(claro_hashtable_t * hashtable, hashtable_key_iter_func * iter_func, void * arg);
+
+/*****************************************************************************
+ * claro_hashtable_get_keys
+   
+ * @name                claro_hashtable_ref
+ * @param   hashtable   the hashtable to use
+ * @return              the hashtable
+ */
+
+CLFEXP claro_list_t * 
+claro_hashtable_get_keys(claro_hashtable_t * hashtable);
 
 #endif
 

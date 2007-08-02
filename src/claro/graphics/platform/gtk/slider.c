@@ -20,27 +20,46 @@
 #include <assert.h>
 #include <claro/graphics/platform.h>
 
+
+static void cgraphics_slider_changed_handler(GtkRange * range, widget_t * w)
+{
+    event_send( OBJECT(w), "changed", "" );
+}
+
 void cgraphics_slider_widget_create( widget_t *widget )
 {
+    if(widget->flags & cSliderVertical)
+        widget->native = (void *)gtk_vscale_new_with_range(0.0, 1.0, 0.1);
+    else
+    {
+        widget->native = (void *)gtk_hscale_new_with_range(0.0, 1.0, 0.1);
+    }	
+
+    cgraphics_widget_create( widget );
 	
+	g_signal_connect( G_OBJECT(widget->native), "value-changed", 
+        G_CALLBACK(cgraphics_slider_changed_handler), widget );
 }
 
 void cgraphics_slider_set_value( widget_t *progress, double value )
 {
-	
+	gtk_range_set_value(GTK_RANGE(progress->native), value);
 }
 
 void cgraphics_slider_set_range( widget_t *progress, double minimum, double maximum )
 {
-	
+	gtk_range_set_range(GTK_RANGE(progress->native), minimum, maximum);
 }
 
+
+//probably not very realistic to allow change of the style after creation..	
 void cgraphics_slider_set_style( widget_t *progress, int style )
 {
-	
 }
 
 double cgraphics_slider_get_value( widget_t *slider )
 {
-	return 0;
+    return gtk_range_get_value(GTK_RANGE(slider->native));	
 }
+
+
