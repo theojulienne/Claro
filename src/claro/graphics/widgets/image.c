@@ -38,11 +38,11 @@ object_t *image_widget_create_with_image( object_t *parent, bounds_t *bounds, in
 
 	widget_set_bounds( object, bounds );
 	widget_set_flags( object, flags );
+
+	object_realize( object );
 	
 	if ( image != NULL )
 		image_set_image( object, image );
-
-	object_realize( object );
 
 	return object;
 }
