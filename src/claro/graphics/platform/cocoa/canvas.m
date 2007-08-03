@@ -206,7 +206,12 @@ event_send( OBJECT(cw), e, "iiiii", "x", (int)pt.x, "y", (int)pt.y, "modifiers",
 		// create a new surface with this context
 #if CAIRO_VERSION_MINOR > 3
 		cvsw->surface = cairo_quartz_surface_create_for_cg_context( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h);
-#else		
+#elif (CAIRO_VERSION_MINOR == 3) && (CAIRO_VERSION_MICRO >= 12)
+		/* the y_grows_down argument was present at least in 1.3.12. 
+		 * FIXME: find which version this was actually added in
+		 */
+		cvsw->surface = cairo_quartz_surface_create( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h, true);
+#else
 		cvsw->surface = cairo_quartz_surface_create( context, WIDGET(cw)->size_req->w, WIDGET(cw)->size_req->h);
 #endif
 	}
