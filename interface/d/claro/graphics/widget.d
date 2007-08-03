@@ -57,7 +57,7 @@ class Bounds {
 }
 
 class Widget : CObject {
-	Bounds b;
+	Bounds _b;
 	
 	static int NotifyMouse = 1;
 	static int NotifyKey = 2;
@@ -75,6 +75,20 @@ class Widget : CObject {
 	
 	void created( ) {
 		
+	}
+	
+	Bounds b( )
+	{
+		if ( _b !is null )
+			return _b;
+		
+		_b = new Bounds( 0, 0, 0, 0 );
+		return _b;
+	}
+	
+	void b( Bounds b )
+	{
+		_b = b;
 	}
 	
 	Bounds bounds( ) {

@@ -1,6 +1,7 @@
 module claro.graphics.widgets.window;
 
 private import claro.graphics.widget;
+private import claro.graphics.image;
 
 extern (C)
 {
@@ -8,6 +9,7 @@ extern (C)
 	void window_show( object_t * );
 	void window_focus( object_t * );
 	void window_set_title( object_t*, char *title );
+	void window_set_icon( object_t*, object_t* );
 }
 
 class WindowWidget : Widget {
@@ -48,4 +50,12 @@ class WindowWidget : Widget {
 	
 	// FIXME: return the window's title
 	char[] title( ) { return ""; }
+	
+	void icon( Image icon )
+	{
+		if ( icon is null )
+			window_set_icon( this.obj, null );
+		
+		window_set_icon( this.obj, icon.obj );
+	}
 }

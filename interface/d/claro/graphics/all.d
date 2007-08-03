@@ -19,4 +19,7 @@ public
 	import claro.graphics.widgets.slider;
 	import claro.graphics.widgets.progress;
 	import claro.graphics.widgets.label;
+	import claro.graphics.widgets.splitter;
+	import claro.graphics.widgets.treeview;
+	import claro.graphics.widgets.workspace;
 }
