@@ -63,7 +63,8 @@ int event_send( object_t *object, const char *event, const char *fmt, ... )
     if(mainloop)
         goto call_handlers;
     
-    e.args = claro_hashtable_str_create(TRUE, _free_event_arg);
+	if ( e.arg_num > 0 )
+    	e.args = claro_hashtable_str_create(TRUE, _free_event_arg);
 	
     va_start( argp, fmt );
 
@@ -133,24 +134,45 @@ call_handlers:
 	return e.handled;
 }
 
+#define ensure_args_exist(e) cassert( e->args != NULL, "Event has no arguments" )
+#define ensure_arg_valid(k,v) cassert( v != NULL, "Event hashtable does not contain the key '%s'", k )
+
 void *event_get_ptr( event_t *e, const char *key )
 {
-	claro_typebox_t *value = claro_hashtable_lookup( e->args, key );
-	cassert( value != NULL, "Event hashtable does not contain the key '%s'", key );
+	claro_typebox_t *value;
+	
+	ensure_args_exist( e );
+	
+	value = claro_hashtable_lookup( e->args, key );
+	
+	ensure_arg_valid( key, value );
+	
 	return claro_typebox_extract_pointer( value );
 }
 
 int event_get_int( event_t *e, const char *key )
 {
-	claro_typebox_t *value = claro_hashtable_lookup( e->args, key );
-	cassert( value != NULL, "Event hashtable does not contain the key '%s'", key );
+	claro_typebox_t *value;
+	
+	ensure_args_exist( e );
+	
+	value = claro_hashtable_lookup( e->args, key );
+	
+	ensure_arg_valid( key, value );
+	
 	return claro_typebox_extract_int( value );
 }
 
 double event_get_double( event_t *e, const char *key )
 {
-	claro_typebox_t *value = claro_hashtable_lookup( e->args, key );
-	cassert( value != NULL, "Event hashtable does not contain the key '%s'", key );
+	claro_typebox_t *value;
+	
+	ensure_args_exist( e );
+	
+	value = claro_hashtable_lookup( e->args, key );
+	
+	ensure_arg_valid( key, value );
+	
 	return claro_typebox_extract_double( value );
 }
 
