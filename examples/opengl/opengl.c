@@ -15,6 +15,7 @@
  * See the LICENSE file for more details.
  */
 
+// Do we really need this .. ?
 #define CLARO_OPENGL
 
 #include <claro/base.h>
@@ -77,12 +78,10 @@ int main( int argc, char *argv[] )
 	InitGL( );
 	
 	// Claro doesn't send a "resized" event at creation time
-	context_resized( gl, NULL );
-
 	window_show( w );
 	window_focus( w );
 	
-	block_heap_loginfo( );
+    context_resized( gl, NULL );
 	
 	/* add our main loop */
 	object_addhandler( claro, "mainloop", handle_main );

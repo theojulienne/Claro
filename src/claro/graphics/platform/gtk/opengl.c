@@ -29,6 +29,7 @@
 #include <X11/Xlib.h>
 #include <gdk/gdkx.h>
 
+
 static int get_glx_version()
 {
     static int _glx_version = 0;
@@ -235,18 +236,12 @@ gtk_gl_area_send_configure (GtkGLArea * gl_area)
   
   gtk_widget_event (widget, event);
   gdk_event_free (event);
-
-  //glXMakeCurrent(GDK_DISPLAY(), GDK_WINDOW_XID(widget->window), gl_area->glx_context);  
 }
 
 static void gtk_gl_area_activate(GtkWidget * widget)
 {    
     if(GTK_WIDGET_REALIZED(widget))
-    {
         glXMakeCurrent(GDK_DISPLAY(), GDK_WINDOW_XID(widget->window), GTK_GL_AREA(widget)->glx_context);
-        //glDrawBuffer (GL_FRONT);
-        //glReadBuffer (GL_FRONT);
-    }
 }
 
 static void gtk_gl_area_flip(GtkWidget * widget)
@@ -254,7 +249,6 @@ static void gtk_gl_area_flip(GtkWidget * widget)
     if(GTK_WIDGET_REALIZED(widget))
         glXSwapBuffers(GDK_DISPLAY(), GDK_WINDOW_XID(widget->window)); 
 }
-
 
 static gint cgraphics_opengl_mouse_move( GtkWidget *widget, GdkEventMotion *event, widget_t *w )
 {
