@@ -42,19 +42,25 @@ void cgraphics_textarea_widget_create( widget_t *widget )
 		MessageBox( 0, "Could not create text HWND.", "Claro error", 0 );
 	
 	widget->native = hwnd;
+	widget->ndata = NULL;
 
 	ShowWindow( hwnd, SW_SHOW );
 	UpdateWindow( hwnd );
 }
 
 
-void cgraphics_textarea_set_text( textarea_widget_t *widget )
+void cgraphics_textarea_set_text( widget_t *widget, const char *text )
 {
-	HWND hwnd = widget->widget.native;
-	SetWindowText( hwnd, widget->text );
+	HWND hwnd = widget->native;
+	SetWindowText( hwnd, text );
 }
 
-char *cgraphics_textarea_get_text( widget_t *obj )
+char *cgraphics_textarea_get_text( widget_t *widget )
 {
-	return NULL;
+	int text_length = GetWindowTextLength( widget->native ) + 1;
+	LPTSTR str = g_new0( TCHAR, text_length );
+	GetWindowText( widget->native, str, text_length );
+	// FIXME: This is actually incorrect. If compiled with UNICODE, THIS WILL FAIL.
+	// TODO: convert string to utf8 when UNICODE is set
+	return str;
 }

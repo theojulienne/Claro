@@ -654,7 +654,7 @@ LRESULT CALLBACK cg_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 						else if ( object_is_of_class( OBJECT(w), "textarea_widget" ) )
 						{
 							textarea_widget_t *tbw = (textarea_widget_t *)w;
-							SendMessage( w->native, WM_GETTEXT, CLARO_TEXTAREA_MAXIMUM-1, (LPARAM)tbw->text );
+							//SendMessage( w->native, WM_GETTEXT, CLARO_TEXTAREA_MAXIMUM-1, (LPARAM)tbw->text );
 							event_send( OBJECT(w), "changed", "" );
 						}
 						break;
