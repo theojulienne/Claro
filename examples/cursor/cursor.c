@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 	
 	clog(CL_INFO, "%s running using Claro!", __FILE__);
 	
-	w = window_widget_create(0, new_bounds(100, 100, 230, 80), 0);
+	w = window_widget_create(0, new_bounds(100, 100, 230, 100), 0);
 	object_addhandler(w, "destroy", window_closed);
 	window_set_title(w, "Cursor Types");
 	

@@ -20,6 +20,7 @@
 
 HFONT nicerfont;
 int cg_isxplater = 0;
+static int cg_window_cursor = cCursorNormal;
 
 extern claro_list_t * tblist;
 extern claro_list_t * mblist;
@@ -119,6 +120,9 @@ LRESULT CALLBACK cg_intercept_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 				event_send( w, "hide", "" );
 			
 			break;
+		case WM_SETCURSOR:
+			widget_set_cursor( (object_t*)NULL, cg_window_cursor );
+			return 1;
 		case WM_VSCROLL:
 		case WM_HSCROLL:
 			if ( lParam != 0 )
@@ -500,9 +504,19 @@ void cgraphics_widget_screen_offset( widget_t *object, int *dx, int *dy )
 	*dy = cr.top;
 }
 
+LPCTSTR cgraphics_cursors[] = {
+	IDC_ARROW, //cCursorNormal=0,
+	IDC_IBEAM, //cCursorTextEdit,
+	IDC_WAIT, //cCursorWait,
+	IDC_HAND, //cCursorPoint,
+};
+
 void cgraphics_widget_set_cursor( widget_t *widget, int cursor )
 {
-
+	HCURSOR win_cursor;
+	win_cursor = LoadCursor( NULL, cgraphics_cursors[cursor] );
+	SetCursor(win_cursor);
+	cg_window_cursor = cursor;
 }
 
 
