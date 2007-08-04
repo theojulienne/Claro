@@ -19,10 +19,9 @@
 #include <claro/base.h>
 #include <claro/graphics.h>
 
-#define UTF8_TEXT   " 日本語: 猿も木から落ちる。\n\n 中文：\n 山中问答\n\n" \ 
-                    " 问余何意栖碧山\n 笑而不大心自闲\n" \
-                    " 桃花流水窅然去\n 别有天地在人间\n\n 李白\n\n" \
-                    " 
+#define UTF8_TEXT   " 日本語: 猿も木から落ちる。\n\n 中文：\n 山中问答\n\n"\ 
+                    " 问余何意栖碧山\n 笑而不大心自闲\n"\
+                    " 桃花流水窅然去\n 别有天地在人间\n\n 李白\n\n" 
 
 object_t *w, *t;
 
