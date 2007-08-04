@@ -24,7 +24,8 @@ contains
 	recurse workspace workspace
 	recurse customdraw customdraw
 	recurse atomic atomic
-	
+	recurse i18n i18n
+
 fail
 	recurse contextual contextual
 	

@@ -1,0 +1,9 @@
+info
+	name "claro i18n"
+	description "Claro Internationilzation test"
+	version "0.1"
+
+targets
+	application i18n
+		sources
+			i18n.c
