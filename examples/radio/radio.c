@@ -48,7 +48,7 @@ int main( int argc, char *argv[] )
 	/* create a frame */
 	b = lt_bounds(lt,"set1");
 	fr = frame_widget_create_with_label( w, b, 0, "Group 1" );
-	lt2 = layout_create( fr, "[r1][r2][r3]", *b, 20, 20 );
+	lt2 = layout_create( fr, "[r1][r2][r3][_]", *b, 20, 20 );
 	
 	rg = radiogroup_create( fr, 0 );
 	
@@ -59,7 +59,7 @@ int main( int argc, char *argv[] )
 	/* create a frame */
 	b = lt_bounds(lt,"set2");
 	fr = frame_widget_create_with_label( w, b, 0, "Group 2" );
-	lt3 = layout_create( fr, "[r1][r2][r3]", *b, 20, 20 );
+	lt3 = layout_create( fr, "[r1][r2][r3][_]", *b, 20, 20 );
 	
 	rg = radiogroup_create( fr, 0 );
 	
@@ -70,7 +70,7 @@ int main( int argc, char *argv[] )
 	/* create a frame */
 	b = lt_bounds(lt,"set3");
 	fr = frame_widget_create_with_label( w, b, 0, "Group 3" );
-	lt4 = layout_create( fr, "[r1][r2][r3]", *b, 20, 20 );
+	lt4 = layout_create( fr, "[r1][r2][r3][_]", *b, 20, 20 );
 	
 	btn = checkbox_widget_create_with_label( fr, lt_bounds(lt4,"r1"), 0, "Button 1" );
 	btn = checkbox_widget_create_with_label( fr, lt_bounds(lt4,"r2"), 0, "Button 2" );

@@ -60,7 +60,7 @@ int main( int argc, char *argv[] )
 	/* create a frame */
 	b = lt_bounds(lt,"frame");
 	fr = frame_widget_create_with_label( w, b, 0, "Combo example" );
-	lt2 = layout_create( fr, "[combo][{10}][text]", *b, 25, 25 );
+	lt2 = layout_create( fr, "[combo][{10}][text][_]", *b, 25, 25 );
 	
 	combo = combo_widget_create( fr, lt_bounds( lt2, "combo" ), 0 );
 	tbox  = textbox_widget_create( fr, lt_bounds( lt2, "text" ), 0 );
