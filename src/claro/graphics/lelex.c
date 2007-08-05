@@ -66,7 +66,7 @@ lelex_t *lelex_parse( const char *layout )
 	lelex_t *lel = NULL;
 	const char *ptr;
 	
-	lel = (lelex_t *)malloc( sizeof(lelex_t) );
+	lel = g_new0(lelex_t, 1);
 	
 	lel->numrows = 0;
 	lel->numcells = 0;
@@ -83,10 +83,8 @@ lelex_t *lelex_parse( const char *layout )
 	//printf( "%d rows, %d cells\n", lel->numrows, lel->numcells );
 	
 	// allocate all rows and all cells
-	lel->rows = (lelex_row_t *)malloc( sizeof(lelex_row_t) * lel->numrows );
-	lel->cells = (lelex_cell_t *)malloc( sizeof(lelex_cell_t) * lel->numcells );
-	
-	memset( lel->cells, 0, sizeof(lelex_cell_t) * lel->numcells );
+	lel->rows = g_new0( lelex_row_t, lel->numrows );
+	lel->cells = g_new0( lelex_cell_t, lel->numcells );
 	
 	// set row's cell pointers
 	lelex_cell_t *cell_ptr = lel->cells;
