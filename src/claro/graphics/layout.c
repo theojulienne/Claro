@@ -32,6 +32,11 @@ bounds_t *lt_bounds(layout_t *lt, const char *name)
 }
 
 
+void layout_reparse(layout_t *lt, bounds_t bounds, int min_w, int min_h)
+{
+	lelex_calculate( lt->lelex, bounds.w, bounds.h, min_w, min_h );
+}
+
 void layout_recalculate_event( object_t *obj, event_t *event )
 {
 	widget_t *parent;
@@ -39,7 +44,7 @@ void layout_recalculate_event( object_t *obj, event_t *event )
 	
 	parent = (widget_t *)obj->parent;
 	
-	lelex_calculate( lt->lelex, parent->size_ct.w, parent->size_ct.h, lt->min_w, lt->min_h );
+	layout_reparse( lt, parent->size_ct, lt->min_w, lt->min_h );
 }
 
 claro_define_type_partial( layout, object, NULL, NULL, NULL, NULL );
