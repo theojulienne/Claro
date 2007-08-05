@@ -23,6 +23,9 @@ void sizeinfo_set( sizeinfo_t *ptr, int size, int percentage )
 	ptr->size = size;
 	ptr->is_percentage = (uchar)percentage;
 	ptr->is_set = 1;
+	
+	if ( ptr->size == 0 )
+		ptr->is_set = 0;
 }
 
 void sizeinfo_set_from_string( sizeinfo_t *ptr, const char *str )
