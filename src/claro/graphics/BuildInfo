@@ -6,9 +6,8 @@ info
 targets
 	library claro-graphics
 		sources
-			layout/layout_parser.c
-			layout/layout.c
-			layout/layout_heap.c
+			lelex.c
+			layout.c
 			widget.c
 			graphics.c
 			image.c
@@ -179,9 +178,7 @@ targets
 			widgets/workspace.h
 			widgets/opengl.h
 			widgets/treeview.h
-			widgets/font_dialog.c
-			layout/layout_heap.h
-			layout/layout.h
+			widgets/font_dialog.h
 			platform posix
 				platform/gtk/notify.h
 				platform/gdkcairo.h

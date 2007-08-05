@@ -123,10 +123,10 @@ int main( int argc, char *argv[] )
         return error("Could not parse the interface", 0);
     }
 
-    argi = 2;
+    argi = 2;/*
     for(i = 0, cl = layout_in_order(lt, &size); i < size; i++) {
         if(strlen(cl[i]->name) > 0) {
-            /* this has contents, place widget that matches */
+            // this has contents, place widget that matches
             if(cl[i]->name[0] == 'T' && cl[i]->name[1] == '.') {
                 if(argc < argi) {
                     return error("Each text widget needs a string after the layout.", 0);
@@ -141,6 +141,6 @@ int main( int argc, char *argv[] )
             }
         }
     }
-
+*/
     return claro_application_run(window, lt);
 }

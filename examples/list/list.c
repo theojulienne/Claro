@@ -111,7 +111,13 @@ int main( int argc, char *argv[] )
 	object_addhandler( w, "destroy", window_closed );
 	window_set_title( w, "List test" );
 	
-	lt = layout_create( w, "[{10}][(10)|text|(10)|>add|(10)|>del|(10)|>up|(10)|>down|(10)][{10}][_(10)|list|(10)][{10}]", *b, 50, 30 );
+	lt = layout_create( w,
+		"[{10}]"
+		"[(10)|text|(10)|>add|(10)|>del|(10)|>up|(10)|>down|(10)]"
+		"[{10}]"
+		"[_(10)|list|(10)]"
+		"[{10}]",
+	*b, 50, 30 );
 	
 	t = listbox_widget_create( w, lt_bounds(lt,"list"), 0 );
 	object_addhandler( t, "selected", handle_selected );

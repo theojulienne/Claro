@@ -67,9 +67,9 @@ int main( int argc, char *argv[] )
         printf("- error parsing\n");
         return 1;
     }
-
+/*
     layout_dump(lt);
-        
+       
     for(i = 0, cl = layout_in_order(lt, &size); i < size; i++) {
         if(strlen(cl[i]->name) > 0) {
             if(cl[i]->name[0] == 't') {
@@ -80,7 +80,7 @@ int main( int argc, char *argv[] )
                 button_set_text(wgt, cl[i]->name);
             }
         }
-    }
+    }*/
     
     window_show( window );
     window_focus( window );

@@ -55,7 +55,7 @@ layout_t *make_layout(object_t *parent, bounds_t *b, const char *text)
 			statusbar_set_text(wgt, "Status Good");
 		}
 		
-		for(i = 0, cl = layout_in_order(lt, &size); i < size; i++) {
+		/*for(i = 0, cl = layout_in_order(lt, &size); i < size; i++) {
 			if(strlen(cl[i]->name) > 0) {
 				if(!strncmp(cl[i]->name, "BT.", 3)) {
 					// button
@@ -86,7 +86,7 @@ layout_t *make_layout(object_t *parent, bounds_t *b, const char *text)
 			}
 			
 			statusbar_set_text(status, "Layout parsed");
-		}
+		}*/
 	} else {
 		statusbar_set_text(status, "ERROR: Failed to parse your lelex");
 	}

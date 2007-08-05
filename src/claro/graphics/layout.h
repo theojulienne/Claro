@@ -73,30 +73,13 @@ struct LayoutHeap;
  */
 
 typedef struct layout_ {
-    object_t widget;
-
-    int curs;  // do not touch, needed by ragel
-
-    struct {
-        int total;
-        int flex_count;
-        int set_h;
-        int set_count;
-        int min;
-        int start;
-    } row;
-    
-    struct {
-        int fixed_w;
-        int fixed_count;
-        int min;
-    } col;
+    object_t object;
     
     bounds_t bounds;
     
-    const char *temp;
-    cell_t *cells;
-    struct LayoutHeap *heap;
+	lelex_t *lelex;
+	
+	int min_w, min_h;
 } layout_t;
 
 declare_class( layout );
@@ -144,27 +127,6 @@ CLFEXP void layout_destroy(layout_t *lt);
 CLFEXP void layout_reparse(layout_t *lt, bounds_t bounds, int min_w, int min_h);
 
 /**
- * A way for you to go through all the cells in a layout without knowing
- * their names.  It's typicaly use with an i indexer like this:
- *
- * size_t i, size = 0;
- * Cell **cl = NULL;
- * for(i = 0, cl = layout_in_order(lt, &size); i < size; i++) {
- *    // do stuff here like: cl[i]->name
- * }
- *
- * This is a little weird, but it makes sure that you know the whole
- * size and don't run over. It's also very fast since you are basically
- * directly accessing the internal cell list.
- *
- * Before you go nuts thinking you can tweak this type of traversal understand
- * that it was devised under lots of testing to be fast as hell.  Your compiler
- * is way smarter than you at figuring out what's going on so unless you find
- * _evidence_ that this is slow you should just trust it.
- */
-CLFEXP cell_t **layout_in_order(layout_t *lt, size_t *size);
-
-/**
  * A little different from the other functions since it's so commonly 
  * used.  It just returns the bounds_t with that name from the layout
  * so that you can configure a widget (or widgets if you're doing sublayouts).
@@ -181,18 +143,10 @@ CLFEXP bounds_t *lt_bounds(layout_t *lt, const char *name);
 /** Set the width of the given cell. Call layout_reparse afterwards to see it.  w must be >= 0.*/
 CLFEXP void layout_cell_set_w(layout_t *lt, const char *name, int w);
 
-/** Fix cell's width to the lt->col.min setting (min_w).  Call layout_reparse to see it. */
-CLFEXP void layout_cell_fix_w(layout_t *lt, const char *name);
-
 /** Flex the cell's width so that it fills it's portion of the available non-fixed space.
  * Call layout_reparse to see it.
  */
 CLFEXP void layout_cell_flex_w(layout_t *lt, const char *name); 
-
-/** Fix cell's heigh to the lt->row.min.  Call layout_reparse to see it. 
- * Currently can be done with any cell but only defined for row cells.
- */
-CLFEXP void layout_cell_fix_h(layout_t *lt, const char *name);
 
 /** Flex the cell's height so that it takes up it's portino of the available non-fixed height.
  * Call layout_reparse to see it.  Currently can be done with any cell but only defined
@@ -207,41 +161,6 @@ CLFEXP void layout_cell_flex_h(layout_t *lt, const char *name);
  */
 CLFEXP void layout_cell_set_h(layout_t *lt, const char *name, int w);
 
-
-/** Used more internally for getting a cell so you can mess with it.
- * Use at your own risk, but provided for the power users and tests.
- */
-CLFEXP cell_t *layout_cell_get(layout_t *lt, const char *name);
-
-
-/**
- * Useful debugging function that just dumps a bunch of layout information.
- * Using this you can figure out exactly why you stuff isn't looking right.
- */
-CLFEXP void layout_dump(layout_t *lt);
-
-/**
- * Dumps just one cell so you can debug it.
- */
-CLFEXP void cell_dump(cell_t *cell);
-
-
-/**
- * Takes the given layout and writes it into the buffer in a
- * format you can then save for later or present to the user.
- * It effectively gives you a way to build a layout dynamically
- * and then present it's textual version.
- *
- * The layout this produces is a "normalized" version that might
- * not represent the original.  It also has no spacing preserved or
- * generated, and only uses < for min width so it can place it at the
- * end of a cell.
- *
- * It returns the number of characters written to the buffer or -1
- * if there was a parsing error.  A typical error is that the buffer
- * is not the right size to hold the contents.
- */
-CLFEXP int layout_serialize(layout_t *lt, char *buffer, size_t len);
 
 #endif
 

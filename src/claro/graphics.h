@@ -40,7 +40,9 @@ extern "C" {
 #include "graphics/font.h"
 
 #include "graphics/widget.h"
-#include "graphics/layout/layout.h"
+
+#include "graphics/lelex.h"
+#include "graphics/layout.h"
 
 /* Basic image handling */
 #include "graphics/image.h"
