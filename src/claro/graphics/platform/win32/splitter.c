@@ -27,7 +27,7 @@ LRESULT CALLBACK cg_splitter_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 	native_splitter_widget_t *nw;
 	bounds_t b;
 	int mx, my;
-	cell_t *cl;
+	lelex_cell_t *cl;
 	int es;
 	POINT mouse;
 	POINT ptClientUL;
@@ -51,7 +51,7 @@ LRESULT CALLBACK cg_splitter_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			widget_set_size( w, LOWORD(lParam), HIWORD(lParam), 1 );
 			b = w->size;
 			b.x = b.y = 0;
-			layout_reparse( nw->lt, b, nw->lt->col.min, nw->lt->row.min );
+			layout_reparse( nw->lt, b, nw->lt->min_w, nw->lt->min_h );
 			break;
 		case WM_LBUTTONDOWN:
 			mx = LOWORD(lParam);
@@ -110,7 +110,7 @@ LRESULT CALLBACK cg_splitter_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				
 				if ( w->flags & cSplitterVertical )
 				{
-					cl = layout_cell_get( nw->lt, act );
+					cl = lelex_get_cell( nw->lt, act );
 					
 					es = cl->bounds.h + my;
 					
@@ -124,7 +124,7 @@ LRESULT CALLBACK cg_splitter_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				}
 				else
 				{
-					cl = layout_cell_get( nw->lt, act );
+					cl = lelex_get_cell( nw->lt, act );
 					
 					es = cl->bounds.w + mx;
 					
@@ -138,7 +138,7 @@ LRESULT CALLBACK cg_splitter_win32_proc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				}
 				
 				// reparse the layout
-				layout_reparse( nw->lt, b, nw->lt->col.min, nw->lt->row.min );
+				layout_reparse( nw->lt, b, nw->lt->min_w, nw->lt->min_h );
 				
 				// update all the children
 				widget_resized_handle( OBJECT(w), 0 );
@@ -226,7 +226,7 @@ event_handler( cgraphics_splitter_child_vis_updated_p )
 		}
 	}
 	
-	layout_reparse( nw->lt, *sw->widget.size_req, nw->lt->col.min, nw->lt->row.min );
+	layout_reparse( nw->lt, *sw->widget.size_req, nw->lt->min_w, nw->lt->min_h );
 	
 	// update all the children
 	widget_resized_handle( OBJECT(sw), 0 );

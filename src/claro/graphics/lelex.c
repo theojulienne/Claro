@@ -332,7 +332,7 @@ void lelex_calculate_cells( lelex_t *lel, lelex_row_t *row, int width, int heigh
 			}
 			
 			row->cells[cell].bounds.x = x_pos;
-			row->cells[cell].bounds.w = cell_width;
+			row->cells[cell].bounds.w = cell_width<=0?1:cell_width;
 			
 			//printf( " --> Cell %d (\"%s\") starts at %dpx and is %dpx wide.\n", cell, cellp->name, x_pos, cell_width );
 			
@@ -437,7 +437,7 @@ void lelex_calculate( lelex_t *lel, int width, int height, int min_cell_width, i
 			for ( cell = 0; cell < rowp->numcells; cell++ )
 			{
 				rowp->cells[cell].bounds.y = y_pos;
-				rowp->cells[cell].bounds.h = row_height;
+				rowp->cells[cell].bounds.h = row_height<=0?1:row_height;
 			}
 			
 			//printf( "Row %d starts at %dpx and is %dpx high.\n", row, y_pos, row_height );

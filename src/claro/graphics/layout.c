@@ -22,12 +22,13 @@ bounds_t *lt_bounds(layout_t *lt, const char *name)
 {
 	lelex_cell_t *cell = lelex_get_cell(lt->lelex, name);
 	
-	if ( cell )
+	if ( cell != NULL )
 	{
 		cell->bounds.owner = OBJECT(lt);
 		return &cell->bounds;
 	}
 	
+	cassert( cell != NULL, "Bounds requested for non-existant cell '%s'!", name );
 	return NULL;
 }
 

@@ -153,7 +153,7 @@ int main( int argc, char *argv[] )
         
     lt = layout_create(w, "[][_<a|clock|>a][{40}Red|Green|Blue]", *b, 10, 10 );
     assert(lt != NULL && "layout was failed to parse");
-        
+    
     c = canvas_widget_create( w, lt_bounds(lt, "clock"), 0 );
 	
     object_addhandler(OBJECT(c), "redraw", handle_redraw );
