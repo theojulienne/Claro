@@ -15,7 +15,7 @@
  * See the LICENSE file for more details.
  */
 
-
+#include <unistd.h>
 #include <claro/base.h>
 
 object_t *claro = NULL;
@@ -120,9 +120,13 @@ void claro_loop( )
 	while ( claro_in_loop )
 	{
 		claro_run( );
+
 #ifndef _NIX
-		mssleep( 1 );
+		mssleep(1);
+#else
+        usleep(1);
 #endif
+
 	}
 	
 	claro_destroy( );

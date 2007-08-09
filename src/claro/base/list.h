@@ -21,6 +21,8 @@
 
 typedef void claro_list_t;
 
+typedef int list_compare_func(const void * value1, const void * value2, void * user_arg);
+
 CLFEXP claro_list_t * claro_list_create();
 
 CLFEXP void claro_list_destroy(claro_list_t * list);
@@ -37,4 +39,12 @@ CLFEXP unsigned int claro_list_count(claro_list_t * list);
 
 #define LIST_LENGTH claro_list_count
 
+CLFEXP void claro_list_reverse(claro_list_t * list);
+
+CLFEXP void claro_list_sort(claro_list_t * list, 
+    list_compare_func * compare_func, void * user_arg);
+
+CLFEXP void claro_list_insert(claro_list_t * list, int index, void * data);
+
 #endif
+

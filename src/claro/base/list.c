@@ -63,4 +63,60 @@ CLFEXP unsigned int claro_list_count(claro_list_t * list)
     return array->len;
 }
 
+CLFEXP void claro_list_reverse(claro_list_t * list)
+{
+    GPtrArray * array = (GPtrArray *)list;
+    gpointer tmp;
+    int i, j;
 
+    g_return_if_fail(array != NULL);
+
+    j = array->len - 1;
+
+    for(i = 0; i < j; i++, j--)
+    {
+        tmp = array->pdata[i];
+        array->pdata[i] = array->pdata[j];
+        array->pdata[j] = tmp;
+    }    
+}
+
+CLFEXP void claro_list_sort(claro_list_t * list, 
+    list_compare_func * compare_func, void * user_arg)
+{
+    GPtrArray * array = (GPtrArray *)list;
+    g_ptr_array_sort_with_data(array, (GCompareDataFunc)compare_func, user_arg);
+}
+
+CLFEXP void claro_list_insert(claro_list_t * list, int index, void * data)
+{
+    GPtrArray *array = (GPtrArray *)list;
+    int i; 
+
+    g_return_if_fail(array != NULL); 
+          
+    if ((index + 1) == array->len) 
+    {
+        // add to the end of the array 
+        g_ptr_array_add (array, data);
+        return;
+    }
+        
+    if (index >= array->len)
+    {
+        // extend and add PAST the end of the array
+        g_ptr_array_set_size (array, index + 1);
+        array->pdata[index] = data;
+        return;
+    }
+       
+    // normal case - shift all elements starting at @index 1 position to the right 
+
+    g_ptr_array_set_size (array, array->len + 1);
+
+    for (i = array->len - 2; i >= index; i--)
+        array->pdata[i + 1] = array->pdata[i];
+
+    array->pdata[index] = data;
+}
+     
