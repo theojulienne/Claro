@@ -10,6 +10,7 @@ contains
 	recurse base src/claro/base
 	recurse graphics src/claro/graphics
 	recurse examples examples
+	recurse tests tests
 	
 skip
 	recurse net src/claro/net
