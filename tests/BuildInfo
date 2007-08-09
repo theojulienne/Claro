@@ -1,0 +1,36 @@
+info
+	name "claro tests"
+	description "Claro Tests"
+	version "0.1"
+
+targets
+	application button_test
+		sources
+			button_test.c
+	application checkbox_test
+		sources
+			checkbox_test.c
+	application label_test
+		sources
+			label_test.c
+	application test_claro_list
+		sources
+			test_claro_list.c
+			tests.c
+
+	application hash_test
+		sources
+			hash_test.c
+
+flags
+ 
+	pkg-config "gtk+-2.0 gdk-2.0"
+	(cairo) pkg-config "cairo"
+	library "claro-base"
+	library "claro-graphics"
+
+	libdir "^src"
+	libdir "^src/claro/base"
+	libdir "^src/claro/graphics"
+
+	define REAL_GLIB
