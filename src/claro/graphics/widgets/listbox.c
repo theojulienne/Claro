@@ -113,7 +113,7 @@ int listbox_get_rows( object_t *obj )
 {
 	list_widget_t *lw = (list_widget_t *)obj;
 	assert_valid_listbox_widget( obj, "obj" );
-	return LIST_LENGTH( &lw->items );
+	return LIST_LENGTH( lw->items );
 }
 
 void listbox_select_item( object_t *obj, list_item_t *item )
