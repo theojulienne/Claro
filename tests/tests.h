@@ -6,11 +6,11 @@
 #include <stdarg.h>
 #include <string.h> 
 
-#include <sys/stat.h>	 
-#include <fcntl.h>
-#include <unistd.h>
-#include <time.h>
-#include <glib.h> 
+//#include <sys/stat.h>	 
+//#include <fcntl.h>
+//#include <unistd.h>
+//#include <time.h>
+//#include <glib.h> 
  
 #include <claro/base.h>
 #include <claro/graphics.h>
