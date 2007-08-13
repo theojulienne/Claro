@@ -24,15 +24,15 @@ namespace Claro
 	public class Object: IWrapper
 	{	
 		IntPtr m_handle;
+
 		string m_type = null;
 		Object m_parent = null;
-
-		internal static readonly int Size = 68 + (IntPtr.Size * 2) + (List.Size * 2);
 
 		[DllImport(Global.ClaroGraphics)]
 		private static extern void object_addhandler( IntPtr obj, string evt, IntPtr func);
 	
 		private static readonly Dictionary<string,Type> claro_types = GetTypes();
+
 		private static Dictionary<string,Type> GetTypes()
 		{
 			Dictionary<string,Type> hash = new Dictionary<string,Type>();
@@ -70,8 +70,8 @@ namespace Claro
 			try
 			{
 				StringBuilder sb = new StringBuilder(64);
-				string typename = Marshal.PtrToStringAnsi(raw);
-				string[] split = typename.Split('_');
+				string typename = Marshal.PtrToStringAnsi(Marshal.ReadIntPtr(raw));
+                string[] split = typename.Split('_');
 				sb.Append(split[0]);			
 				sb[0] = Char.ToUpper(sb[0]);
 				sb.Insert(0,"Claro.");
@@ -97,11 +97,12 @@ namespace Claro
 		{
 			if(handle == IntPtr.Zero)
 				throw new ArgumentException("handle");
-			m_handle = handle;
+			
+            m_handle = handle;
 			AddHandlers();
 		}
 
-		public Object(IntPtr handle,Object parent): this(handle)
+		public Object(IntPtr handle, Object parent): this(handle)
 		{
 			m_parent = parent;
 		}
@@ -120,10 +121,11 @@ namespace Claro
 
 		internal void Connect(string evt,EventFunc func)
 		{
-			object_addhandler(m_handle,evt,Marshal.GetFunctionPointerForDelegate (func) );
+			object_addhandler(m_handle, evt, Marshal.GetFunctionPointerForDelegate (func) );
 		}
 
-		internal IntPtr make_offset(IntPtr base_ptr, int offset)
+	/*	
+        internal IntPtr make_offset(IntPtr base_ptr, int offset)
 		{
 			if(IntPtr.Size == 8)
 				return new IntPtr( (long)offset + base_ptr.ToInt64() );
@@ -144,7 +146,7 @@ namespace Claro
 				return children;
 			}
 		} 
-	
+	*/
 		public string TypeName
 		{
 			get 

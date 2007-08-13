@@ -22,6 +22,9 @@ namespace Claro
 		[DllImport(Global.ClaroGraphics)]
 		private static extern void widget_focus(IntPtr widget);
 
+        [DllImport(Global.ClaroGraphics)]
+		private static extern IntPtr get_req_bounds(IntPtr widget);
+
 		internal Widget(IntPtr handle): base(handle)
 		{
 		}
@@ -73,7 +76,8 @@ namespace Claro
 		{
 			get
 			{
-				return new Bounds(Marshal.ReadIntPtr(Handle,Claro.Object.Size));
+				return new Bounds(get_req_bounds(Handle));
+                //Marshal.ReadIntPtr(Handle,Claro.Object.Size));
 			}
 		}
 	}

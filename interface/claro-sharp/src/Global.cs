@@ -31,12 +31,14 @@ namespace Claro
                 throw new ArgumentException("s");           
             
             int len = s.Length;
-            IntPtr raw = smalloc(len);
             int utf8_len = Encoding.UTF8.GetByteCount(s);
+            IntPtr raw = smalloc(utf8_len);
+            
             fixed(char * cptr = s)
             {
                 Encoding.UTF8.GetBytes(cptr, len, (byte*)raw.ToPointer(), utf8_len);
             }            
+
             return raw;
         }
 
@@ -44,11 +46,21 @@ namespace Claro
         {
             if(p == IntPtr.Zero)
                 throw new ArgumentException("p");
-            //byte * bptr = (byte*)p.ToPointer();
-            int utf8_len = strlen(p);
-                        
+            
+            string s = null;
+            byte * bptr = (byte*)p.ToPointer();
+            int utf8_len = strlen(p);            
+            int utf16_len = Encoding.UTF8.GetCharCount(bptr, utf8_len);
+            char * chars = (char *)smalloc(utf16_len).ToPointer();            
+
+            Encoding.UTF8.GetChars (bptr, utf8_len, chars, utf16_len);
+    
             if(needs_free)
                 sfree(p);
+
+            sfree(new IntPtr((void *)chars));
+
+            return s;
         }	
     }
 }
