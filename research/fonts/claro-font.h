@@ -26,7 +26,14 @@
 // This header file is really a mess and will be rewritten with the new object system.
 // And the internal crap will be pulled out of course.
 
-#define claro_type_HEAD 
+#define CLARO_FLOATING 0x80000000
+#define claro_type_HEAD  volatile unsigned int _ref_count, void (* _destroy_func) (void *), 
+
+#define claro_type_init(obj, destroy_func) do { 	obj->_ref_count = CLARO_FLOATING; obj->_destroy_func = destroy_func; } while(0)
+
+#define claro_type_ref(obj) do { if(obj->_ref_count & CLARO_FLOATING) { obj->_ref_count = 1; } else { object->_ref_count++; } } while(0)
+
+#define claro_type_unref(obj) do { if(obj->_ref_count == CLARO_FLOATING || obj->_ref_count == 1) { if(obj->_destroy_func) { obj->_destroy_func(obj); } sfree(obj); } else { object->_ref_count--; } } while(0)
 
 #define cFontSlantNormal 0
 #define cFontSlantItalic 1
@@ -109,9 +116,9 @@ typedef struct
     //fontset functions
 
     // references
-    claro_fontset_t * (* ref_fontset) (claro_fontset_t * pattern);
+    claro_fontset_t * (* ref_fontset) (claro_fontset_t * fontset);
 
-    void (* unref_fontset) (claro_fontset_t * pattern);
+    void (* unref_fontset) (claro_fontset_t * fontset);
 
     // enumeration
     int (* claro_fontset_count) (claro_fontset_t * fontset);
