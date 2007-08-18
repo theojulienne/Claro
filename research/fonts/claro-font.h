@@ -86,6 +86,7 @@ typedef struct
     void (* cleanup) (claro_font_backend_t * backend);
 
     // Returns a global list of family names in UTF-8. DO NOT MODIFY.
+    // They MUST be sorted case-insenstive alphabetically. 
     claro_list_t * (* get_font_families) (claro_font_backend_t * backend);
 
     // Attempts to load the font described by the arguments given. Possibly returning a similar font, or NULL. All can be missing except for family. It will also take the language into account.
@@ -98,6 +99,12 @@ typedef struct
    
     // Sets the widget's font.
     bool_t (* set_widget_font) (claro_font_backend_t * backend, widget_t * widget, claro_font_t * font);
+
+    //font functions
+    claro_font_t * (* ref_font) (claro_font * font);
+    
+    void (* unref_font) (claro_font * font);
+    
 
     //fontset functions
 
