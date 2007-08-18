@@ -29,11 +29,11 @@
 #define CLARO_FLOATING 0x80000000
 #define claro_type_HEAD  volatile unsigned int _ref_count; void (* _destroy_func) (void *);
 
-#define claro_type_init(obj, destroy_func) do { 	obj->_ref_count = CLARO_FLOATING; obj->_destroy_func = destroy_func; } while(0)
+#define claro_type_init(obj, destroy_func) do { (obj)->_ref_count = CLARO_FLOATING; (obj)->_destroy_func = destroy_func; } while(0)
 
-#define claro_type_ref(obj) do { if(obj->_ref_count & CLARO_FLOATING) { obj->_ref_count = 1; } else { object->_ref_count++; } } while(0)
+#define claro_type_ref(obj) do { if((obj)->_ref_count & CLARO_FLOATING) { (obj)->_ref_count = 1; } else { (obj)->_ref_count++; } } while(0)
 
-#define claro_type_unref(obj) do { if(obj->_ref_count == CLARO_FLOATING || obj->_ref_count == 1) { if(obj->_destroy_func) { obj->_destroy_func(obj); } sfree(obj); } else { object->_ref_count--; } } while(0)
+#define claro_type_unref(obj) do { if((obj)->_ref_count == CLARO_FLOATING || (obj)->_ref_count == 1) { if((obj)->_destroy_func) { (obj)->_destroy_func((obj)); } sfree((obj)); } else { (obj)->_ref_count--; } } while(0)
 
 #define cFontSlantNormal 0
 #define cFontSlantItalic 1
@@ -77,91 +77,70 @@ typedef struct
 
 typedef void claro_fontset_foreach_func(claro_font_t * font, void * arg);
 
-// not an object - just a structure for your crud..
-typedef void claro_font_backend_t;
+CLFEXP void claro_fonts_init();
+CLFEXP void claro_fonts_cleanup();
 
-
-typedef struct
-{
-    //main functions
-
-    // Initializes the font system and retrieves the list of available font families.
-    // A font mapping cache should be created and stored in the backend object.
-    // should g_assert on failure. (FUBAR)
-    claro_font_backend_t * (* init) ();
-
-    // Cleans up all allocated memory by the font system and unrefs any fonts in the font cache. 
-    void (* cleanup) (claro_font_backend_t * backend);
-
-    // Returns a global list of family names in UTF-8. DO NOT MODIFY.
-    // They MUST be sorted case-insenstive alphabetically. 
-    claro_list_t * (* get_font_families) (claro_font_backend_t * backend);
+CLFEXP claro_list_t * claro_get_font_families();
 
     // Attempts to load the font described by the arguments given. Possibly returning a similar font, or NULL. All can be missing except for family. It will also take the language into account.
-    claro_font_t * (* load_font) (claro_font_backend_t * backend, claro_font_pattern_t * pattern, const char * lang_id);
+CLFEXP claro_font_t * claro_load_font(claro_font_pattern_t * pattern, const char * lang_id);
 
-    claro_fontset_t * (* load_fontset) (claro_font_backend_t * backend, claro_font_pattern_t * pattern, const char * lang_id);
+CLFEXP claro_fontset_t * claro_load_fontset(claro_font_pattern_t * pattern, const char * lang_id);
 
-     // Takes a Claro font and creates a Cairo font object for use with a Cairo context.
-    cairo_font_face_t * (* create_cairo_font) (claro_font_backend_t * backend, claro_font_t * font);
+// Takes a Claro font and creates a Cairo font object for use with a Cairo context.
+CLFEXP cairo_font_face_t * claro_cairo_font_create(claro_font_t * font);
    
-    // Sets the widget's font.
-    bool_t (* set_widget_font) (claro_font_backend_t * backend, widget_t * widget, claro_font_t * font);
+// Sets the widget's font.
+CLFEXP bool_t claro_widget_set_font(widget_t * widget, claro_font_t * font);
 
-    //font functions
-    claro_font_t * (* ref_font) (claro_font * font);
+//font functions
+CLFEXP claro_font_t * claro_font_ref(claro_font_t * font);
     
-    void (* unref_font) (claro_font * font);
+CLFEXP void claro_font_unref(claro_font_t * font);
     
+CLFEXP claro_fontset_t * claro_fontset_ref(claro_fontset_t * fontset);
 
-    //fontset functions
+CLFEXP void claro_fontset_unref(claro_fontset_t * fontset);
 
-    // references
-    claro_fontset_t * (* ref_fontset) (claro_fontset_t * fontset);
+//enumeration
+CLFEXP int claro_fontset_count(claro_fontset_t * fontset);
 
-    void (* unref_fontset) (claro_fontset_t * fontset);
+CLFEXP claro_font_t * claro_fontset_get_item(claro_fontset_t * fontset, int i);
 
-    // enumeration
-    int (* claro_fontset_count) (claro_fontset_t * fontset);
-
-    claro_font_t * (* claro_fontset_get_item) (claro_fontset_t * fontset, int i);
-
-    void (* claro_fontset_foreach) (claro_fontset_t * fontset, claro_fontset_foreach_func * func,
+CLFEXP void claro_fontset_foreach(claro_fontset_t * fontset, claro_fontset_foreach_func * func,
 void * arg);
 
-    //pattern functions
+//pattern functions
 
-    // allocation
-    claro_font_pattern_t * (* create_pattern) ();
+// allocation
+CLFEXP claro_font_pattern_t * claro_font_pattern_create();
 
-    // references
-    claro_font_pattern_t * (* ref_pattern) (claro_font_pattern_t * pattern);
+// references
+CLFEXP claro_font_pattern_t * claro_font_pattern_ref(claro_font_pattern_t * pattern);
 
-    void (* unref_pattern) (claro_font_pattern_t * pattern);
+CLFEXP void claro_pattern_unref(claro_font_pattern_t * pattern);
 
-    // gets - NULL or -1 means missing
-    const char * (* get_family) (claro_font_pattern_t * pattern);
+// gets - NULL or -1 means missing
+CLFEXP const char * claro_font_pattern_get_family(claro_font_pattern_t * pattern);
 
-    int (* get_size) (claro_font_pattern_t * pattern);
+CLFEXP int claro_font_pattern_get_size(claro_font_pattern_t * pattern);
     
-    int (* get_weight) (claro_font_pattern_t * pattern);
+CLFEXP int claro_font_pattern_get_weight(claro_font_pattern_t * pattern);
 
-    int (* get_slant) (claro_font_pattern_t * pattern);
+CLFEXP int claro_font_pattern_get_slant(claro_font_pattern_t * pattern);
 
-    int (* get_decoration) (claro_font_pattern_t * pattern);
+CLFEXP int claro_font_pattern_get_decoration(claro_font_pattern_t * pattern);
 
-    //sets - set NULL or -1 to remove
-    void (* set_family) (claro_font_pattern_t * pattern, const char * family);
+//sets - set NULL or -1 to remove
+CLFEXP void claro_font_pattern_set_family(claro_font_pattern_t * pattern, const char * family);
 
-    void (* set_size) (claro_font_pattern_t * pattern, int size);
+CLFEXP void claro_font_pattern_set_size(claro_font_pattern_t * pattern, int size);
     
-    void (* set_weight) (claro_font_pattern_t * pattern, int weight);
+CLFEXP void claro_font_pattern_set_weight(claro_font_pattern_t * pattern, int weight);
 
-    void (* set_slant) (claro_font_pattern_t * pattern, int slant);
+CLFEXP void claro_font_pattern_set_slant(claro_font_pattern_t * pattern, int slant);
 
-    void (* set_decoration) (claro_font_pattern_t * pattern, int decoration);
-    
-} cgraphics_font_vtable;
+CLFEXP void claro_font_pattern_set_decoration(claro_font_pattern_t * pattern, int decoration);
 
 #endif
 

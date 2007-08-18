@@ -15,13 +15,15 @@
  * See the LICENSE file for more details.
  */
 
-#include <claro/base.h>
-#include <claro/graphics.h>
-
 #include <glib.h>
 
 #include <cairo/cairo.h>
 #include <cairo/cairo-ft.h>
+
+#include <claro/base.h>
+#include <claro/graphics.h>
+
+#include "claro-font-vtable.h"
 
 // I know my ADD error checking here might seem a bit excessive..but ghost bugs waste man hours.
 
@@ -66,7 +68,7 @@ static int _cmp_font_family(const void * a, const void * b)
     return g_strcasecmp(family_a, family_b);
 }
 
-static FcBool _claro_ft2_list_families(claro_ft2_backend_t * backend)
+static FcBool _claro_ft2_list_families(claro_ft2_backend * backend)
 {
     FcPattern * pattern;
     FcFontSet * set;
@@ -97,7 +99,7 @@ static FcBool _claro_ft2_list_families(claro_ft2_backend_t * backend)
     FcObjectSetDestroy(os);
     FcPatternDestroy(pattern);
 
-    return FALSE;
+    return TRUE;
 }
 
 static claro_font_pattern_t * _claro_ft2_make_pattern(FcPattern * fc_pattern)
@@ -131,7 +133,7 @@ static claro_font_t * _claro_ft2_make_font(FcPattern * fc_pattern)
     font = (claro_font_t *)smalloc(sizeof(claro_font_t));
     claro_type_init(font, _claro_ft2_font_destroy);
 
-    font->pattern = _claro_ft2_make_pattern(real_pattern);
+    font->pattern = _claro_ft2_make_pattern(fc_pattern);
 
     // This is a bit goofy..because we don't need to deal with FreeType directly.
     font->native = NULL;
@@ -146,15 +148,14 @@ static claro_font_t * _claro_ft2_make_font(FcPattern * fc_pattern)
 static claro_font_backend_t * claro_ft2_init()
 {
     claro_ft2_backend * ft2_backend;
-    FcBool res;
+    gboolean res;
 
     ft2_backend = (claro_ft2_backend *)smalloc(sizeof(claro_ft2_backend));
 
-    res = FcInit();
-    g_assert(res == TRUE);
+    //g_assert(FcInit());
 
     ft2_backend->config = FcConfigGetCurrent();
-    g_assert(backend->config != NULL);
+    g_assert(ft2_backend->config != NULL);
     
     ft2_backend->font_families = claro_list_create();
     res = _claro_ft2_list_families(ft2_backend);
@@ -168,7 +169,7 @@ static void claro_ft2_cleanup(claro_font_backend_t * backend)
     int i, len;
     claro_ft2_backend * ft2_backend = (claro_ft2_backend *)backend;
     
-    g_return_val_if_fail(ft2_backend != NULL, NULL);
+    g_return_if_fail(ft2_backend != NULL);
 
     len = claro_list_count(ft2_backend->font_families);
 
@@ -177,7 +178,9 @@ static void claro_ft2_cleanup(claro_font_backend_t * backend)
 
     claro_list_destroy(ft2_backend->font_families);
 
-    sfree(ft2_backend);   
+    sfree(ft2_backend);  
+
+    //FcFini(); 
 }
 
 static claro_list_t * claro_ft2_get_font_families(claro_font_backend_t * backend)
@@ -206,10 +209,10 @@ claro_font_t * claro_ft2_load_font(claro_font_backend_t * backend, claro_font_pa
     if(lang_id)
         FcPatternAddString (test_pattern, FC_LANG, lang_id);
 
-    g_return_val_if_fail(FcConfigSubstitute(config, test_pattern, FcMatchPattern), NULL);
+    g_return_val_if_fail(FcConfigSubstitute(ft2_backend->config, test_pattern, FcMatchPattern), NULL);
     FcDefaultSubstitute(test_pattern);
 
-    real_pattern = FcFontMatch(config, test_pattern, &res);                
+    real_pattern = FcFontMatch(ft2_backend->config, test_pattern, &res);                
     if(res != FcResultMatch)
     {
         FcPatternDestroy(real_pattern);     
@@ -236,21 +239,36 @@ static cairo_font_face_t * claro_ft2_create_cairo_font(claro_font_backend_t * ba
 }
    
 // Sets the widget's font.
-static bool_t set_widget_font(claro_font_backend_t * backend, widget_t * widget, claro_font_t * font)
+static bool_t claro_ft2_set_widget_font(claro_font_backend_t * backend, widget_t * widget, claro_font_t * font)
 {
     return TRUE;
     // Not dependent on fontconfig..deal with later.
 }
 
-static claro_fontset_t * claro_ft2_ref_fontset(claro_fontset_t * fontset)
+static claro_font_t * claro_ft2_font_ref(claro_font_t * font)
+{
+    g_return_val_if_fail(font != NULL, NULL);
+
+    claro_type_ref(font);
+    return font;
+}
+
+static void claro_ft2_font_unref(claro_font_t * font)
+{
+    g_return_if_fail(font != NULL);
+
+    claro_type_unref(font);
+}
+
+static claro_fontset_t * claro_ft2_fontset_ref(claro_fontset_t * fontset)
 {
     g_return_val_if_fail(fontset != NULL, NULL);
 
-    claro_type_ref(fonset);
-    return fonset;
+    claro_type_ref(fontset);
+    return fontset;
 }
 
-static void unref_fontset(claro_fontset_t * pattern)
+static void claro_ft2_fontset_unref(claro_fontset_t * fontset)
 {
     g_return_if_fail(fontset != NULL);
 
@@ -275,40 +293,40 @@ static claro_font_t * claro_ft2_fontset_get_item(claro_fontset_t * fontset, int 
 
     g_return_val_if_fail(fontset != NULL, NULL);
 
-    fc_fontset = FcFontSet *)fontset->native;
+    fc_fontset = (FcFontSet *)fontset->native;
 
     g_return_val_if_fail(i < 0 || i > fc_fontset->nfont, NULL);
 
-    fc_pattern = fc_fontset->font[i];  
+    fc_pattern = fc_fontset->fonts[i];  
     
     g_return_val_if_fail(fc_pattern != NULL, NULL);
 
     return _claro_ft2_make_font(fc_pattern);
 }
 
-static void claro_fontset_foreach(claro_fontset_t * fontset, claro_fontset_foreach_func * foreach_func, void * arg)
+static void claro_ft2_fontset_foreach(claro_fontset_t * fontset, claro_fontset_foreach_func * foreach_func, void * arg)
 {
     FcFontSet * fc_fontset;
     int i;
 
-    g_return_val_if_fail(fontset != NULL, NULL);
-    g_return_val_if_fail(func != NULL, NULL);
+    g_return_if_fail(fontset != NULL);
+    g_return_if_fail(foreach_func != NULL);
     
-    fc_fontset = FcFontSet *)fontset->native;
+    fc_fontset = (FcFontSet *)fontset->native;
 
     for(i = 0; i < fc_fontset->nfont; i++)
     {
-        FcPattern * fc_pattern = fc_fontset->font[i]; 
+        FcPattern * fc_pattern = fc_fontset->fonts[i]; 
         foreach_func(_claro_ft2_make_font(fc_pattern), arg);
     }
 }
 
-static claro_font_pattern_t * claro_ft2_create_pattern()
+static claro_font_pattern_t * claro_ft2_pattern_create()
 {
     return _claro_ft2_make_pattern(NULL);
 }
 
-static claro_font_pattern_t * claro_ft2_ref_pattern(claro_font_pattern_t * pattern)
+static claro_font_pattern_t * claro_ft2_pattern_ref(claro_font_pattern_t * pattern)
 {
     g_return_val_if_fail(pattern != NULL, NULL);
 
@@ -316,9 +334,9 @@ static claro_font_pattern_t * claro_ft2_ref_pattern(claro_font_pattern_t * patte
     FcPatternReference((FcPattern *)pattern->native);    
 }
 
-static void claro_ft2_unref_pattern(claro_font_pattern_t * pattern)
+static void claro_ft2_pattern_unref(claro_font_pattern_t * pattern)
 {
-    g_return_val_if_fail(pattern != NULL, NULL);
+    g_return_if_fail(pattern != NULL);
 
     claro_type_unref(pattern);
 }
@@ -347,7 +365,7 @@ static int claro_ft2_get_size(claro_font_pattern_t * pattern)
     FcResult res;
     double size;
 
-    g_return_val_if_fail(pattern != NULL, NULL);
+    g_return_val_if_fail(pattern != NULL, -1);
 
     fc_pattern = (FcPattern *)pattern->native;
 
@@ -365,7 +383,7 @@ static int claro_ft2_get_weight(claro_font_pattern_t * pattern)
     FcResult res;
     int weight;
 
-    g_return_val_if_fail(pattern != NULL, NULL);
+    g_return_val_if_fail(pattern != NULL, -1);
 
     fc_pattern = (FcPattern *)pattern->native;
 
@@ -390,7 +408,7 @@ static int claro_ft2_get_slant(claro_font_pattern_t * pattern)
     FcResult res;
     int slant;
 
-    g_return_val_if_fail(pattern != NULL, NULL);
+    g_return_val_if_fail(pattern != NULL, -1);
 
     fc_pattern = (FcPattern *)pattern->native;
 
@@ -405,7 +423,7 @@ static int claro_ft2_get_slant(claro_font_pattern_t * pattern)
         else if(slant == FC_SLANT_ITALIC)
             return cFontSlantItalic;
         else if(slant == FC_SLANT_OBLIQUE)
-            return cContSlantOblique;
+            return cFontSlantOblique;
         else
             return -1;
     }   
@@ -413,18 +431,62 @@ static int claro_ft2_get_slant(claro_font_pattern_t * pattern)
 
 static int claro_ft2_get_decoration(claro_font_pattern_t * pattern)
 {
-    
+    g_return_val_if_fail(pattern != NULL, -1);
+
+    return -1;
 }
 
-    //sets - set NULL or -1 to remove
-    void (* set_family) (claro_font_pattern_t * pattern, const char * family);
+static void claro_ft2_set_family(claro_font_pattern_t * pattern, const char * family)
+{
+}
 
-    void (* set_size) (claro_font_pattern_t * pattern, int size);
+static void claro_ft2_set_size(claro_font_pattern_t * pattern, int size)
+{
+}
     
-    void (* set_weight) (claro_font_pattern_t * pattern, int weight);
+static void claro_ft2_set_weight(claro_font_pattern_t * pattern, int weight)
+{
+}
 
-    void (* set_slant) (claro_font_pattern_t * pattern, int slant);
+static void claro_ft2_set_slant(claro_font_pattern_t * pattern, int slant)
+{
+}
 
-    void (* set_decoration) (claro_font_pattern_t * pattern, int decoration);
+static void claro_ft2_set_decoration(claro_font_pattern_t * pattern, int decoration)
+{
+}
+
+
+cgraphics_font_vtable _cgraphics_font_vtable =
+{
+    claro_ft2_init,
+    claro_ft2_cleanup,
+    claro_ft2_get_font_families,
+    claro_ft2_load_font,
+    claro_ft2_load_fontset,
+    claro_ft2_create_cairo_font,
+    claro_ft2_set_widget_font,
+    claro_ft2_font_ref,
+    claro_ft2_font_unref,
+    claro_ft2_fontset_ref,
+    claro_ft2_fontset_unref,
+    claro_ft2_fontset_count,
+    claro_ft2_fontset_get_item,
+    claro_ft2_fontset_foreach,
+    claro_ft2_pattern_create,
+    claro_ft2_pattern_ref,
+    claro_ft2_pattern_unref,    
+    claro_ft2_get_family,
+    claro_ft2_get_size,
+    claro_ft2_get_weight,
+    claro_ft2_get_slant,
+    claro_ft2_get_decoration,
+    claro_ft2_set_family,
+    claro_ft2_set_size,
+    claro_ft2_set_weight,
+    claro_ft2_set_slant,
+    claro_ft2_set_decoration
+};
+
 
 
