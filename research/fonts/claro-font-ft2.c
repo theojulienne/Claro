@@ -106,8 +106,6 @@ static claro_font_pattern_t * _claro_ft2_make_pattern(FcPattern * fc_pattern)
 {
     claro_font_pattern_t * pattern;
 
-    g_assert(fc_pattern != NULL);
-
     pattern = (claro_font_pattern_t *)smalloc(sizeof(claro_font_pattern_t));
 
     claro_type_init(pattern, _claro_ft2_font_pattern_destroy);
@@ -196,7 +194,7 @@ claro_font_t * claro_ft2_load_font(claro_font_backend_t * backend, claro_font_pa
 {
     claro_ft2_backend * ft2_backend = (claro_ft2_backend *)backend;
     FcPattern * real_pattern = NULL, * test_pattern;
-    FcResult res;
+    int res;
     
     claro_font_t * font;    
     
@@ -212,9 +210,12 @@ claro_font_t * claro_ft2_load_font(claro_font_backend_t * backend, claro_font_pa
     g_return_val_if_fail(FcConfigSubstitute(ft2_backend->config, test_pattern, FcMatchPattern), NULL);
     FcDefaultSubstitute(test_pattern);
 
-    real_pattern = FcFontMatch(ft2_backend->config, test_pattern, &res);                
+    //TODO this sets res to "134524017" wtf?
+    real_pattern = FcFontMatch(ft2_backend->config, test_pattern, NULL);                
+
     if(res != FcResultMatch)
     {
+        printf("%s: res = %d\n", __FUNCTION__, res);
         FcPatternDestroy(real_pattern);     
         return NULL; 
     }
@@ -233,9 +234,14 @@ static claro_fontset_t * claro_ft2_load_fontset(claro_font_backend_t * backend, 
 // Takes a Claro font and creates a Cairo font object for use with a Cairo context.
 static cairo_font_face_t * claro_ft2_create_cairo_font(claro_font_backend_t * backend, claro_font_t * font)
 {
+    cairo_font_face_t * font_face;
+
     g_return_val_if_fail(backend != NULL, NULL);
     g_return_val_if_fail(font != NULL, NULL);
-    return cairo_ft_font_face_create_for_pattern((FcPattern *)font->pattern);   
+    
+    font_face = cairo_ft_font_face_create_for_pattern((FcPattern *)font->pattern->native);   
+
+    return font_face;
 }
    
 // Sets the widget's font.
@@ -438,6 +444,17 @@ static int claro_ft2_get_decoration(claro_font_pattern_t * pattern)
 
 static void claro_ft2_set_family(claro_font_pattern_t * pattern, const char * family)
 {
+    FcPattern * fc_pattern;
+    FcValue val;
+    
+    val.u.s = family;
+    val.type = FcTypeString;
+
+    g_return_if_fail(pattern != NULL);
+
+    fc_pattern = (FcPattern *)pattern->native;
+
+    g_assert(FcPatternAddWeak(fc_pattern, FC_FAMILY, val, TRUE));     
 }
 
 static void claro_ft2_set_size(claro_font_pattern_t * pattern, int size)

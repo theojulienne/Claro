@@ -1,0 +1,33 @@
+info
+	name "font research"
+	description "Claro Fonts Research"
+	version "0.1"
+
+targets
+	application test
+		sources
+            test.c  
+            claro-font.c
+            claro-font-ft2.c
+
+flags
+	platform win32
+		(cairo) cflags "-I/MinGW/include/cairo"
+		(cairo) ldflags "-L/MinGW/lib -lcairo"
+		(opengl) ldflags "-lopengl32 -lglu32"
+		ldflags "-lgdi32 -lole32  -lcomctl32 -lmsvcp60"
+	library "claro-base"
+	library "claro-graphics"
+	libdir "^src"
+	libdir "^src/claro/base"
+	libdir "^src/claro/graphics"
+	platform darwin
+		(cairo) cflags "-I/usr/local/include/cairo -I/usr/include/cairo"
+		(cairo) ldflags "-L/usr/local/lib -lcairo"
+	platform posix
+		pkg-config "gtk+-2.0 gdk-2.0"
+		(cairo) pkg-config "cairo"
+	platform all
+		(!cairo) define NO_CAIRO
+        cflags "-Wall -g"
+
