@@ -27,7 +27,7 @@
 // And the internal crap will be pulled out of course.
 
 #define CLARO_FLOATING 0x80000000
-#define claro_type_HEAD  volatile unsigned int _ref_count, void (* _destroy_func) (void *), 
+#define claro_type_HEAD  volatile unsigned int _ref_count; void (* _destroy_func) (void *);
 
 #define claro_type_init(obj, destroy_func) do { 	obj->_ref_count = CLARO_FLOATING; obj->_destroy_func = destroy_func; } while(0)
 
@@ -37,6 +37,7 @@
 
 #define cFontSlantNormal 0
 #define cFontSlantItalic 1
+#define cFontSlantOblique 1
 
 #define cFontWeightNormal 0
 #define cFontWeightBold 1

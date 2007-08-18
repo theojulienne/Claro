@@ -308,20 +308,113 @@ static claro_font_pattern_t * claro_ft2_create_pattern()
     return _claro_ft2_make_pattern(NULL);
 }
 
-static claro_font_pattern_t * (* ref_pattern) (claro_font_pattern_t * pattern);
+static claro_font_pattern_t * claro_ft2_ref_pattern(claro_font_pattern_t * pattern)
+{
+    g_return_val_if_fail(pattern != NULL, NULL);
 
-    void (* unref_pattern) (claro_font_pattern_t * pattern);
+    claro_type_ref(pattern);
+    FcPatternReference((FcPattern *)pattern->native);    
+}
 
-    // gets - NULL or -1 means missing
-    const char * (* get_family) (claro_font_pattern_t * pattern);
+static void claro_ft2_unref_pattern(claro_font_pattern_t * pattern)
+{
+    g_return_val_if_fail(pattern != NULL, NULL);
 
-    int (* get_size) (claro_font_pattern_t * pattern);
+    claro_type_unref(pattern);
+}
+
+static const char * claro_ft2_get_family(claro_font_pattern_t * pattern)
+{
+    FcPattern * fc_pattern;
+    FcResult res;
+    FcChar8 * family;
+
+    g_return_val_if_fail(pattern != NULL, NULL);
+
+    fc_pattern = (FcPattern *)pattern->native;
+
+    res = FcPatternGetString (fc_pattern, FC_FAMILY, 0, &family);
+
+    if(res != FcResultMatch)
+        return NULL;
+    else
+        return (const char *)family;
+}
+
+static int claro_ft2_get_size(claro_font_pattern_t * pattern)
+{
+    FcPattern * fc_pattern;
+    FcResult res;
+    double size;
+
+    g_return_val_if_fail(pattern != NULL, NULL);
+
+    fc_pattern = (FcPattern *)pattern->native;
+
+    res = FcPatternGetDouble (fc_pattern, FC_SIZE, 0, &size);
+
+    if(res != FcResultMatch)
+        return -1;
+    else
+        return (int)1024 * size;
+}
     
-    int (* get_weight) (claro_font_pattern_t * pattern);
+static int claro_ft2_get_weight(claro_font_pattern_t * pattern)
+{
+    FcPattern * fc_pattern;
+    FcResult res;
+    int weight;
 
-    int (* get_slant) (claro_font_pattern_t * pattern);
+    g_return_val_if_fail(pattern != NULL, NULL);
 
-    int (* get_decoration) (claro_font_pattern_t * pattern);
+    fc_pattern = (FcPattern *)pattern->native;
+
+    res = FcPatternGetInteger(fc_pattern, FC_WEIGHT, 0, &weight);
+
+    if(res != FcResultMatch)
+        return -1;
+    else
+    {
+        if(weight == FC_WEIGHT_NORMAL)
+            return cFontWeightNormal;
+        else if(weight == FC_WEIGHT_BOLD)
+            return cFontWeightBold;
+        else
+            return -1;
+    }
+}
+
+static int claro_ft2_get_slant(claro_font_pattern_t * pattern)
+{
+    FcPattern * fc_pattern;
+    FcResult res;
+    int slant;
+
+    g_return_val_if_fail(pattern != NULL, NULL);
+
+    fc_pattern = (FcPattern *)pattern->native;
+
+    res = FcPatternGetInteger(fc_pattern, FC_SLANT, 0, &slant);
+
+    if(res != FcResultMatch)
+        return -1;
+    else
+    {
+        if(slant == FC_SLANT_ROMAN)
+            return cFontSlantNormal;
+        else if(slant == FC_SLANT_ITALIC)
+            return cFontSlantItalic;
+        else if(slant == FC_SLANT_OBLIQUE)
+            return cContSlantOblique;
+        else
+            return -1;
+    }   
+}
+
+static int claro_ft2_get_decoration(claro_font_pattern_t * pattern)
+{
+    
+}
 
     //sets - set NULL or -1 to remove
     void (* set_family) (claro_font_pattern_t * pattern, const char * family);
