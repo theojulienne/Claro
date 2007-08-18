@@ -88,6 +88,12 @@ CLFEXP void claro_list_sort(claro_list_t * list,
     g_ptr_array_sort_with_data(array, (GCompareDataFunc)compare_func, user_arg);
 }
 
+CLFEXP void claro_list_foreach(claro_list_t * list, list_foreach_func * foreach_func, void * data)
+{
+    GPtrArray * array = (GPtrArray *)list;
+    g_ptr_array_foreach(array, (GFunc)foreach_func, data);       
+}
+
 CLFEXP void claro_list_insert(claro_list_t * list, int index, void * data)
 {
     GPtrArray *array = (GPtrArray *)list;

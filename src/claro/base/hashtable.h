@@ -21,7 +21,7 @@
 
 typedef struct _claro_hashtable claro_hashtable_t;
 
-typedef void hashtable_key_iter_func(const void * key, const void * value, void * user_arg);
+typedef void hashtable_foreach_func(const void * key, const void * value, void * user_arg);
 
 //PRIVATE
 void _claro_hashtable_init();
@@ -140,7 +140,7 @@ claro_hashtable_ref(claro_hashtable_t * hashtable);
  */
 
 CLFEXP void 
-claro_hashtable_iter_keys(claro_hashtable_t * hashtable, hashtable_key_iter_func * iter_func, void * arg);
+claro_hashtable_foreach(claro_hashtable_t * hashtable, hashtable_foreach_func * foreach_func, void * arg);
 
 /*****************************************************************************
  * claro_hashtable_get_keys

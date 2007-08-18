@@ -5,7 +5,7 @@
 
 #include <claro/base.h>
 
-static void _iter_cb(const void * key, const void * value, void * unused)
+static void _foreach_cb(const void * key, const void * value, void * unused)
 {
     printf("%s = %d\n", key, value);
 }
@@ -24,7 +24,7 @@ int main(int argc, char ** argv)
     claro_hashtable_insert(hash, "two", (void *)2, TRUE);
     claro_hashtable_insert(hash, "three", (void *)3, TRUE);
 
-    claro_hashtable_iter_keys(hash, _iter_cb, NULL);
+    claro_hashtable_foreach(hash, _foreach_cb, NULL);
 
     list = claro_hashtable_get_keys(hash);
 
@@ -41,3 +41,4 @@ int main(int argc, char ** argv)
 
     return 0;
 }
+

@@ -115,23 +115,23 @@ claro_hashtable_ref(claro_hashtable_t * hashtable)
     return claro_boxed_ref(hashtable);
 }
 
-static void _ghash_iter_cb(gpointer key, gpointer value, gpointer user_data)
+static void _ghash_foreach_cb(gpointer key, gpointer value, gpointer user_data)
 {
     void ** args = (void **)user_data;
-    hashtable_key_iter_func * iter_func = (hashtable_key_iter_func *)args[0];
+    hashtable_foreach_func * foreach_func = (hashtable_foreach_func *)args[0];
 
-    iter_func(key, value, args[1]);   
+    foreach_func(key, value, args[1]);   
 }
 
 CLFEXP void 
-claro_hashtable_iter_keys(claro_hashtable_t * hashtable, hashtable_key_iter_func * iter_func, void * arg)
+claro_hashtable_foreach(claro_hashtable_t * hashtable, hashtable_foreach_func * foreach_func, void * arg)
 {
     void * args[2];
-    args[0] = iter_func;
+    args[0] = foreach_func;
     args[1] = arg;
 
-    g_assert(iter_func != NULL);
-    g_hash_table_foreach(hashtable->table, _ghash_iter_cb, (void *)args);
+    g_assert(foreach_func != NULL);
+    g_hash_table_foreach(hashtable->table, _ghash_foreach_cb, (void *)args);
 }
 
 static void _ghash_append_key_cb(gpointer key, gpointer value, gpointer user_data)

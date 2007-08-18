@@ -357,9 +357,16 @@ const struct {
 	return r; 
 }
 
-int main() {
+static void _list_foreach_func(const void * val, void * arg)
+{
+    clog(CL_DEBUG, "%d [%x]\n", val, arg);
+}
+
+int main() 
+{
 	int c = 0, x = 0; 
-	
+	claro_list_t * list;
+
 	claro_base_init(); 
 	
 	log_fd_set_level( CL_DEBUG, stderr );
@@ -368,6 +375,20 @@ int main() {
 
 //	clog(CL_INFO, "Tests for CLARO_LIST");
 		
+    // foreach test code hacked in
+
+    list = claro_list_create();
+
+    claro_list_append(list, 1);
+
+    claro_list_append(list, 2);
+
+    claro_list_append(list, 3);
+
+    claro_list_foreach(list, _list_foreach_func, 0xdeadbeef);
+    
+    claro_list_destroy(list);
+
 	c = 0; x=-1;	
 	while (tests[++x].type != TEST_LAST) {
 		if (tests[x].f == TF_SKIP) {

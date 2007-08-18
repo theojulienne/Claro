@@ -41,4 +41,5 @@ flags
 		(cairo) pkg-config "cairo"
 	platform all
 		(!cairo) define NO_CAIRO
+        cflags "-Wall -g"
 
