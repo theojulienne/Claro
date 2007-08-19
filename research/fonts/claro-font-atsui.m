@@ -77,8 +77,6 @@ static bool _claro_atsui_list_families(claro_atsui_backend * backend)
 	return TRUE;
 }
 
-#define FcPattern int
-
 static claro_font_pattern_t * _claro_atsui_make_pattern(NSFontDescriptor * desc)
 {
 	claro_font_pattern_t * pattern;
@@ -224,12 +222,15 @@ static bool_t claro_atsui_set_widget_font(claro_font_backend_t * backend, widget
 static claro_font_pattern_t * claro_atsui_font_get_font_pattern(claro_font_t * font)
 {
 	claro_font_pattern_t * pattern;
+	NSFont *ft;
+	NSFontDescriptor *fd;
 
 	g_return_val_if_fail(font != NULL, NULL);
+	
+	ft = (NSFont *)font->native;
+	fd = [ft fontDescriptor];
 
-	pattern = (claro_font_pattern_t *)font->native;
-
-	claro_type_ref(pattern);
+	pattern = _claro_atsui_make_pattern( fd );
 
 	return pattern;	   
 }
