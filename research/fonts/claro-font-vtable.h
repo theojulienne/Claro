@@ -55,18 +55,7 @@ typedef struct
     // Sets the widget's font.
     bool_t (* widget_set_font) (claro_font_backend_t * backend, widget_t * widget, claro_font_t * font);
 
-    //font functions
-    claro_font_t * (* font_ref) (claro_font_t * font);
-    
-    void (* font_unref) (claro_font_t * font);
-    
-
-    //fontset functions
-
-    // references
-    claro_fontset_t * (* fontset_ref) (claro_fontset_t * fontset);
-
-    void (* fontset_unref) (claro_fontset_t * fontset);
+    claro_font_pattern_t * (* font_get_font_pattern) (claro_font_t * font);
 
     // enumeration
     int (* fontset_count) (claro_fontset_t * fontset);
@@ -80,11 +69,6 @@ void * arg);
 
     // allocation
     claro_font_pattern_t * (* font_pattern_create) ();
-
-    // references
-    claro_font_pattern_t * (* font_pattern_ref) (claro_font_pattern_t * pattern);
-
-    void (* font_pattern_unref) (claro_font_pattern_t * pattern);
 
     // gets - NULL or -1 means missing
     const char * (* font_pattern_get_family) (claro_font_pattern_t * pattern);

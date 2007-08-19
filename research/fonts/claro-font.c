@@ -66,26 +66,37 @@ CLFEXP bool_t claro_widget_set_font(widget_t * widget, claro_font_t * font)
     return _claro_font_vtable->widget_set_font(_backend, widget, font);
 }
 
+CLFEXP claro_font_pattern_t * claro_font_get_font_pattern(claro_font_t * font)
+{
+    return _claro_font_vtable->font_get_font_pattern(font);
+}
+
 //font functions
 CLFEXP claro_font_t * claro_font_ref(claro_font_t * font)
-{
-    return _claro_font_vtable->font_ref(font);
+{   
+    g_return_val_if_fail(font != NULL, NULL);
+    claro_type_ref(font);
+    return font;
 }
     
 CLFEXP void claro_font_unref(claro_font_t * font)
 {
-   _claro_font_vtable->font_unref(font);    
+    g_return_if_fail(font != NULL);
+    claro_type_unref(font);
 }
     
 CLFEXP claro_fontset_t * claro_fontset_ref(claro_fontset_t * fontset)
 {
-    return _claro_font_vtable->fontset_ref(fontset);
+    g_return_val_if_fail(fontset != NULL, NULL);
+    claro_type_ref(fontset);
+    return fontset;
 }
 
 CLFEXP void claro_fontset_unref(claro_fontset_t * fontset)
 {
-    _claro_font_vtable->fontset_unref(fontset);
-}   
+    g_return_if_fail(fontset != NULL);
+    claro_type_unref(fontset);
+}  
 
 //enumeration
 CLFEXP int claro_fontset_count(claro_fontset_t * fontset)
@@ -115,12 +126,15 @@ CLFEXP claro_font_pattern_t * claro_font_pattern_create()
 // references
 CLFEXP claro_font_pattern_t * claro_font_pattern_ref(claro_font_pattern_t * pattern)
 {
-    return _claro_font_vtable->font_pattern_ref(pattern);
+    g_return_val_if_fail(pattern != NULL, NULL);
+    claro_type_ref(pattern);
+    return pattern;
 }
 
 CLFEXP void claro_font_pattern_unref(claro_font_pattern_t * pattern)
 {
-    _claro_font_vtable->font_pattern_unref(pattern);
+    g_return_if_fail(pattern != NULL);
+    claro_type_unref(pattern);   
 }
 
 // gets - NULL or -1 means missing

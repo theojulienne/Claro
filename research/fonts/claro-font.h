@@ -60,9 +60,6 @@ typedef struct
 {
     claro_type_HEAD
 
-    // The pattern that specfically matches this font.   
-    claro_font_pattern_t * pattern;
-
     // an already matched FcPattern, a ATSUFontId, or a HFONT
     // for Pango, this will be the PangoFont* - then an FT_Face will be pulled out
     void * native;
@@ -92,6 +89,8 @@ CLFEXP cairo_font_face_t * claro_cairo_font_create(claro_font_t * font);
    
 // Sets the widget's font.
 CLFEXP bool_t claro_widget_set_font(widget_t * widget, claro_font_t * font);
+
+CLFEXP claro_font_pattern_t * claro_font_get_font_pattern(claro_font_t * font);
 
 //font functions
 CLFEXP claro_font_t * claro_font_ref(claro_font_t * font);

@@ -48,7 +48,7 @@ static void _claro_ft2_font_destroy(void * obj)
 {
     claro_font_t * font = (claro_font_t *)obj;
 
-    claro_type_unref(font->pattern);
+    claro_type_unref((claro_font_pattern_t *)font->native);
 }
 
 // This also validates each font pattern so we don't have to twice.
@@ -131,12 +131,12 @@ static claro_font_t * _claro_ft2_make_font(FcPattern * fc_pattern)
     font = (claro_font_t *)smalloc(sizeof(claro_font_t));
     claro_type_init(font, _claro_ft2_font_destroy);
 
-    font->pattern = _claro_ft2_make_pattern(fc_pattern);
+    pattern = _claro_ft2_make_pattern(fc_pattern);
 
     // This is a bit goofy..because we don't need to deal with FreeType directly.
-    font->native = NULL;
+    font->native = (void *)pattern;
 
-    claro_type_ref(font->pattern);
+    claro_type_ref(pattern);
 
     return font;
 }
@@ -232,14 +232,15 @@ static claro_fontset_t * claro_ft2_load_fontset(claro_font_backend_t * backend, 
 }
 
 // Takes a Claro font and creates a Cairo font object for use with a Cairo context.
-static cairo_font_face_t * claro_ft2_create_cairo_font(claro_font_backend_t * backend, claro_font_t * font)
+static cairo_font_face_t * claro_ft2_cairo_font_create(claro_font_backend_t * backend, claro_font_t * font)
 {
     cairo_font_face_t * font_face;
 
     g_return_val_if_fail(backend != NULL, NULL);
     g_return_val_if_fail(font != NULL, NULL);
     
-    font_face = cairo_ft_font_face_create_for_pattern((FcPattern *)font->pattern->native);   
+    font_face = cairo_ft_font_face_create_for_pattern
+        ((FcPattern *)((claro_font_pattern_t *)font->native)->native);   
 
     return font_face;
 }
@@ -251,34 +252,17 @@ static bool_t claro_ft2_set_widget_font(claro_font_backend_t * backend, widget_t
     // Not dependent on fontconfig..deal with later.
 }
 
-static claro_font_t * claro_ft2_font_ref(claro_font_t * font)
+static claro_font_pattern_t * claro_ft2_font_get_font_pattern(claro_font_t * font)
 {
+    claro_font_pattern_t * pattern;
+
     g_return_val_if_fail(font != NULL, NULL);
 
-    claro_type_ref(font);
-    return font;
-}
+    pattern = (claro_font_pattern_t *)font->native;
 
-static void claro_ft2_font_unref(claro_font_t * font)
-{
-    g_return_if_fail(font != NULL);
+    claro_type_ref(pattern);
 
-    claro_type_unref(font);
-}
-
-static claro_fontset_t * claro_ft2_fontset_ref(claro_fontset_t * fontset)
-{
-    g_return_val_if_fail(fontset != NULL, NULL);
-
-    claro_type_ref(fontset);
-    return fontset;
-}
-
-static void claro_ft2_fontset_unref(claro_fontset_t * fontset)
-{
-    g_return_if_fail(fontset != NULL);
-
-    claro_type_unref(fontset);
+    return pattern;    
 }
    
 static int claro_ft2_fontset_count(claro_fontset_t * fontset)
@@ -330,21 +314,6 @@ static void claro_ft2_fontset_foreach(claro_fontset_t * fontset, claro_fontset_f
 static claro_font_pattern_t * claro_ft2_pattern_create()
 {
     return _claro_ft2_make_pattern(NULL);
-}
-
-static claro_font_pattern_t * claro_ft2_pattern_ref(claro_font_pattern_t * pattern)
-{
-    g_return_val_if_fail(pattern != NULL, NULL);
-
-    claro_type_ref(pattern);
-    FcPatternReference((FcPattern *)pattern->native);    
-}
-
-static void claro_ft2_pattern_unref(claro_font_pattern_t * pattern)
-{
-    g_return_if_fail(pattern != NULL);
-
-    claro_type_unref(pattern);
 }
 
 static const char * claro_ft2_get_family(claro_font_pattern_t * pattern)
@@ -454,7 +423,7 @@ static void claro_ft2_set_family(claro_font_pattern_t * pattern, const char * fa
 
     fc_pattern = (FcPattern *)pattern->native;
 
-    g_assert(FcPatternAddWeak(fc_pattern, FC_FAMILY, val, TRUE));     
+    g_assert(FcPatternAdd(fc_pattern, FC_FAMILY, val, TRUE));     
 }
 
 static void claro_ft2_set_size(claro_font_pattern_t * pattern, int size)
@@ -481,18 +450,13 @@ cgraphics_font_vtable _cgraphics_font_vtable =
     claro_ft2_get_font_families,
     claro_ft2_load_font,
     claro_ft2_load_fontset,
-    claro_ft2_create_cairo_font,
+    claro_ft2_cairo_font_create,
     claro_ft2_set_widget_font,
-    claro_ft2_font_ref,
-    claro_ft2_font_unref,
-    claro_ft2_fontset_ref,
-    claro_ft2_fontset_unref,
+    claro_ft2_font_get_font_pattern,
     claro_ft2_fontset_count,
     claro_ft2_fontset_get_item,
     claro_ft2_fontset_foreach,
-    claro_ft2_pattern_create,
-    claro_ft2_pattern_ref,
-    claro_ft2_pattern_unref,    
+    claro_ft2_pattern_create,  
     claro_ft2_get_family,
     claro_ft2_get_size,
     claro_ft2_get_weight,
