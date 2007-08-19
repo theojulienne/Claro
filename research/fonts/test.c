@@ -75,6 +75,10 @@ static void draw_with_font(object_t * obj, event_t * event)
         return;
 
     item = listbox_get_selected(l);
+
+	if (!item)
+		return;
+
     str = (const char *)item->data[0];
 
     pattern = claro_font_pattern_create();
@@ -115,8 +119,8 @@ int main(int argc, char ** argv)
 
     enum_fonts(l);
 
-    widget_show(c);
-    widget_show( w );
+ //   widget_show(c);
+    window_show( w );
 
     claro_loop();
 
