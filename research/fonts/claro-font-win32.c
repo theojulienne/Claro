@@ -124,6 +124,10 @@ static bool _claro_win32_list_families(claro_win32_backend * backend)
 	return TRUE;
 }
 
+#ifndef CLEARTYPE_QUALITY
+#define CLEARTYPE_QUALITY 5
+#endif
+
 static claro_font_pattern_t * _claro_win32_make_pattern(LOGFONT * desc)
 {
 	claro_font_pattern_t * pattern;
@@ -135,6 +139,11 @@ static claro_font_pattern_t * _claro_win32_make_pattern(LOGFONT * desc)
 	if (desc == NULL)
 	{
 		desc = g_new0( LOGFONT, 1 );
+		desc->lfCharSet = DEFAULT_CHARSET;
+		desc->lfOutPrecision = OUT_OUTLINE_PRECIS;
+		desc->lfClipPrecision = CLIP_DEFAULT_PRECIS;
+		desc->lfQuality = ANTIALIASED_QUALITY | CLEARTYPE_QUALITY;
+		desc->lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
 		//desc = [NSFontDescriptor fontDescriptorWithFontAttributes: nil];
 	}
 	
