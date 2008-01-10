@@ -206,4 +206,7 @@ extern (C)
 	void cairo_identity_matrix(cairo_t* cr);
 	void cairo_scale(cairo_t* cr, double sx, double sy);
 	void cairo_matrix_init_translate(cairo_matrix_t* matrix, double tx, double ty);
+	
+	// Dave added this
+	cairo_surface_t* cairo_image_surface_create_from_png(char *filename);
 }

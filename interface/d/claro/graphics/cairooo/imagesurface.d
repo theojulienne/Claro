@@ -101,5 +101,11 @@ class ImageSurface : Surface
     {
         return new ImageSurface(this);
     }
+
+	// Dave added this
+	static ImageSurface createFromPng( char *filename )
+	{
+		return new ImageSurface( cairo_image_surface_create_from_png( filename ), false );
+	}
 }
 
